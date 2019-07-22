@@ -19,3 +19,27 @@ CREATE TABLE `shop_user`(
     PRIMARY KEY (`id`),
     UNIQUE KEY `user_name` (`username`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+DROP TABLE IF EXISTS `shop_goods`;
+CREATE TABLE `shop_goods`(
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `category_id` int(11) NOT NULL COMMENT '商品类别id',
+    `goods_id` varchar(63) NOT NULL COMMENT '商品编号id',
+    `name` varchar(127) DEFAULT NULL COMMENT '商品名称',
+    `brief` varchar(255) DEFAULT NULL COMMENT '商品介绍',
+    `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',
+    `picture` varchar(255) DEFAULT NULL COMMENT '图片',
+    `inventory` int(11) DEFAULT NULL COMMENT '库存量',
+    `counter_price` decimal(10,2) DEFAULT '0.00' COMMENT '专柜价格',
+    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价格',
+    `create_by` varchar(63) DEFAULT NULL COMMENT '创建者',
+    `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_by` varchar(63) DEFAULT NULL COMMENT '更新者',
+    `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+    `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
+    `is_on_sale` tinyint(1) DEFAULT '1' COMMENT '是否上架，默认上架',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0：正常 1：删除）',
+    PRIMARY KEY (`id`),
+    KEY `category_id` (`category_id`),
+    KEY `goods_id` (`goods_id`),
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
