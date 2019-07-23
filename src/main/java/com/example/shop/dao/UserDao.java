@@ -2,6 +2,7 @@ package com.example.shop.dao;
 
 import com.example.shop.dao.entity.UserEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,14 +13,14 @@ public interface UserDao {
      * @param userEntity
      * @return
      */
-    Integer insert(UserEntity userEntity);
+    Integer insert(@Param("id")int id, @Param("username") String username, );
 
     /**
      * 更新用户
      * @param userEntity
      * @return
      */
-     Integer uddate(UserEntity userEntity);
+     Integer update(UserEntity userEntity);
 
      Integer updatePasswordById(UserEntity userEntity);
 

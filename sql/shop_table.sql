@@ -10,7 +10,7 @@ CREATE TABLE `shop_user`(
     `nickname` varchar(63) NOT NULL DEFAULT '' COMMENT '用户昵称或网络名称',
     `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '用户手机号码',
     `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像图片',
-    `weixin_openid` varchar(63) NOT NULL DEFAULT '' COMMENT '微信登录openid',
+    `wechat_openid` varchar(63) NOT NULL DEFAULT '' COMMENT '微信登录openid',
     `session_key` varchar(100) NOT NULL DEFAULT '' COMMENT '微信登录会话KEY',
     `status` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0 可用, 1 禁用, 2 注销',
     `add_time` datetime DEFAULT NULL COMMENT '创建时间',
@@ -19,6 +19,19 @@ CREATE TABLE `shop_user`(
     PRIMARY KEY (`id`),
     UNIQUE KEY `user_name` (`username`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+DROP TABLE IF EXISTS `shop_admin`;
+CREATE TABLE `shop_admin`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `username` varchar(63) NOT NULL COMMENT '管理员名',
+    `password` varchar(63) NOT NULL COMMENT '管理员密码',
+    `last_login_time` datetime DEFAULT NULL COMMENT '最近一次登录时间',
+    `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像图片',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 DROP TABLE IF EXISTS `shop_goods`;
 CREATE TABLE `shop_goods`(
@@ -30,8 +43,8 @@ CREATE TABLE `shop_goods`(
     `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',
     `picture` varchar(255) DEFAULT NULL COMMENT '图片',
     `inventory` int(11) DEFAULT NULL COMMENT '库存量',
-    `counter_price` decimal(10,2) DEFAULT '0.00' COMMENT '专柜价格',
-    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价格',
+    `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
+    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
     `create_by` varchar(63) DEFAULT NULL COMMENT '创建者',
     `create_date` datetime DEFAULT NULL COMMENT '创建时间',
     `update_by` varchar(63) DEFAULT NULL COMMENT '更新者',
@@ -41,5 +54,112 @@ CREATE TABLE `shop_goods`(
     `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0：正常 1：删除）',
     PRIMARY KEY (`id`),
     KEY `category_id` (`category_id`),
-    KEY `goods_id` (`goods_id`),
+    KEY `goods_id` (`goods_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+
+DROP TABLE IF EXISTS `shop_category`;
+CREATE TABLE `shop_category`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(63) NOT NULL DEFAULT '' COMMENT '类目名称',
+    `keywords` varchar(1023) NOT NULL DEFAULT '' COMMENT '类目关键字，以JSON数组格式',
+    `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父类目ID',
+    `icon_url` varchar(255) DEFAULT '' COMMENT '类目图标',
+    `pic_url` varchar(255) DEFAULT '' COMMENT '类目图片',
+    `sort_order` tinyint(3) DEFAULT '50' COMMENT '排序',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+    PRIMARY KEY (`id`),
+    KEY `parent_id` (`pid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品类别表';
+
+DROP TABLE IF EXISTS `shop_cart`;
+CREATE TABLE `shop_cart`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) DEFAULT NULL COMMENT '用户表的用户ID',
+    `goods_id` int(11) DEFAULT NULL COMMENT '商品表的商品ID',
+    `goods_sn` varchar(63) DEFAULT NULL COMMENT '商品编号',
+    `goods_name` varchar(127) DEFAULT NULL COMMENT '商品名称',
+    `price` decimal(10,2) DEFAULT '0.00' COMMENT '商品货品的价格',
+    `number` smallint(5) DEFAULT '0' COMMENT '商品货品的数量',
+    `checked` tinyint(1) DEFAULT '1' COMMENT '购物车中商品是否选择状态',
+    `pic_url` varchar(255) DEFAULT NULL COMMENT '商品图片或者商品货品图片',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车表';
+
+DROP TABLE IF EXISTS `shop_order`;
+CREATE TABLE `shop_order`(
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `user_id` int(11) NOT NULL COMMENT '用户表的id',
+    `order_sn` varchar(63) NOT NULL COMMENT '订单编号',
+    `order_status` smallint(1) NOT NULL COMMENT '订单状态（0：未完成 1：完成 2：取消）',
+    `consignee` varchar(63) NOT NULL COMMENT '收货人名称',
+    `mobile` varchar(63) NOT NULL COMMENT '收货人手机号',
+    `address` varchar(127) NOT NULL COMMENT '收货地址',
+    `order_price` decimal(10,2) NOT NULL COMMENT '订单价格',
+    `order_integral` varchar(63) NOT NULL COMMENT  '订单积分',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+    `message` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0:正常1:删除）',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+DROP TABLE IF EXISTS `shop_goods_order`;
+CREATE TABLE `shop_goods_order`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
+    `order_id` int(11) DEFAULT NULL COMMENT '订单id',
+    `goods_name` varchar(127) DEFAULT NULL COMMENT '商品名称',
+    `pic_url` varchar(255) DEFAULT NULL COMMENT '商品图片或者商品货品图片',
+    `goods_type` varchar(63) DEFAULT NULL COMMENT '商品类型',
+    `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
+    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
+    `goods_order_count` int(11) DEFAULT NULL COMMENT '购买数量',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+    PRIMARY KEY (`id`),
+    KEY `order_id` (`order_id`),
+    KEY `goods_id` (`goods_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品订单表';
+
+DROP TABLE IF EXISTS `shop_integral`;
+CREATE TABLE `shop_integral`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `username` varchar(63) NOT NULL COMMENT '用户名',
+    `charger_integral` varchar(63) DEFAULT NULL COMMENT '积分变化',
+    `current_integral` varchar(63) DEFAULT NULL COMMENT  '总积分',
+    `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+    `order_id` int(11) DEFAULT NULL COMMENT '订单id',
+    `order_sn` varchar(63) NOT NULL COMMENT '订单编号',
+    `goods_name` varchar(127) DEFAULT NULL COMMENT '商品名称',
+    `pic_url` varchar(255) DEFAULT NULL COMMENT '商品图片或者商品货品图片',
+    `goods_type` varchar(63) DEFAULT NULL COMMENT '商品类型',
+    `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
+    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
+    `goods_order_count` int(11) DEFAULT NULL COMMENT '购买数量',
+    `total_price` decimal(10,2) NOT NULL COMMENT '支付总价',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0:正常1:删除）',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户积分表';
+
+DROP TABLE IF EXISTS `shop_operate_integral`;
+CREATE TABLE `shop_operate_integral`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
+    `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
+    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
+    `integral` varchar(63) DEFAULT NULL COMMENT  '积分',
+    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+    `start_time` datetime DEFAULT NULL COMMENT '生效时间',
+    `end_time` datetime DEFAULT NULL COMMENT '失效时间',
+    `message` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分运营表';
