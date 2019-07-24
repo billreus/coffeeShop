@@ -6,7 +6,7 @@ CREATE TABLE `shop_user`(
     `gender` tinyint(3) NOT NULL DEFAULT '0' COMMENT '性别：0未知，1男，2女',
     `birthday` date DEFAULT NULL COMMENT '生日',
     `last_login_time` datetime DEFAULT NULL COMMENT '最近一次登录时间',
-    `user_level` tinyint(3) DEFAULT '0' COMMENT '0 普通用户，1 VIP用户，2 高级VIP用户',
+    `user_level` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0 普通用户，1 VIP用户，2 高级VIP用户',
     `nickname` varchar(63) NOT NULL DEFAULT '' COMMENT '用户昵称或网络名称',
     `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '用户手机号码',
     `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像图片',

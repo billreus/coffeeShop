@@ -3,18 +3,24 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.shop.dao.UserDao">
+<mapper namespace="com.example.shop.mapper.UserMapper">
     <!--插入用户-->
-    <insert id="insert" parameterType="com.example.shop.dao.entity.UserEntity">
+    <insert id="insert">
         INSERT INTO
-        shop_user(id,username,password,gender,birthday,last_login_time,user_level,nickname,mobile,avatar,weixin_openid,
+        shop_user(username,password,gender,birthday,last_login_time,user_level,nickname,mobile,avatar,wechat_openid,
         session_key,status,add_time,update_time,deleted)
-        VALUES(#{id},#{username},#{password},#{gender},#{birthday},#{last_login_time},#{user_level},#{nickname},
-               #{mobile},#{avatar},#{weixin_openid},#{session_key},#{status},#{add_time},#{update_time},#{deleted});
+        VALUES(#{username},#{password},#{gender},#{birthday},#{last_login_time},#{user_level},#{nickname},
+               #{mobile},#{avatar},#{wechat_openid},#{session_key},#{status},#{add_time},#{update_time},#{deleted})
     </insert>
 
+    <!--<insert id="insert">
+        INSERT INTO
+            shop_user(username,password)
+        VALUES(#{username},#{password})
+    </insert>-->
+
     <!--更新用户-->
-    <update id="update" parameterType="com.example.shop.dao.entity.UserEntity">
+    <update id="update" parameterType="com.example.shop.model.UserEntity">
         UPDATE shop_user
         SET id=#{id},username=#{username},password=#{password},gender=#{gender},birthday=#{birthday},
             last_login_time=#{last_login_time},user_level=#{user_level},nickname=#{nickname},mobile=#{mobile},
@@ -23,32 +29,32 @@
         WHERE id=#{id}
     </update>
     <!--更新密码-->
-    <update id="updatePasswordById" parameterType="com.example.shop.dao.entity.UserEntity">
+    <update id="updatePasswordById" parameterType="com.example.shop.model.UserEntity">
         UPDATE shop_user
         SET password=#{password}
         WHERE id=#{id}
     </update>
 
     <!--通过id查询-->
-    <select id="selectById" resultType="com.example.shop.dao.entity.UserEntity" parameterType="java.lang.Integer">
+    <select id="selectById" resultType="com.example.shop.model.UserEntity" parameterType="java.lang.Integer">
         SELECT *
         FROM shop_user
         WHERE id=#{id};
     </select>
     <!--通过用户名查询-->
-    <select id="selectByUserName" resultType="com.example.shop.dao.entity.UserEntity">
+    <select id="selectByUserName" resultType="com.example.shop.model.UserEntity">
         SELECT *
         FROM shop_user
         WHERE username=#{username};
     </select>
     <!--查询所有用户-->
-    <select id="findAllList" resultType="com.example.shop.dao.entity.UserEntity">
+    <select id="findAllList" resultType="com.example.shop.model.UserEntity">
         SELECT *
         FROM shop_user
         ORDER BY id=#{id};
     </select>
     <!--查询用户总数-->
-    <select id="findAllCount" resultType="com.example.shop.dao.entity.UserEntity">
+    <select id="findAllCount" resultType="com.example.shop.model.UserEntity">
         SELECT
             COUNT(1)
         FROM shop_user
