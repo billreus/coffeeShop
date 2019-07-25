@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserMapper {
     /**
      * 新建用户
-     * @param username, password
+     * @param userEntity
      * @return
      */
     int insert(UserEntity userEntity);

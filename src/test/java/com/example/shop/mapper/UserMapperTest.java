@@ -36,10 +36,25 @@ public class UserMapperTest {
 
     @Test
     public void update() {
+        UserEntity userEntity = userMapper.selectById(1);
+        userEntity.setUsername("testUser");
+        userEntity.setPassword("122");
+        userEntity.setGender(1);
+        userEntity.setUser_level(0);
+        userEntity.setNickname("");
+        userEntity.setMobile("");
+        userEntity.setAvatar("");
+        userEntity.setWechat_openid("");
+        userEntity.setSession_key("");
+        userEntity.setStatus(0);
+        userMapper.update(userEntity);
     }
 
     @Test
     public void updatePasswordById() {
+        UserEntity userEntity = userMapper.selectById(1);
+        userEntity.setPassword("321321");
+        userMapper.updatePasswordById(userEntity);
     }
 
     @Test

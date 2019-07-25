@@ -13,18 +13,12 @@
                #{mobile},#{avatar},#{wechat_openid},#{session_key},#{status},#{add_time},#{update_time},#{deleted})
     </insert>
 
-    <!--<insert id="insert">
-        INSERT INTO
-            shop_user(username,password)
-        VALUES(#{username},#{password})
-    </insert>-->
-
     <!--更新用户-->
     <update id="update" parameterType="com.example.shop.model.UserEntity">
         UPDATE shop_user
         SET id=#{id},username=#{username},password=#{password},gender=#{gender},birthday=#{birthday},
             last_login_time=#{last_login_time},user_level=#{user_level},nickname=#{nickname},mobile=#{mobile},
-            avatar=#{avatar},weixin_openid=#{weixin_openid},session_key=#{session_key},status=#{status},
+            avatar=#{avatar},wechat_openid=#{wechat_openid},session_key=#{session_key},status=#{status},
             add_time=#{add_time},update_time=#{update_time},deleted=#{deleted}
         WHERE id=#{id}
     </update>
