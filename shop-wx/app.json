@@ -1,8 +1,10 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/logs/logs",
-    "pages/auth/accountLogin/accountLogin"
+      "pages/auth/accountLogin/accountLogin",
+      "pages/auth/login/login",
+      "pages/auth/register/register",
+      "pages/auth/reset/reset",
+      "pages/logs/logs"
   ],
   "window": {
     "backgroundTextStyle": "light",
