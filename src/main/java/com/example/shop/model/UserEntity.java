@@ -1,40 +1,85 @@
 package com.example.shop.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 用户实体类
+ */
 public class UserEntity implements Serializable {
 
+    /**
+     * 用户id
+     */
     private int id;
+    /**
+     * 用户名
+     */
     private String username;
+    /**
+     * 密码
+     */
     private String password;
+    /**
+     * 性别
+     */
     private int gender;
-
+    /**
+     * 生日
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
-
+    /**
+     * 最近登录时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date last_login_time;
-
+    /**
+     * 用户等级
+     */
     private int user_level;
+    /**
+     * 昵称
+     */
     private String nickname;
+    /**
+     * 手机号
+     */
     private String mobile;
+    /**
+     * 头像
+     */
     private String avatar;
+    /**
+     * 微信登录opendid
+     */
     private String wechat_openid;
+    /**
+     * 微信登录会话key
+     */
     private String session_key;
+    /**
+     * 用户状态：0可用，1禁用，2注销
+     */
     private int status;
+    /**
+     * 逻辑删除
+     */
     private int deleted;
-
+    /**
+     * 创建时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date add_time;
-
+    /**
+     * 更新时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date update_time;

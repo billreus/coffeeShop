@@ -4,13 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.shop.mapper.UserMapper">
-    <!--插入用户-->
+    <!--新建用户-->
     <insert id="insert">
         INSERT INTO
-        shop_user(username,password,gender,birthday,last_login_time,user_level,nickname,mobile,avatar,wechat_openid,
-        session_key,status,add_time,update_time,deleted)
-        VALUES(#{username},#{password},#{gender},#{birthday},#{last_login_time},#{user_level},#{nickname},
-               #{mobile},#{avatar},#{wechat_openid},#{session_key},#{status},#{add_time},#{update_time},#{deleted})
+        shop_user(username,password,mobile)
+        VALUES(#{username},#{password},#{mobile})
     </insert>
 
     <!--更新用户-->
@@ -48,7 +46,7 @@
         ORDER BY id=#{id};
     </select>
     <!--查询用户总数-->
-    <select id="findAllCount" resultType="com.example.shop.model.UserEntity">
+    <select id="findAllCount" resultType="long">
         SELECT
             COUNT(1)
         FROM shop_user

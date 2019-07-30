@@ -7,8 +7,8 @@ Page({
     username: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
-    code: ''
+    mobile: ''//,
+    //code: ''
   },
   onLoad: function(options) {
     // 页面初始化 options为页面跳转所带来的参数
@@ -30,6 +30,7 @@ Page({
     // 页面关闭
 
   },
+  /*
   sendCode: function() {
     let that = this;
 
@@ -50,11 +51,10 @@ Page({
       });
       return false;
     }
-
     wx.request({
       url: api.AuthRegisterCaptcha,
       data: {
-        mobile: that.data.mobile
+        mobile: that.mobile
       },
       method: 'POST',
       header: {
@@ -76,7 +76,7 @@ Page({
         }
       }
     });
-  },
+  },*/
   requestRegister: function(wxCode) {
     let that = this;
     wx.request({
@@ -85,7 +85,7 @@ Page({
         username: that.data.username,
         password: that.data.password,
         mobile: that.data.mobile,
-        code: that.data.code,
+        //code: that.data.code,
         wxCode: wxCode
       },
       method: 'POST',
@@ -118,10 +118,11 @@ Page({
   startRegister: function() {
     var that = this;
 
-    if (this.data.password.length < 6 || this.data.username.length < 6) {
+    //if (this.data.password.length < 6 || this.data.username.length < 6) {
+    if (this.data.password.length < 6) {
       wx.showModal({
         title: '错误信息',
-        content: '用户名和密码不得少于6位',
+        content: '密码不得少于6位',
         showCancel: false
       });
       return false;
@@ -135,11 +136,11 @@ Page({
       });
       return false;
     }
-
-    if (this.data.mobile.length == 0 || this.data.code.length == 0) {
+    if (this.data.mobile.length == 0) {
+    //if (this.data.mobile.length == 0 || this.data.code.length == 0) {
       wx.showModal({
         title: '错误信息',
-        content: '手机号和验证码不能为空',
+        content: '手机号不能为空',
         showCancel: false
       });
       return false;
@@ -220,11 +221,12 @@ Page({
           mobile: ''
         });
         break;
+/*
       case 'clear-code':
         this.setData({
           code: ''
         });
-        break;
+        break;*/
     }
   }
 })
