@@ -3,9 +3,12 @@ package com.example.shop.service;
 import com.example.shop.mapper.UserMapper;
 import com.example.shop.model.UserEntity;
 import com.example.shop.util.ShopUtil;
+import com.example.shop.util.UserToken;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,10 +50,27 @@ public class UserService {
         userEntity.setUsername(username);
         userEntity.setMobile(phone);
         userEntity.setPassword(ShopUtil.MD5(password));
+        userEntity.setNickname(username);
+        userEntity.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
+        userEntity.setLastLoginTime(LocalDateTime.now());
         userMapper.insert(userEntity);
-        return map;
+
+        //更新登录状态
+
+        //token
+        String token = UserToken.generateToken(userEntity.getId());
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("userInfo", userEntity);
+        return result;
     }
 
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @return
+     */
     public Map<String, Object> login(String username, String password){
         Map<String, Object> map = new HashMap<>();
         if(username == null || username.length() == 0){
@@ -70,6 +90,17 @@ public class UserService {
             map.put("msgpwd", "密码不正确");
             return map;
         }
-        return map;
+
+        //更新登录状态
+        user.setLastLoginTime(LocalDateTime.now());
+        userMapper.updateLastLoginTimeById(user);
+
+        //token
+        String token = UserToken.generateToken(user.getId());
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("userInfo", user);
+
+        return result;
     }
 }

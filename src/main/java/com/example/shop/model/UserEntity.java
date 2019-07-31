@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -36,13 +37,13 @@ public class UserEntity implements Serializable {
     /**
      * 最近登录时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date last_login_time;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime lastLoginTime;
     /**
      * 用户等级
      */
-    private int user_level;
+    private int userLevel;
     /**
      * 昵称
      */
@@ -58,11 +59,11 @@ public class UserEntity implements Serializable {
     /**
      * 微信登录opendid
      */
-    private String wechat_openid;
+    private String wechatOpenid;
     /**
      * 微信登录会话key
      */
-    private String session_key;
+    private String sessionKey;
     /**
      * 用户状态：0可用，1禁用，2注销
      */
@@ -74,15 +75,15 @@ public class UserEntity implements Serializable {
     /**
      * 创建时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date add_time;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date addTime;
     /**
      * 更新时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date update_time;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
 
     public int getId() {
         return id;
@@ -124,20 +125,20 @@ public class UserEntity implements Serializable {
         this.birthday = birthday;
     }
 
-    public Date getLast_login_time() {
-        return last_login_time;
+    public LocalDateTime getLastLoginTime() {
+        return lastLoginTime;
     }
 
-    public void setLast_login_time(Date last_login_time) {
-        this.last_login_time = last_login_time;
+    public void setLastLoginTime(LocalDateTime lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
-    public int getUser_level() {
-        return user_level;
+    public int getUserLevel() {
+        return userLevel;
     }
 
-    public void setUser_level(int user_level) {
-        this.user_level = user_level;
+    public void setUserLevel(int userLevel) {
+        this.userLevel = userLevel;
     }
 
     public String getNickname() {
@@ -164,20 +165,20 @@ public class UserEntity implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getWechat_openid() {
-        return wechat_openid;
+    public String getWechatOpenid() {
+        return wechatOpenid;
     }
 
-    public void setWechat_openid(String wechat_openid) {
-        this.wechat_openid = wechat_openid;
+    public void setWechatOpenid(String wechatOpenid) {
+        this.wechatOpenid = wechatOpenid;
     }
 
-    public String getSession_key() {
-        return session_key;
+    public String getSessionKey() {
+        return sessionKey;
     }
 
-    public void setSession_key(String session_key) {
-        this.session_key = session_key;
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
     }
 
     public int getStatus() {
@@ -196,19 +197,19 @@ public class UserEntity implements Serializable {
         this.deleted = deleted;
     }
 
-    public Date getAdd_time() {
-        return add_time;
+    public Date getAddTime() {
+        return addTime;
     }
 
-    public void setAdd_time(Date add_time) {
-        this.add_time = add_time;
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
-    public Date getUpdate_time() {
-        return update_time;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdate_time(Date update_time) {
-        this.update_time = update_time;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

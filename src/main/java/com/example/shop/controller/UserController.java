@@ -26,19 +26,22 @@ public class UserController {
      * @return
      */
     @PostMapping("register")
-    public Map<String, Object> register(@RequestBody String body, HttpServletRequest request){
+    public String register(@RequestBody String body, HttpServletRequest request){
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
         String mobile = JacksonUtil.parseString(body, "mobile");
         String wxCode = JacksonUtil.parseString(body, "wxCode");
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = userService.register(username, password, mobile);
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(mobile)){
-            map.put("mes", "数据有误");
-            return map;
+            return ShopUtil.getJSONString(1,"数据有误");
         }
-        map = userService.register(username, password, mobile);
-        return map;
+        if(map.containsKey("token")){
+            return ShopUtil.getJSONString(0, "成功", map);
+        }else{
+            return ShopUtil.getJSONString(1, "失败", map);
+        }
+
     }
 
     /**
@@ -48,7 +51,7 @@ public class UserController {
      * @return
      */
     @PostMapping("login")
-    public String login(@RequestBody String body, HttpServletRequest request){
+    public Object login(@RequestBody String body, HttpServletRequest request){
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
 
@@ -56,6 +59,24 @@ public class UserController {
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
             return ShopUtil.getJSONString(1,"数据有误");
         }
-        return ShopUtil.getJSONString(0, "成功");
+
+        if(map.containsKey("token")){
+            return ShopUtil.getJSONString(0, "成功", map);
+        }else{
+            return ShopUtil.getJSONString(1, "失败", map);
+        }
+    }
+
+    /**
+     * 登出
+     * @param userId
+     * @return
+     */
+    @PostMapping("logout")
+    public Object logout(Integer userId){
+        if(userId == null){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        return ShopUtil.getJSONString(0, "退出成功");
     }
 }

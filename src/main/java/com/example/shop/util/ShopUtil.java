@@ -38,22 +38,30 @@ public class ShopUtil {
         }
     }
 
-    public static String getJSONString(int code) {
+    public static String getJSONString(int errno) {
         JSONObject json = new JSONObject();
-        json.put("code", code);
+        json.put("errno", errno);
         return json.toJSONString();
     }
 
-    public static String getJSONString(int code, String msg) {
+    public static String getJSONString(int errno, String errmsg) {
         JSONObject json = new JSONObject();
-        json.put("errno", code);
-        json.put("errmsg", msg);
+        json.put("errno", errno);
+        json.put("errmsg", errmsg);
         return json.toJSONString();
     }
 
-    public static String getJSONString(int code, Map<String, Object> map) {
+    public static String getJSONString(int errno, String errmsg, Object data) {
         JSONObject json = new JSONObject();
-        json.put("code", code);
+        json.put("errno", errno);
+        json.put("errmsg", errmsg);
+        json.put("data", data);
+        return json.toJSONString();
+    }
+
+    public static String getJSONString(int errno, Map<String, Object> map) {
+        JSONObject json = new JSONObject();
+        json.put("errno", errno);
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             json.put(entry.getKey(), entry.getValue());
         }

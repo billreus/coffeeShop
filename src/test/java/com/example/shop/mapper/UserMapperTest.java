@@ -22,12 +22,12 @@ public class UserMapperTest {
         userEntity.setUsername("testUser");
         userEntity.setPassword("1223345");
         userEntity.setGender(0);
-        userEntity.setUser_level(0);
+        userEntity.setUserLevel(0);
         userEntity.setNickname("");
         userEntity.setMobile("");
         userEntity.setAvatar("");
-        userEntity.setWechat_openid("");
-        userEntity.setSession_key("");
+        userEntity.setWechatOpenid("");
+        userEntity.setSessionKey("");
         userEntity.setStatus(0);
         userEntity.setDeleted(0);
         int i = userMapper.insert(userEntity);
@@ -40,12 +40,12 @@ public class UserMapperTest {
         userEntity.setUsername("testUser");
         userEntity.setPassword("122");
         userEntity.setGender(1);
-        userEntity.setUser_level(0);
+        userEntity.setUserLevel(0);
         userEntity.setNickname("");
         userEntity.setMobile("");
         userEntity.setAvatar("");
-        userEntity.setWechat_openid("");
-        userEntity.setSession_key("");
+        userEntity.setWechatOpenid("");
+        userEntity.setSessionKey("");
         userEntity.setStatus(0);
         userMapper.update(userEntity);
     }

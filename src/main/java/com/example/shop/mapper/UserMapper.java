@@ -32,6 +32,13 @@ public interface UserMapper {
      */
      int updatePasswordById(UserEntity userEntity);
 
+    /**
+     * 通过id更新最后登录时间
+     * @param userEntity
+     * @return
+     */
+     int updateLastLoginTimeById(UserEntity userEntity);
+
      /**
      * 通过id查询
      * @param id
