@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -19,34 +22,39 @@ public class UserMapperTest {
     @Test
     public void insert() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("testUser");
-        userEntity.setPassword("1223345");
+        userEntity.setUsername("test3");
+        userEntity.setPassword("123456");
         userEntity.setGender(0);
         userEntity.setUserLevel(0);
-        userEntity.setNickname("");
-        userEntity.setMobile("");
+        userEntity.setNickname("test10");
+        userEntity.setMobile("13545684521");
         userEntity.setAvatar("");
         userEntity.setWechatOpenid("");
         userEntity.setSessionKey("");
         userEntity.setStatus(0);
         userEntity.setDeleted(0);
-        int i = userMapper.insert(userEntity);
-        System.out.println(i);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(date);
+        userEntity.setLoginTime(dateString);
+        userMapper.insert(userEntity);
     }
 
     @Test
     public void update() {
         UserEntity userEntity = userMapper.selectById(1);
-        userEntity.setUsername("testUser");
-        userEntity.setPassword("122");
+        userEntity.setUsername("test1");
+        userEntity.setPassword("123456");
         userEntity.setGender(1);
         userEntity.setUserLevel(0);
-        userEntity.setNickname("");
-        userEntity.setMobile("");
+        userEntity.setNickname("test1");
+        userEntity.setMobile("13235489456");
         userEntity.setAvatar("");
         userEntity.setWechatOpenid("");
         userEntity.setSessionKey("");
         userEntity.setStatus(0);
+        //userEntity.setLogin(LocalDateTime.now());
+        userEntity.setUserLevel(0);
         userMapper.update(userEntity);
     }
 
@@ -63,6 +71,8 @@ public class UserMapperTest {
 
     @Test
     public void selectByUserName() {
+        UserEntity userEntity = userMapper.selectByUserName("test8");
+        System.out.println(userEntity);
     }
 
     @Test

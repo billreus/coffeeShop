@@ -7,15 +7,15 @@
     <!--新建用户-->
     <insert id="insert">
         INSERT INTO
-        shop_user(username,password,mobile,nickname,avatar,last_login_time)
-        VALUES(#{username},#{password},#{mobile},#{nickname},#{avatar},#{lastLoginTime} )
+        shop_user(username,password,mobile,nickname,avatar,login_time)
+        VALUES(#{username},#{password},#{mobile},#{nickname},#{avatar},#{loginTime}  )
     </insert>
 
     <!--更新用户-->
-    <update id="update" parameterType="com.example.shop.model.UserEntity">
+    <update id="update">
         UPDATE shop_user
-        SET id=#{id},username=#{username},password=#{password},gender=#{gender},birthday=#{birthday},
-            last_login_time=#{lastLoginTime} ,user_level=#{userLevel} ,nickname=#{nickname},mobile=#{mobile},
+        SET username=#{username},password=#{password},gender=#{gender},birthday=#{birthday},
+            user_level=#{userLevel} ,login_time=#{loginTime} ,nickname=#{nickname},mobile=#{mobile},
             avatar=#{avatar},wechat_openid=#{wechatOpenid}  ,session_key=#{sessionKey}  ,status=#{status},
             add_time=#{addTime}  ,update_time=#{updateTime}  ,deleted=#{deleted}
         WHERE id=#{id}
@@ -29,7 +29,7 @@
     <!--更新登录时间-->
     <update id="updateLastLoginTimeById">
         UPDATE shop_user
-        SET last_login_time=#{lastLoginTime}
+        SET login_time=#{loginTime}
         WHERE id=#{id}
     </update>
 

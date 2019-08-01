@@ -7,6 +7,7 @@ import com.example.shop.util.UserToken;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,7 +53,10 @@ public class UserService {
         userEntity.setPassword(ShopUtil.MD5(password));
         userEntity.setNickname(username);
         userEntity.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
-        userEntity.setLastLoginTime(LocalDateTime.now());
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = formatter.format(date);
+        userEntity.setLoginTime(time);
         userMapper.insert(userEntity);
 
         //更新登录状态
@@ -92,7 +96,10 @@ public class UserService {
         }
 
         //更新登录状态
-        user.setLastLoginTime(LocalDateTime.now());
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = formatter.format(date);
+        user.setLoginTime(time);
         userMapper.updateLastLoginTimeById(user);
 
         //token

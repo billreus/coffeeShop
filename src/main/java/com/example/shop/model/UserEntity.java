@@ -1,10 +1,6 @@
 package com.example.shop.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -31,15 +27,11 @@ public class UserEntity implements Serializable {
     /**
      * 生日
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
+    private String birthday;
     /**
      * 最近登录时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime lastLoginTime;
+    private String loginTime;
     /**
      * 用户等级
      */
@@ -75,15 +67,11 @@ public class UserEntity implements Serializable {
     /**
      * 创建时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date addTime;
+    private String addTime;
     /**
      * 更新时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
 
     public int getId() {
         return id;
@@ -117,20 +105,20 @@ public class UserEntity implements Serializable {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
-    public LocalDateTime getLastLoginTime() {
-        return lastLoginTime;
+    public String getLoginTime() {
+        return loginTime;
     }
 
-    public void setLastLoginTime(LocalDateTime lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
+    public void setLoginTime(String loginTime) {
+        this.loginTime = loginTime;
     }
 
     public int getUserLevel() {
@@ -197,19 +185,19 @@ public class UserEntity implements Serializable {
         this.deleted = deleted;
     }
 
-    public Date getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 }
