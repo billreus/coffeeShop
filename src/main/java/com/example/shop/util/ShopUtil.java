@@ -1,6 +1,8 @@
 package com.example.shop.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.security.MessageDigest;
 import java.util.Map;
@@ -56,7 +58,8 @@ public class ShopUtil {
         json.put("errno", errno);
         json.put("errmsg", errmsg);
         json.put("data", data);
-        return json.toJSONString();
+        //分类列表有循环引用，不关闭会传输JSON会出现$ref
+        return JSON.toJSONString(json, SerializerFeature.DisableCircularReferenceDetect);
     }
 
     public static String getJSONString(int errno, Map<String, Object> map) {

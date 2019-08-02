@@ -5,7 +5,7 @@ Page({
   data: {
     categoryList: [],
     currentCategory: {},
-    currentSubCategoryList: {},
+    currentSubCategoryList: [],
     scrollLeft: 0,
     scrollTop: 0,
     goodsCount: 0,
@@ -44,7 +44,7 @@ Page({
   getCurrentCategory: function(id) {
     let that = this;
     util.request(api.CatalogCurrent, {
-        id: id
+        id: id||1
       })
       .then(function(res) {
         that.setData({

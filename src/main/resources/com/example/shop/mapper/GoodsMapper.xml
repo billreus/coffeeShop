@@ -3,5 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shop.mapper.GoodsMapper">
-
+    <select id="findSaleCount" resultType="long">
+            SELECT
+                COUNT(1)
+            FROM shop_goods
+            WHERE shop_goods.is_on_sale = '1'
+        </select>
 </mapper>

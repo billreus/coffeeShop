@@ -1,6 +1,5 @@
 package com.example.shop.controller;
 
-import com.example.shop.mapper.UserMapper;
 import com.example.shop.service.UserService;
 import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.ShopUtil;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController

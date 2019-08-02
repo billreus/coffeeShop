@@ -44,7 +44,7 @@ CREATE TABLE `shop_goods`(
     `picture` varchar(255) DEFAULT NULL COMMENT '图片',
     `inventory` int(11) DEFAULT NULL COMMENT '库存量',
     `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
-    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
+    `retail_price` decimal(10,2) DEFAULT '0.00' COMMENT '零售价',
     `create_by` varchar(63) DEFAULT NULL COMMENT '创建者',
     `create_date` datetime DEFAULT NULL COMMENT '创建时间',
     `update_by` varchar(63) DEFAULT NULL COMMENT '更新者',

@@ -4,9 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shop.mapper.CategoryMapper">
     <!-- 查询一级目录-->
-    <select id="selectByName" resultType="com.example.shop.model.CategoryEntity">
+    <select id="selectByLevel" resultType="com.example.shop.model.CategoryEntity">
         SELECT *
         FROM shop_category
         WHERE level=#{level};
+    </select>
+
+    <!-- 通过id查询目录-->
+    <select id="selectById" resultType="com.example.shop.model.CategoryEntity">
+        SELECT *
+        FROM shop_category
+        WHERE id=#{id};
+    </select>
+
+    <!-- 通过Pid查询目录-->
+    <select id="selectByPid" resultType="com.example.shop.model.CategoryEntity">
+        SELECT *
+        FROM shop_category
+        WHERE pid=#{pid};
     </select>
 </mapper>
