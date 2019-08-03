@@ -38,6 +38,7 @@ CREATE TABLE `shop_goods`(
     `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
     `category_id` int(11) NOT NULL COMMENT '商品类别id',
     `goods_id` varchar(63) NOT NULL COMMENT '商品编号id',
+    `gallery` varchar(1023) DEFAULT NULL COMMENT '商品宣传图片列表，采用JSON数组格式',
     `name` varchar(127) DEFAULT NULL COMMENT '商品名称',
     `brief` varchar(255) DEFAULT NULL COMMENT '商品介绍',
     `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',

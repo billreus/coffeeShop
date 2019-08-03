@@ -1,5 +1,7 @@
 package com.example.shop.model;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -23,6 +25,10 @@ public class GoodsEntity implements Serializable {
      * 商品名
      */
     private String name;
+    /**
+     * 展示图片
+     */
+    private String gallery;
     /**
      * 商品介绍
      */
@@ -98,6 +104,14 @@ public class GoodsEntity implements Serializable {
 
     public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getGallery() {
+        return gallery;
+    }
+
+    public void setGallery(String gallery) {
+        this.gallery = gallery;
     }
 
     public String getName() {

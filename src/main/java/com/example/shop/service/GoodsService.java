@@ -77,7 +77,7 @@ public class GoodsService {
      * @return
      */
     public Map<String, Object> detail(Integer id){
-        List<GoodsEntity> goods = goodsMapper.selectById(id);
+        GoodsEntity goods = goodsMapper.selectById(id);
 
         Map<String, Object> data = new HashMap<>();
         data.put("info", goods);

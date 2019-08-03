@@ -12,5 +12,5 @@ public interface GoodsMapper {
 
     List<GoodsEntity> selectByCategoryId(Integer categoryId);
 
-    List<GoodsEntity> selectById(Integer Id);
+    GoodsEntity selectById(Integer Id);
 }

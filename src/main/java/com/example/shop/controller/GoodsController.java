@@ -38,8 +38,13 @@ public class GoodsController {
     }
 
     @GetMapping("detail")
-    public String detail(Integer id){
-        Map<String, Object> data = goodsService.detail(id);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Object detail(Integer id){
+        Object data = goodsService.detail(id);
+        Map<String, Object> res = new HashMap<>();
+        res.put("errno", 0);
+        res.put("errmsg", "成功");
+        res.put("data", data);
+        //turn ShopUtil.getJSONString(0, "成功", data);
+        return res;
     }
 }
