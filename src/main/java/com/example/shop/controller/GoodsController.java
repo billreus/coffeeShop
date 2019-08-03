@@ -2,12 +2,14 @@ package com.example.shop.controller;
 
 import com.example.shop.service.GoodsService;
 import com.example.shop.util.ShopUtil;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/wx/goods")
@@ -24,7 +26,20 @@ public class GoodsController {
 
     @GetMapping("category")
     public String category(Integer id){
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = goodsService.category(id);
+        return ShopUtil.getJSONString(0, "成功", data);
+    }
+
+    @GetMapping("list")
+    public String list(Integer categoryId, Integer page, Integer limit){
+        //TODO 分页
+        Map<String, Object> data = goodsService.list(categoryId, page,limit);
+        return ShopUtil.getJSONString(0, "成功", data);
+    }
+
+    @GetMapping("detail")
+    public String detail(Integer id){
+        Map<String, Object> data = goodsService.detail(id);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 }

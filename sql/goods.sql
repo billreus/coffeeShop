@@ -1,3 +1,27 @@
+DROP TABLE IF EXISTS `shop_goods`;
+CREATE TABLE `shop_goods`(
+                             `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                             `category_id` int(11) NOT NULL COMMENT '商品类别id',
+                             `goods_id` varchar(63) NOT NULL COMMENT '商品编号id',
+                             `name` varchar(127) DEFAULT NULL COMMENT '商品名称',
+                             `brief` varchar(255) DEFAULT NULL COMMENT '商品介绍',
+                             `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',
+                             `pic_url` varchar(255) DEFAULT NULL COMMENT '图片',
+                             `inventory` int(11) DEFAULT NULL COMMENT '库存量',
+                             `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
+                             `retail_price` decimal(10,2) DEFAULT '0.00' COMMENT '零售价',
+                             `create_by` varchar(63) DEFAULT NULL COMMENT '创建者',
+                             `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+                             `update_by` varchar(63) DEFAULT NULL COMMENT '更新者',
+                             `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+                             `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
+                             `is_on_sale` tinyint(1) DEFAULT '1' COMMENT '是否上架，默认上架',
+                             `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0：正常 1：删除）',
+                             PRIMARY KEY (`id`),
+                             KEY `category_id` (`category_id`),
+                             KEY `goods_id` (`goods_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+
 INSERT INTO `shop_goods` VALUES (1,1,'1','水洗四件套1','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg',100,919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
                                 (2,2,'1','水洗四件套2','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg',100,919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
                                 (3,3,'1','水洗四件套3','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg',100,919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),

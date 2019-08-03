@@ -44,7 +44,7 @@ Page({
   getCurrentCategory: function(id) {
     let that = this;
     util.request(api.CatalogCurrent, {
-        id: id||1
+        id: id
       })
       .then(function(res) {
         that.setData({

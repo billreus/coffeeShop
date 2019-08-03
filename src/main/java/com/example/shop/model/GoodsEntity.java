@@ -34,7 +34,7 @@ public class GoodsEntity implements Serializable {
     /**
      * 图片
      */
-    private String picture;
+    private String picUrl;
     /**
      * 库存
      */
@@ -124,12 +124,12 @@ public class GoodsEntity implements Serializable {
         this.keywords = keywords;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getPicUrl() {
+        return picUrl;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
     public int getInventory() {

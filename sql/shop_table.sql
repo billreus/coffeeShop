@@ -41,7 +41,7 @@ CREATE TABLE `shop_goods`(
     `name` varchar(127) DEFAULT NULL COMMENT '商品名称',
     `brief` varchar(255) DEFAULT NULL COMMENT '商品介绍',
     `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',
-    `picture` varchar(255) DEFAULT NULL COMMENT '图片',
+    `pic_url` varchar(255) DEFAULT NULL COMMENT '图片',
     `inventory` int(11) DEFAULT NULL COMMENT '库存量',
     `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
     `retail_price` decimal(10,2) DEFAULT '0.00' COMMENT '零售价',

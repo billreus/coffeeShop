@@ -3,6 +3,7 @@ package com.example.shop.service;
 import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.mapper.GoodsMapper;
 import com.example.shop.model.CategoryEntity;
+import com.example.shop.model.GoodsEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +30,11 @@ public class GoodsService {
         return goodsMapper.findSaleCount();
     }
 
+    /**
+     * 商品分类页的分类
+     * @param id
+     * @return
+     */
     public Map<String, Object> category(Integer id){
         CategoryEntity currentCategory = categoryMapper.selectById(id);
         CategoryEntity parentCategory = null;
@@ -47,6 +53,34 @@ public class GoodsService {
         data.put("currentCategory", currentCategory);
         data.put("parentCategory", parentCategory);
         data.put("brotherCategory", childrenCategory);
+        return data;
+    }
+
+    /**
+     * 分类页商品列表
+     * @param id
+     * @param page
+     * @param limit
+     * @return
+     */
+    public Map<String, Object> list(Integer categoryId, Integer page, Integer limit){
+        List<GoodsEntity> goodsList = goodsMapper.selectByCategoryId(categoryId);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", goodsList);
+        return data;
+    }
+
+    /**
+     * 商品详情页
+     * @param id
+     * @return
+     */
+    public Map<String, Object> detail(Integer id){
+        List<GoodsEntity> goods = goodsMapper.selectById(id);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("info", goods);
         return data;
     }
 }
