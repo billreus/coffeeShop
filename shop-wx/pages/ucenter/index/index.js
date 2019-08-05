@@ -6,8 +6,8 @@ var app = getApp();
 Page({
   data: {
     userInfo: {
-      nickName: '点击登录',
-      avatarUrl: 'http://yanxuan.nosdn.127.net/8945ae63d940cc42406c3f67019c5cb6.png'
+      nickname: '点击登录',
+      avatar: 'http://yanxuan.nosdn.127.net/8945ae63d940cc42406c3f67019c5cb6.png'
     },
     order: {
       unpaid: 0,
@@ -207,6 +207,7 @@ Page({
     });
   },  
   exitLogin: function() {
+   //this.onload();
     wx.showModal({
       title: '',
       confirmColor: '#b4282d',
@@ -220,9 +221,10 @@ Page({
         app.globalData.hasLogin = false;
         wx.removeStorageSync('token');
         wx.removeStorageSync('userInfo');
+        //this.onload();
         wx.reLaunch({
           //url: '/pages/index/index'
-          url: '/ucenter/index/index'
+          url: '/pages/ucenter/index/index'
         });
       }
     })

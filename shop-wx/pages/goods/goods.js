@@ -157,8 +157,10 @@ Page({
           }
         }
 */
+let info = res.data.info;
+info.gallery = JSON.parse(info.gallery);
         that.setData({
-          goods: res.data.info,
+          goods: info,
           attribute: res.data.attribute,
           issueList: res.data.issue,
           comment: res.data.comment,

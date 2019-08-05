@@ -1,6 +1,9 @@
 package com.example.shop.mapper;
 
+import com.example.shop.model.CartEntity;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface CartMapper {
@@ -9,5 +12,5 @@ public interface CartMapper {
      * @param userId
      * @return
      */
-    long findCartCount(Integer userId);
+    List<CartEntity> selectByUserId(Integer userId);
 }

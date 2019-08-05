@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shop.mapper.CartMapper">
-    <select id="findCartCount" resultType="long">
-        SELECT
-            COUNT(1)
+    <!-- 统计购物车中商品数量 -->
+    <select id="selectByUserId" resultType="CartEntity">
+        SELECT *
         FROM shop_cart
         WHERE user_id =#{userId};
     </select>

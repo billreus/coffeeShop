@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/cart/cart",
     "pages/ucenter/index/index",
     "pages/goods/goods",
     "pages/catalog/catalog",
@@ -49,7 +50,7 @@
         "text": "分类"
       },
       {
-        "pagePath": "pages/ucenter/index/index",
+        "pagePath":"pages/cart/cart",
         "iconPath": "static/images/cart.png",
         "selectedIconPath": "static/images/cart@selected.png",
         "text": "购物车"

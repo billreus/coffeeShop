@@ -5,11 +5,15 @@ import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.ShopUtil;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * 用户注册登录
+ */
 @RestController
 @RequestMapping("/wx/auth")
 public class UserController {
@@ -67,14 +71,16 @@ public class UserController {
 
     /**
      * 登出
-     * @param userId
+     * @param
      * @return
      */
     @PostMapping("logout")
-    public Object logout(Integer userId){
-        if(userId == null){
+    public Object logout(NativeWebRequest request){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
             return ShopUtil.getJSONString(501, "请登录");
+        }else {
+            return ShopUtil.getJSONString(0, "退出成功");
         }
-        return ShopUtil.getJSONString(0, "退出成功");
     }
 }

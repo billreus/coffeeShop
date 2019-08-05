@@ -18,7 +18,17 @@ public interface CategoryMapper {
      */
     List<CategoryEntity> selectByLevel(String level);
 
+    /**
+     * 通过id查询
+     * @param id
+     * @return
+     */
     CategoryEntity selectById(Integer id);
 
+    /**
+     * 通过父类id查询
+     * @param pid
+     * @return
+     */
     List<CategoryEntity> selectByPid(Integer pid);
 }
