@@ -10,4 +10,30 @@
         WHERE user_id =#{userId};
     </select>
 
+    <!-- 通过Id查询-->
+    <select id="selectById" resultType="CartEntity">
+        SELECT *
+        FROM shop_cart
+        WHERE id =#{id};
+    </select>
+
+    <!-- 通过id更新购物车商品数量-->
+    <select id="updateById" resultType="CartEntity">
+        UPDATE shop_cart
+        SET number=#{number}
+        WHERE id =#{id};
+    </select>
+
+    <!-- 通过用户id和商品id删除购物车-->
+    <delete id="deleteByUserIdAndGoodsId" parameterType="java.lang.Integer">
+        DELETE FROM shop_cart
+        WHERE user_id=#{userId} AND goods_id=#{goodsId} ;
+    </delete>
+
+    <update id="updateCheckById">
+        UPDATE shop_cart
+        SET checked=#{checked}
+        WHERE user_id=#{userId} AND goods_id=#{goodsId};
+    </update>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.example.shop.mapper;
 
 import com.example.shop.model.CartEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,4 +14,35 @@ public interface CartMapper {
      * @return
      */
     List<CartEntity> selectByUserId(Integer userId);
+
+    /**
+     * 通过id查询购物车商品
+     * @param id
+     * @return
+     */
+    CartEntity selectById(Integer id);
+
+    /**
+     * 通过id更新购物车商品数量
+     * @param cartEntity
+     * @return
+     */
+    CartEntity updateById(CartEntity cartEntity);
+
+    /**
+     * 通过用户id和商品id删除购物车
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    int deleteByUserIdAndGoodsId(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
+
+    /**
+     * 通过用户和商品id更新选中状态
+     * @param userId
+     * @param goodsId
+     * @param checked
+     * @return
+     */
+    int updateCheckById(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId, @Param("checked") boolean checked);
 }

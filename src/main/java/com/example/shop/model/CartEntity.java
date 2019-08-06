@@ -17,15 +17,15 @@ public class CartEntity {
     /**
      * 商品Id
      */
-    private int goodId;
+    private int goodsId;
     /**
      * 商品编号
      */
-    private String goodSn;
+    private String goodsSn;
     /**
      * 商品名
      */
-    private String goodName;
+    private String goodsName;
     /**
      * 价格
      */
@@ -71,28 +71,28 @@ public class CartEntity {
         this.userId = userId;
     }
 
-    public int getGoodId() {
-        return goodId;
+    public int getGoodsId() {
+        return goodsId;
     }
 
-    public void setGoodId(int goodId) {
-        this.goodId = goodId;
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public String getGoodSn() {
-        return goodSn;
+    public String getGoodsSn() {
+        return goodsSn;
     }
 
-    public void setGoodSn(String goodSn) {
-        this.goodSn = goodSn;
+    public void setGoodsSn(String goodsSn) {
+        this.goodsSn = goodsSn;
     }
 
-    public String getGoodName() {
-        return goodName;
+    public String getGoodsName() {
+        return goodsName;
     }
 
-    public void setGoodName(String goodName) {
-        this.goodName = goodName;
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     public BigDecimal getPrice() {

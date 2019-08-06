@@ -8,10 +8,10 @@ Page({
   data: {
     cartGoods: [],
     cartTotal: {
-      "goodsCount": 0,
-      "goodsAmount": 0.00,
-      "checkedGoodsCount": 0,
-      "checkedGoodsAmount": 0.00
+      "goodsCount": 0,//总数
+      "goodsAmount": 0.00,//总价
+      "checkedGoodsCount": 0,//选中的数量
+      "checkedGoodsAmount": 0.00//选中的价格
     },
     isEditCart: false,
     checkedAllStatus: true,
@@ -87,11 +87,15 @@ Page({
     let itemIndex = event.target.dataset.itemIndex;
     let that = this;
 
-    let productIds = [];
-    productIds.push(that.data.cartGoods[itemIndex].productId);
+    //let productIds = [];
+    //productIds.push(that.data.cartGoods[itemIndex].productId);
+
+    let goodsId = [];
+    goodsId.push(that.data.cartGoods[itemIndex].goodsId);
     if (!this.data.isEditCart) {
-      util.request(api.CartChecked, {
-        productIds: productIds,
+     util.request(api.CartChecked, {
+        //productIds: productIds,
+        goodsId: goodsId,
         isChecked: that.data.cartGoods[itemIndex].checked ? 0 : 1
       }, 'POST').then(function(res) {
         if (res.errno === 0) {
@@ -136,11 +140,14 @@ Page({
     let that = this;
 
     if (!this.data.isEditCart) {
-      var productIds = this.data.cartGoods.map(function(v) {
-        return v.productId;
+      //var productIds = this.data.cartGoods.map(function (v) {
+      var goodsId = this.data.cartGoods.map(function(v) {
+        //return v.productId;
+        return v.goodsId;
       });
       util.request(api.CartChecked, {
-        productIds: productIds,
+        //productIds: productIds,
+        goodsId: goodsId,
         isChecked: that.isCheckedAll() ? 0 : 1
       }, 'POST').then(function(res) {
         if (res.errno === 0) {
@@ -259,28 +266,30 @@ Page({
   deleteCart: function() {
     //获取已选择的商品
     let that = this;
-
-    let productIds = this.data.cartGoods.filter(function(element, index, array) {
+    let goodsId = this.data.cartGoods.filter(function (element, index, array) {
+    //let productIds = this.data.cartGoods.filter(function(element, index, array) {
       if (element.checked == true) {
         return true;
       } else {
         return false;
       }
     });
-
-    if (productIds.length <= 0) {
+    if (goodsId.length <= 0) {
+    //if (productIds.length <= 0) {
       return false;
     }
-
-    productIds = productIds.map(function(element, index, array) {
+    goodsId = goodsId.map(function (element, index, array) {
+    //productIds = productIds.map(function(element, index, array) {
       if (element.checked == true) {
-        return element.productId;
+        return element.goodsId;
+        //return element.productId;
       }
     });
 
 
     util.request(api.CartDelete, {
-      productIds: productIds
+      goodsId: goodsId
+      //productIds: productIds
     }, 'POST').then(function(res) {
       if (res.errno === 0) {
         console.log(res.data);
