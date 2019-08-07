@@ -1,7 +1,9 @@
 package com.example.shop.service;
 
 import com.example.shop.mapper.CartMapper;
+import com.example.shop.mapper.GoodsMapper;
 import com.example.shop.model.CartEntity;
+import com.example.shop.model.GoodsEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,6 +17,9 @@ public class CartService {
 
     @Resource
     CartMapper cartMapper;
+
+    @Resource
+    GoodsMapper goodsMapper;
 
     /**
      * 统计购物车数量
@@ -98,6 +103,21 @@ public class CartService {
             Integer delete = deleteList.get(i);
             cartMapper.deleteByUserIdAndGoodsId(userId, delete);
         }
+
+    }
+
+    public void add(Integer userId, CartEntity cart){
+        Integer number = cart.getNumber();
+        Integer goodsId = cart.getGoodsId();
+        //TODO 购物车错误判断
+        GoodsEntity goods = goodsMapper.selectById(goodsId);
+        cart.setUserId(userId);
+        cart.setGoodsSn(goods.getGoodsId());
+        cart.setGoodsName(goods.getName());
+        cart.setPrice(goods.getRetailPrice());
+        cart.setChecked(true);
+        cart.setPicUrl(goods.getPicUrl());
+        cartMapper.insertCart(cart);
 
     }
 

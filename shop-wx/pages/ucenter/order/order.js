@@ -24,7 +24,7 @@ Page({
   getOrderList() {
     let that = this;
     util.request(api.OrderList, {
-      showType: that.data.showType,
+      showType: that.data.showType,//订单状态，全部，待付款，待发货，待收货，待评价
       page: that.data.page,
       limit: that.data.limit
     }).then(function(res) {

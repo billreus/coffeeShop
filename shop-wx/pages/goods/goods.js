@@ -6,7 +6,7 @@ var user = require('../../utils/user.js');
 
 Page({
   data: {
-    canShare: false,
+    //canShare: false,
     id: 0,
     goods: {},
     groupon: [], //该商品支持的团购规格
@@ -29,7 +29,7 @@ Page({
     noCollectImage: '/static/images/icon_collect.png',
     hasCollectImage: '/static/images/icon_collect_checked.png',
     collectImage: '/static/images/icon_collect.png',
-    shareImage: '',
+    //shareImage: '',
     isGroupon: false, //标识是否是一个参团购买
     soldout: false,
     canWrite: false, //用户是否获取了保存相册的权限
@@ -168,10 +168,10 @@ info.gallery = JSON.parse(info.gallery);
           specificationList: res.data.specificationList,
           productList: res.data.productList,
           userHasCollect: res.data.userHasCollect,
-          shareImage: res.data.shareImage,
+          //shareImage: res.data.shareImage,
           checkedSpecPrice: res.data.info.retailPrice,
           groupon: res.data.groupon,
-          canShare: res.data.share,
+          //canShare: res.data.share,
         });
 /*
         //如果是通过分享的团购参加团购，则团购项目应该与分享的一致并且不可更改
@@ -254,7 +254,7 @@ info.gallery = JSON.parse(info.gallery);
   },
 */
   // 规格选择
-  clickSkuValue: function(event) {
+/*  clickSkuValue: function(event) {
     let that = this;
     let specName = event.currentTarget.dataset.name;
     let specValueId = event.currentTarget.dataset.valueId;
@@ -337,7 +337,7 @@ info.gallery = JSON.parse(info.gallery);
       return v.valueText;
     });
     return checkedValue;
-  },
+  },*/
 
   // 规格改变时，重新计算价格及显示信息
   changeSpecInfo: function() {
@@ -362,7 +362,7 @@ info.gallery = JSON.parse(info.gallery);
         tmpSpecText: '请选择规格数量'
       });
     }
-
+/*
     if (this.isCheckedAllSpec()) {
       this.setData({
         checkedSpecText: this.data.tmpSpecText
@@ -397,10 +397,10 @@ info.gallery = JSON.parse(info.gallery);
         checkedSpecPrice: this.data.goods.retailPrice,
         soldout: false
       });
-    }
+    }*/
 
   },
-
+/*
   // 获取选中的产品（根据规格）
   getCheckedProductItem: function(key) {
     return this.data.productList.filter(function(v) {
@@ -410,7 +410,7 @@ info.gallery = JSON.parse(info.gallery);
         return false;
       }
     });
-  },
+  },*/
 
   onLoad: function(options) {
     // 页面初始化 options为页面跳转所带来的参数
@@ -499,7 +499,7 @@ info.gallery = JSON.parse(info.gallery);
         openAttr: !this.data.openAttr
       });
     } else {
-
+/*
       //提示选择完整规格
       if (!this.isCheckedAllSpec()) {
         wx.showToast({
@@ -507,10 +507,10 @@ info.gallery = JSON.parse(info.gallery);
           title: '请选择完整规格'
         });
         return false;
-      }
+      }*/
 
       //根据选中的规格，判断是否有对应的sku信息
-      let checkedProductArray = this.getCheckedProductItem(this.getCheckedSpecKey());
+/*      let checkedProductArray = this.getCheckedProductItem(this.getCheckedSpecKey());
       if (!checkedProductArray || checkedProductArray.length <= 0) {
         //找不到对应的product信息，提示没有库存
         wx.showToast({
@@ -518,8 +518,8 @@ info.gallery = JSON.parse(info.gallery);
           title: '没有库存'
         });
         return false;
-      }
-
+      }*/
+/*
       let checkedProduct = checkedProductArray[0];
       //验证库存
       if (checkedProduct.number <= 0) {
@@ -532,12 +532,12 @@ info.gallery = JSON.parse(info.gallery);
 
       //验证团购是否有效
       let checkedGroupon = this.getCheckedGrouponValue();
-
+*/
       //立即购买
       util.request(api.CartFastAdd, {
           goodsId: this.data.goods.id,
           number: this.data.number,
-          productId: checkedProduct.id
+          //productId: checkedProduct.id
         }, "POST")
         .then(function(res) {
           if (res.errno == 0) {
@@ -574,7 +574,7 @@ info.gallery = JSON.parse(info.gallery);
         openAttr: !this.data.openAttr
       });
     } else {
-
+/*
       //提示选择完整规格
       if (!this.isCheckedAllSpec()) {
         wx.showToast({
@@ -582,10 +582,10 @@ info.gallery = JSON.parse(info.gallery);
           title: '请选择完整规格'
         });
         return false;
-      }
+      }*/
 
       //根据选中的规格，判断是否有对应的sku信息
-      let checkedProductArray = this.getCheckedProductItem(this.getCheckedSpecKey());
+/*      let checkedProductArray = this.getCheckedProductItem(this.getCheckedSpecKey());
       if (!checkedProductArray || checkedProductArray.length <= 0) {
         //找不到对应的product信息，提示没有库存
         wx.showToast({
@@ -593,8 +593,8 @@ info.gallery = JSON.parse(info.gallery);
           title: '没有库存'
         });
         return false;
-      }
-
+      }*/
+/*
       let checkedProduct = checkedProductArray[0];
       //验证库存
       if (checkedProduct.number <= 0) {
@@ -603,13 +603,13 @@ info.gallery = JSON.parse(info.gallery);
           title: '没有库存'
         });
         return false;
-      }
+      }*/
 
       //添加到购物车
       util.request(api.CartAdd, {
           goodsId: this.data.goods.id,
-          number: this.data.number,
-          productId: checkedProduct.id
+          number: this.data.number
+          //productId: checkedProduct.id
         }, "POST")
         .then(function(res) {
           let _res = res;
@@ -673,11 +673,12 @@ info.gallery = JSON.parse(info.gallery);
       openAttr: false,
     });
   },
+  /*
   closeShare: function() {
     this.setData({
       openShare: false,
     });
-  },
+  },*/
   openCartPage: function() {
     wx.switchTab({
       url: '/pages/cart/cart'

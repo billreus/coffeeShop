@@ -30,10 +30,17 @@
         WHERE user_id=#{userId} AND goods_id=#{goodsId} ;
     </delete>
 
+    <!-- 通过用户id更新check-->
     <update id="updateCheckById">
         UPDATE shop_cart
         SET checked=#{checked}
         WHERE user_id=#{userId} AND goods_id=#{goodsId};
     </update>
+
+    <insert id="insertCart">
+        INSERT INTO
+            shop_cart(user_id, goods_id, goods_sn, goods_name, price, number, checked, pic_url, add_time, update_time)
+        VALUES(#{userId}, #{goodsId}, #{goodsSn}, #{goodsName}, #{price}, #{number}, #{checked}, #{picUrl}, #{addTime}, #{updateTime})
+    </insert>
 
 </mapper>

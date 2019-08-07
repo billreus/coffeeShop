@@ -45,4 +45,11 @@ public interface CartMapper {
      * @return
      */
     int updateCheckById(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId, @Param("checked") boolean checked);
+
+    /**
+     * 增加购物车
+     * @param cartEntity
+     * @return
+     */
+    int insertCart(CartEntity cartEntity);
 }

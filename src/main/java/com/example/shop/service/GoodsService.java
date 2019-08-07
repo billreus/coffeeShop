@@ -1,7 +1,10 @@
 package com.example.shop.service;
 
+import com.example.shop.mapper.AttributeMapper;
 import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.mapper.GoodsMapper;
+import com.example.shop.model.AttributeEntity;
+import com.example.shop.model.CartEntity;
 import com.example.shop.model.CategoryEntity;
 import com.example.shop.model.GoodsEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,9 @@ public class GoodsService {
 
     @Resource
     CategoryMapper categoryMapper;
+
+    @Resource
+    AttributeMapper attributeMapper;
 
     /**
      * 商品总数
@@ -58,7 +64,7 @@ public class GoodsService {
 
     /**
      * 分类页商品列表
-     * @param id
+     * @param categoryId
      * @param page
      * @param limit
      * @return
@@ -73,14 +79,17 @@ public class GoodsService {
 
     /**
      * 商品详情页
-     * @param id
+     * @param id 商品id
      * @return
      */
     public Map<String, Object> detail(Integer id){
         GoodsEntity goods = goodsMapper.selectById(id);
+        List<AttributeEntity> attribute = attributeMapper.selectByGoodsId(id);
 
         Map<String, Object> data = new HashMap<>();
         data.put("info", goods);
+        data.put("attribute", attribute);
         return data;
     }
+
 }

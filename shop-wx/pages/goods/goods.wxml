@@ -34,18 +34,20 @@
 -->
   <view class="goods-info">
     <view class="c">
+      <text class="name">{{goods.name}}</text>
       <text class="desc">{{goods.brief}}</text>
       <view class="price">
         <!--<view class="counterPrice">原价：￥{{goods.counterPrice}}</view>-->
         <view class="counterPrice">原价：￥{{goods.originalPrice}}</view>
         <view class="retailPrice">现价：￥{{checkedSpecPrice}}</view>
       </view>
-
+      <!--品牌
       <view class="brand" wx:if="{{brand.name}}">
         <navigator url="../brandDetail/brandDetail?id={{brand.id}}">
           <text>{{brand.name}}</text>
         </navigator>
-      </view>
+      </view>-->
+
     </view>
   </view>
   <view class="section-nav section-attr" bindtap="switchAttrPop">
@@ -144,15 +146,15 @@
     </view>
 
     <!-- 规格列表 -->
-    <view class="spec-con">
-      <view class="spec-item" wx:for="{{specificationList}}" wx:key="name">
+   <view class="spec-con">
+<!--      <view class="spec-item" wx:for="{{specificationList}}" wx:key="name">
         <view class="name">{{item.name}}</view>
         <view class="values">
           <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.valueList}}" wx:for-item="vitem" wx:key="{{vitem.id}}" data-value-id="{{vitem.id}}" data-name="{{vitem.specification}}">{{vitem.value}}</view>
         </view>
       </view>
-<!--
-      <view class="spec-con" wx:if="{{groupon.length > 0}}">
+
+       <view class="spec-con" wx:if="{{groupon.length > 0}}">
         <view class="spec-item">
           <view class="name">团购立减</view>
           <view class="values">

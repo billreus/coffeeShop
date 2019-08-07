@@ -80,6 +80,12 @@ public class CartController {
         }
     }
 
+    /**
+     * 购物车打勾
+     * @param request
+     * @param body
+     * @return
+     */
     @PostMapping("checked")
     public String checked(NativeWebRequest request, @RequestBody String body){
         String token = request.getHeader("X-Litemall-Token");
@@ -126,5 +132,25 @@ public class CartController {
         }
         cartService.delete(deleteList, userId);
         return index(request);
+    }
+
+    /**
+     * 添加购物车
+     * @param request
+     * @param cart
+     * @return
+     */
+    @PostMapping("add")
+    public Object add(NativeWebRequest request, @RequestBody CartEntity cart){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        if(cart == null){
+            return ShopUtil.getJSONString(401, "参数不对");
+        }
+        cartService.add(userId, cart);
+        return goodCount(request);
     }
 }

@@ -43,7 +43,7 @@ CREATE TABLE `shop_goods`(
     `brief` varchar(255) DEFAULT NULL COMMENT '商品介绍',
     `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',
     `pic_url` varchar(255) DEFAULT NULL COMMENT '图片',
-    `inventory` int(11) DEFAULT NULL COMMENT '库存量',
+    `unit` varchar(31) DEFAULT '’件‘' COMMENT '商品单位，例如件、盒',
     `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
     `retail_price` decimal(10,2) DEFAULT '0.00' COMMENT '零售价',
     `create_by` varchar(63) DEFAULT NULL COMMENT '创建者',
@@ -57,6 +57,31 @@ CREATE TABLE `shop_goods`(
     KEY `category_id` (`category_id`),
     KEY `goods_id` (`goods_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+
+DROP TABLE IF EXISTS `shop_attribute`;
+CREATE TABLE `shop_attribute`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+    `attribute` varchar(255) NOT NULL COMMENT '商品参数名',
+    `value` varchar(255) NOT NULL COMMENT '商品参数',
+    `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0：正常 1：删除）',
+    PRIMARY KEY (`id`),
+    KEY `goods_id` (`goods_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品参数表';
+
+DROP TABLE IF EXISTS `shop_stock`;
+CREATE TABLE `shop_stock`(
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+    `stock` int(11) NOT NULL DEFAULT '0' COMMENT '库存',
+    `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0：正常 1：删除）',
+    PRIMARY KEY (`id`),
+    KEY `goods_id` (`goods_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品库存表';
 
 DROP TABLE IF EXISTS `shop_category`;
 CREATE TABLE `shop_category`(

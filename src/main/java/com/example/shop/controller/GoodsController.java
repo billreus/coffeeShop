@@ -19,18 +19,34 @@ public class GoodsController {
     @Resource
     GoodsService goodsService;
 
+    /**
+     * 商品总数
+     * @return
+     */
     @GetMapping("count")
     public String count(){
         long saleCount = goodsService.count();
         return ShopUtil.getJSONString(0, "成功", saleCount);
     }
 
+    /**
+     * 分类页商品分类
+     * @param id
+     * @return
+     */
     @GetMapping("category")
     public String category(Integer id){
         Map<String, Object> data = goodsService.category(id);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
+    /**
+     * 分类页商品列表
+     * @param categoryId
+     * @param page
+     * @param limit
+     * @return
+     */
     @GetMapping("list")
     public String list(Integer categoryId, Integer page, Integer limit){
         //TODO 分页
@@ -38,6 +54,11 @@ public class GoodsController {
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
+    /**
+     * 商品详情页
+     * @param id
+     * @return
+     */
     @GetMapping("detail")
     public Object detail(Integer id){
         Object data = goodsService.detail(id);

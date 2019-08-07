@@ -1,7 +1,5 @@
 package com.example.shop.model;
 
-import com.alibaba.fastjson.JSON;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -42,9 +40,9 @@ public class GoodsEntity implements Serializable {
      */
     private String picUrl;
     /**
-     * 库存
+     * 商品单位
      */
-    private int inventory;
+    private String unit;
     /**
      * 原价
      */
@@ -146,12 +144,12 @@ public class GoodsEntity implements Serializable {
         this.picUrl = picUrl;
     }
 
-    public int getInventory() {
-        return inventory;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setInventory(int inventory) {
-        this.inventory = inventory;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public BigDecimal getOriginalPrice() {
