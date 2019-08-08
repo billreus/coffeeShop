@@ -121,4 +121,21 @@ public class CartService {
 
     }
 
+    public Map<String ,Object> checkout(Integer userId, Integer cartId, Integer addressId, Integer couponId){
+        List<CartEntity> checkGoodsList = cartMapper.selectByUserIdAndChecked(userId, 1);
+        BigDecimal goodsTotalPrice = new BigDecimal(0);
+        for(CartEntity checkGoods : checkGoodsList){
+            BigDecimal price = checkGoods.getPrice();
+            int number = checkGoods.getNumber();
+            goodsTotalPrice = goodsTotalPrice.add(price.multiply(new BigDecimal(number)));
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("checkedGoodsList", checkGoodsList);
+        data.put("goodsTotalPrice", goodsTotalPrice);
+        //TODO 优惠劵价格
+        data.put("actualPrice", goodsTotalPrice);
+        return data;
+    }
+
 }

@@ -31,13 +31,9 @@ public class GoodsOrderEntity {
      */
     private String goodsType;
     /**
-     * 原价
+     * 实际付款金额
      */
-    private BigDecimal originalPrice;
-    /**
-     * 零售价
-     */
-    private BigDecimal retailPrice;
+    private BigDecimal actualPrice;
     /**
      * 购买数量
      */
@@ -103,20 +99,12 @@ public class GoodsOrderEntity {
         this.goodsType = goodsType;
     }
 
-    public BigDecimal getOriginalPrice() {
-        return originalPrice;
+    public BigDecimal getActualPrice() {
+        return actualPrice;
     }
 
-    public void setOriginalPrice(BigDecimal originalPrice) {
-        this.originalPrice = originalPrice;
-    }
-
-    public BigDecimal getRetailPrice() {
-        return retailPrice;
-    }
-
-    public void setRetailPrice(BigDecimal retailPrice) {
-        this.retailPrice = retailPrice;
+    public void setActualPrice(BigDecimal actualPrice) {
+        this.actualPrice = actualPrice;
     }
 
     public int getGoodsCount() {

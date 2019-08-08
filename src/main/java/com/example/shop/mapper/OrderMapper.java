@@ -15,5 +15,12 @@ public interface OrderMapper {
      * @param userId
      * @return
      */
-    List<OrderEntity> selectByUserId(Integer userId);
+    List<OrderEntity> selectByUserId(Integer userId, Integer orderStatus);
+
+    /**
+     * 通过id查询订单
+     * @param id
+     * @return
+     */
+    OrderEntity selectById(Integer id);
 }

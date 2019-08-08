@@ -17,6 +17,12 @@
         WHERE id =#{id};
     </select>
 
+    <select id="selectByUserIdAndChecked" resultType="CartEntity">
+        SELECT *
+        FROM shop_cart
+        WHERE user_id =#{userId} AND checked =#{checked};
+    </select>
+
     <!-- 通过id更新购物车商品数量-->
     <select id="updateById" resultType="CartEntity">
         UPDATE shop_cart

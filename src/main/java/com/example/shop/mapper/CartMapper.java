@@ -16,6 +16,14 @@ public interface CartMapper {
     List<CartEntity> selectByUserId(Integer userId);
 
     /**
+     * 通过用户id和是否选中查询
+     * @param userId
+     * @param checked
+     * @return
+     */
+    List<CartEntity> selectByUserIdAndChecked(Integer userId, int checked);
+
+    /**
      * 通过id查询购物车商品
      * @param id
      * @return

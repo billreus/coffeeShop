@@ -7,7 +7,13 @@
     <select id="selectByUserId" resultType="OrderEntity">
         SELECT *
         FROM shop_order
-        WHERE user_id =#{userId};
+        WHERE user_id =#{userId} AND order_status=#{orderStatus};
     </select>
 
+    <!-- 通过用户Id查询-->
+    <select id="selectById" resultType="OrderEntity">
+        SELECT *
+        FROM shop_order
+        WHERE id =#{id};
+    </select>
 </mapper>

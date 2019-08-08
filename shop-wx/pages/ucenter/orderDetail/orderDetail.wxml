@@ -29,10 +29,10 @@
         <view class="info">
           <view class="t">
             <text class="name">{{item.goodsName}}</text>
-            <text class="number">x{{item.number}}</text>
+            <text class="number">x{{item.goodsCount}}</text>
           </view>
           <view class="attr">{{item.specifications}}</view>
-          <view class="price">￥{{item.price}}</view>
+          <view class="price">￥{{item.actualPrice}}</view>
           <view class="btn active" wx:if="{{handleOption.comment && (item.comment == 0)}}">
             <navigator url="../../commentPost/commentPost?orderId={{item.orderId}}&&valueId={{item.goodsId}}&type=0">去评价</navigator>
           </view>
@@ -49,7 +49,7 @@
           <text class="name">{{orderInfo.consignee}}</text>
           <text class="mobile">{{orderInfo.mobile}}</text>
         </view>
-        <view class="b">{{orderInfo.address}}</view>
+        <view class="b">地址：{{orderInfo.address}}</view>
       </view>
       <view class="total">
         <view class="t">
@@ -57,8 +57,8 @@
           <text class="txt">￥{{orderInfo.goodsPrice}}</text>
         </view>
         <view class="t">
-          <text class="label">运费：</text>
-          <text class="txt">￥{{orderInfo.freightPrice}}</text>
+          <text class="label">积分：</text>
+          <text class="txt">￥{{orderInfo.orderIntegral}}</text>
         </view>
         <view class="t">
           <text class="label">优惠：</text>

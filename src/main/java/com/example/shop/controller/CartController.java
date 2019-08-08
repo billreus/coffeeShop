@@ -153,4 +153,24 @@ public class CartController {
         cartService.add(userId, cart);
         return goodCount(request);
     }
+
+    /**
+     * 购物车下单
+     * @param request
+     * @param cartId
+     * @param addressId
+     * @param couponId
+     * @return
+     */
+    @GetMapping("checkout")
+    public String checkout(NativeWebRequest request, Integer cartId, Integer addressId, Integer couponId){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        Map<String, Object> data = new HashMap<>();
+        data = cartService.checkout(userId, cartId, addressId, couponId);
+        return ShopUtil.getJSONString(0, "成功", data);
+    }
 }

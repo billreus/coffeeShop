@@ -39,9 +39,17 @@ public class OrderEntity {
      */
     private BigDecimal orderPrice;
     /**
+     * 优惠金额
+     */
+    private BigDecimal couponPrice;
+    /**
      * 订单积分
      */
-    private String orderIntegral;
+    private Integer orderIntegral;
+    /**
+     * 实际付款金额
+     */
+    private BigDecimal actualPrice;
     /**
      * 创建时间
      */
@@ -123,11 +131,11 @@ public class OrderEntity {
         this.orderPrice = orderPrice;
     }
 
-    public String getOrderIntegral() {
+    public Integer getOrderIntegral() {
         return orderIntegral;
     }
 
-    public void setOrderIntegral(String orderIntegral) {
+    public void setOrderIntegral(Integer orderIntegral) {
         this.orderIntegral = orderIntegral;
     }
 
@@ -161,5 +169,21 @@ public class OrderEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public BigDecimal getCouponPrice() {
+        return couponPrice;
+    }
+
+    public void setCouponPrice(BigDecimal couponPrice) {
+        this.couponPrice = couponPrice;
+    }
+
+    public BigDecimal getActualPrice() {
+        return actualPrice;
+    }
+
+    public void setActualPrice(BigDecimal actualPrice) {
+        this.actualPrice = actualPrice;
     }
 }

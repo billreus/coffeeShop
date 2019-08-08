@@ -11,13 +11,14 @@ import java.util.Map;
 
 /**
  * 商品
+ * @author EDZ
  */
 @RestController
 @RequestMapping("/wx/goods")
 public class GoodsController {
 
     @Resource
-    GoodsService goodsService;
+    private GoodsService goodsService;
 
     /**
      * 商品总数
