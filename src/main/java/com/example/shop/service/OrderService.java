@@ -1,14 +1,20 @@
 package com.example.shop.service;
 
+import com.example.shop.mapper.CartMapper;
 import com.example.shop.mapper.GoodsOrderMapper;
 import com.example.shop.mapper.OrderMapper;
+import com.example.shop.model.CartEntity;
 import com.example.shop.model.GoodsOrderEntity;
 import com.example.shop.model.OrderEntity;
+import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.OrderUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +23,16 @@ import java.util.Map;
 @Service
 public class OrderService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private OrderMapper orderMapper;
 
     @Resource
     private GoodsOrderMapper goodsOrderMapper;
+
+    @Resource
+    private CartMapper cartMapper;
 
     /**
      * 订单列表
@@ -88,6 +99,73 @@ public class OrderService {
 
     @Transactional
     public Map<String, Object> submit(Integer userId, String body){
+        Integer cartId = JacksonUtil.parseInteger(body, "cartId");
+        Integer addressId = JacksonUtil.parseInteger(body, "addressId");
+        Integer couponId = JacksonUtil.parseInteger(body, "couponId");
+        String message = JacksonUtil.parseString(body, "message");
+        Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
+        Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
 
+        Map<String, Object> data = new HashMap<>();
+        //订单商品
+        List<CartEntity> cartList =null;
+        if(cartId == null){
+            return data;
+        }
+        if(cartId.equals(0)){
+            cartList = cartMapper.selectByUserIdAndChecked(userId, 1);
+        }else {
+            CartEntity cart = cartMapper.selectById(cartId);
+            cartList = new ArrayList<>();
+            cartList.add(cart);
+        }
+        //选中商品价格
+        BigDecimal checkedGoodPrice = new BigDecimal(0.00);
+        for (CartEntity cart : cartList){
+            checkedGoodPrice = checkedGoodPrice.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
+        }
+        //TODO 优惠劵价格和减完价格
+        BigDecimal orderPrice = checkedGoodPrice;
+        BigDecimal couponPrice = new BigDecimal(0.00);
+        BigDecimal actualPrice = checkedGoodPrice;
+
+        //订单
+        Integer orderId = null;
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setUserId(userId);
+        //TODO 生成单号
+        orderEntity.setOrderSn("1000");
+        orderEntity.setOrderStatus(OrderUtil.STATUS_CREATE);
+        orderEntity.setConsignee("a先生");
+        orderEntity.setMobile("13131313135");
+        orderEntity.setAddress("dizilalalla");
+        orderEntity.setOrderPrice(orderPrice);
+        //积分,优惠
+        orderEntity.setCouponPrice(couponPrice);
+        orderEntity.setOrderIntegral(100);
+        orderEntity.setActualPrice(actualPrice);
+        orderEntity.setMessage("");
+
+        //添加订单,记录订单id
+        orderId = orderMapper.insert(orderEntity);
+
+        for(CartEntity cartGoods : cartList){
+            GoodsOrderEntity goodsOrderEntity = new GoodsOrderEntity();
+            goodsOrderEntity.setGoodsId(cartGoods.getGoodsId());
+            goodsOrderEntity.setOrderId(orderEntity.getId());
+            goodsOrderEntity.setGoodsName(cartGoods.getGoodsName());
+            goodsOrderEntity.setPicUrl(cartGoods.getPicUrl());
+            goodsOrderEntity.setActualPrice(cartGoods.getPrice());
+            goodsOrderEntity.setGoodsCount(cartGoods.getNumber());
+
+            goodsOrderMapper.insert(goodsOrderEntity);
+        }
+        //删除购物车信息
+        cartMapper.delete(userId, true);
+
+        // TODO 库存 优惠劵
+
+        data.put("orderId", orderId);
+        return data;
     }
 }

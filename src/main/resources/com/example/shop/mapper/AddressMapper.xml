@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.mapper.AddressMapper">
+
+    <select id="selectByUserId" resultType="AddressEntity">
+        SELECT *
+        FROM shop_address
+        WHERE user_id =#{userId}
+    </select>
+
+    <select id="selectByUserIdAndId" resultType="AddressEntity">
+        SELECT *
+        FROM shop_address
+        WHERE user_id =#{userId} AND id =#{id}
+    </select>
+
+    <update id="updateDefaultByUserId">
+        UPDATE shop_address
+        SET is_default = 1
+        WHERE user_id =#{userId}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO
+            shop_address(name, user_id, province, city, county, address_detail, tel, is_default)
+        VALUES (#{name}, #{userId}, #{province}, #{city}, #{county}, #{addressDetail}, #{tel}, #{isDefault})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM shop_address
+        WHERE id=#{id}
+    </delete>
+</mapper>

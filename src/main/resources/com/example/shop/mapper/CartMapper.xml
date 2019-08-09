@@ -31,6 +31,13 @@
     </select>
 
     <!-- 通过用户id和商品id删除购物车-->
+    <select id="selectByUserIdAndGoodsId" resultType="CartEntity">
+        SELECT *
+        FROM shop_cart
+        WHERE user_id=#{userId} AND goods_id=#{goodsId} ;
+    </select>
+
+    <!-- 通过用户id和商品id删除购物车-->
     <delete id="deleteByUserIdAndGoodsId" parameterType="java.lang.Integer">
         DELETE FROM shop_cart
         WHERE user_id=#{userId} AND goods_id=#{goodsId} ;
@@ -48,5 +55,10 @@
             shop_cart(user_id, goods_id, goods_sn, goods_name, price, number, checked, pic_url, add_time, update_time)
         VALUES(#{userId}, #{goodsId}, #{goodsSn}, #{goodsName}, #{price}, #{number}, #{checked}, #{picUrl}, #{addTime}, #{updateTime})
     </insert>
+
+    <delete id="delete">
+        DELETE FROM shop_cart
+        WHERE user_id=#{userId} AND checked=#{checked}
+    </delete>
 
 </mapper>

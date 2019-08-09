@@ -173,4 +173,15 @@ public class CartController {
         data = cartService.checkout(userId, cartId, addressId, couponId);
         return ShopUtil.getJSONString(0, "成功", data);
     }
+
+    @PostMapping("fastadd")
+    public String fastAdd(NativeWebRequest request, @RequestBody CartEntity cartEntity){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        Integer data = cartService.fastAdd(userId, cartEntity);
+        return ShopUtil.getJSONString(0, "成功", data);
+    }
 }

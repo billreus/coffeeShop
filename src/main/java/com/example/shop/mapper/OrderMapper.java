@@ -23,4 +23,11 @@ public interface OrderMapper {
      * @return
      */
     OrderEntity selectById(Integer id);
+
+    /**
+     * 添加订单
+     * @param orderEntity
+     * @return
+     */
+    Integer insert(OrderEntity orderEntity);
 }

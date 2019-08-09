@@ -9,6 +9,8 @@ import java.util.List;
  * 订单工具类
  */
 public class OrderUtil {
+
+    public static final int STATUS_CREATE = 1;
     /**
      * 订单状态文本
      * @param status

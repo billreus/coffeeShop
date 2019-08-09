@@ -17,8 +17,8 @@
     </select>
 
     <select id="selectById" resultType="com.example.shop.model.GoodsEntity">
-            SELECT *
-            FROM shop_goods
-            WHERE id =#{id};
-        </select>
+        SELECT *
+        FROM shop_goods
+        WHERE id =#{id};
+    </select>
 </mapper>

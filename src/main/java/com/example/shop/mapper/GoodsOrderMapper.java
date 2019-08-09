@@ -12,4 +12,6 @@ import java.util.List;
 public interface GoodsOrderMapper {
 
     List<GoodsOrderEntity> selectByOrderId(Integer orderId);
+
+    int insert(GoodsOrderEntity goodsOrderEntity);
 }

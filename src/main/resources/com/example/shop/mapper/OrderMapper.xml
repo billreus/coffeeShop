@@ -16,4 +16,16 @@
         FROM shop_order
         WHERE id =#{id};
     </select>
+
+    <!-- 添加订单 -->
+    <insert id="insert">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+            shop_order(user_id, order_sn, order_status, consignee, mobile, address, order_price, coupon_price,
+                       order_integral, actual_price, add_time, end_time, message, deleted)
+        VALUES(#{userId}, #{orderSn}, #{orderStatus}, #{consignee}, #{mobile}, #{address}, #{orderPrice}, #{couponPrice},
+               #{orderIntegral}, #{actualPrice}, #{addTime}, #{endTime}, #{message}, #{deleted})
+    </insert>
 </mapper>

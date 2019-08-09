@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,8 +122,24 @@ public class CartService {
 
     }
 
+    /**
+     * 购物车下单
+     * @param userId
+     * @param cartId
+     * @param addressId
+     * @param couponId
+     * @return
+     */
     public Map<String ,Object> checkout(Integer userId, Integer cartId, Integer addressId, Integer couponId){
-        List<CartEntity> checkGoodsList = cartMapper.selectByUserIdAndChecked(userId, 1);
+        List<CartEntity> checkGoodsList = null;
+        if(cartId == null || cartId.equals(0)){
+            checkGoodsList = cartMapper.selectByUserIdAndChecked(userId, 1);
+        }else {
+            CartEntity checkGood = cartMapper.selectById(cartId);
+            checkGoodsList = new ArrayList<>();
+            checkGoodsList.add(checkGood);
+        }
+
         BigDecimal goodsTotalPrice = new BigDecimal(0);
         for(CartEntity checkGoods : checkGoodsList){
             BigDecimal price = checkGoods.getPrice();
@@ -136,6 +153,28 @@ public class CartService {
         //TODO 优惠劵价格
         data.put("actualPrice", goodsTotalPrice);
         return data;
+    }
+
+    public Integer fastAdd(Integer userId, CartEntity cartEntity){
+        Integer number = cartEntity.getNumber();
+        Integer goodsId = cartEntity.getGoodsId();
+
+        //查询商品表是否有此商品
+        GoodsEntity goods = goodsMapper.selectById(goodsId);
+        //查询购物车是否有此商品
+        CartEntity existCart = cartMapper.selectByUserIdAndGoodsId(userId, goodsId);
+        if(existCart == null){
+            cartEntity.setGoodsSn(goods.getGoodsId());
+            cartEntity.setGoodsName(goods.getName());
+            cartEntity.setPicUrl(goods.getPicUrl());
+            cartEntity.setPrice(goods.getRetailPrice());
+            cartEntity.setUserId(userId);
+            cartEntity.setChecked(true);
+            cartMapper.insertCart(cartEntity);
+        }else{
+            existCart.setNumber(number);
+        }
+        return existCart == null ? cartEntity.getId() : existCart.getId();
     }
 
 }

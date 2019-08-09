@@ -10,4 +10,12 @@
         WHERE order_id =#{orderId};
     </select>
 
+    <insert id="insert">
+        INSERT INTO
+            shop_goods_order(goods_id, order_id, goods_name, pic_url, goods_type,actual_price,goods_count,add_time,
+                             update_time,deleted)
+        VALUES (#{goodsId}, #{orderId}, #{goodsName}, #{picUrl}, #{goodsType}, #{actualPrice}, #{goodsCount}, #{addTime},
+                #{updateTime}, #{deleted})
+    </insert>
+
 </mapper>

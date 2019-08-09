@@ -38,6 +38,13 @@ public interface CartMapper {
     CartEntity updateById(CartEntity cartEntity);
 
     /**
+     * 通过用户和商品id查询
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    CartEntity selectByUserIdAndGoodsId(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
+    /**
      * 通过用户id和商品id删除购物车
      * @param userId
      * @param goodsId
@@ -60,4 +67,12 @@ public interface CartMapper {
      * @return
      */
     int insertCart(CartEntity cartEntity);
+
+    /**
+     * 删除购物车
+     * @param userId
+     * @param checked
+     * @return
+     */
+    int delete(@Param("userId") Integer userId,@Param("checked") boolean checked);
 }
