@@ -11,6 +11,7 @@ import java.util.List;
 public class OrderUtil {
 
     public static final int STATUS_CREATE = 1;
+    public static final int STATUS_WAIT = 2;
     /**
      * 订单状态文本
      * @param status

@@ -3,6 +3,7 @@
     <image class="avatar" src="{{userInfo.avatar}}"></image>
     <view class="info">
       <text class="name">{{userInfo.nickname}}</text>
+      <text class="name">Level:{{userInfo.userLevel}} </text>
     </view>
   </view>
 
@@ -80,7 +81,7 @@
 
     <button class="user_column_item_phone" open-type="getPhoneNumber" bindgetphonenumber="bindPhoneNumber">
       <image class='user_column_item_image' src='/static/images/mobile.png'></image>
-      <view class='user_column_item_text'>绑定手机</view>
+      <view class='user_column_item_text'>更改密码</view>
     </button>
     <view class='user_column_item' bindtap='goHelp'>
       <image class='user_column_item_image' src='/static/images/ic_menu_topic_nor.png'></image>

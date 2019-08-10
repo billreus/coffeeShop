@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/cart/cart",
+    "pages/payResult/payResult",
     "pages/checkout/checkout",
     "pages/ucenter/index/index",
     "pages/goods/goods",

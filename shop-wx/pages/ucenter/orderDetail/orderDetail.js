@@ -10,11 +10,14 @@ Page({
     flag: false,
     handleOption: {}
   },
+  //orderId: 0,
   onLoad: function(options) {
     // 页面初始化 options为页面跳转所带来的参数
     this.setData({
       orderId: options.id
     });
+    wx.setStorageSync("id", options.id)
+    console.log(this.orderId)
     this.getOrderDetail();
   },
   onPullDownRefresh() {
@@ -37,7 +40,7 @@ Page({
     setTimeout(function() {
       wx.hideLoading()
     }, 2000);
-
+    console.log(this.orderId)
     let that = this;
     util.request(api.OrderDetail, {
       orderId: that.data.orderId
@@ -56,7 +59,7 @@ Page({
     });
   },
   // “去付款”按钮点击效果
-  payOrder: function() {
+/*  payOrder: function() {
     let that = this;
     util.request(api.OrderPrepay, {
       orderId: that.data.orderId
@@ -85,7 +88,12 @@ Page({
       }
     });
 
+  },*/
+
+  payOrder: function () {
+    util.redirect('/pages/payResult/payResult');
   },
+
   // “取消订单”点击效果
   cancelOrder: function() {
     let that = this;

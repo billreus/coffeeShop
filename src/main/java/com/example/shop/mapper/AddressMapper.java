@@ -20,6 +20,7 @@ public interface AddressMapper {
 
     AddressEntity selectByUserIdAndId(Integer userId, Integer id);
 
+    AddressEntity selectByUserIdDefault(Integer userId);
     /**
      * 更新默认地址
      * @param userId

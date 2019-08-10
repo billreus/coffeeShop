@@ -159,7 +159,7 @@ DROP TABLE IF EXISTS `shop_integral`;
 CREATE TABLE `shop_integral`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `username` varchar(63) NOT NULL COMMENT '用户名',
-    `charger_integral` varchar(63) DEFAULT NULL COMMENT '积分变化',
+    `change_integral` varchar(63) DEFAULT NULL COMMENT '积分变化',
     `current_integral` varchar(63) DEFAULT NULL COMMENT  '总积分',
     `user_id` int(11) DEFAULT NULL COMMENT '用户id',
     `order_id` int(11) DEFAULT NULL COMMENT '订单id',

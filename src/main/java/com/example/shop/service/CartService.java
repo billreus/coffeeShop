@@ -1,7 +1,9 @@
 package com.example.shop.service;
 
+import com.example.shop.mapper.AddressMapper;
 import com.example.shop.mapper.CartMapper;
 import com.example.shop.mapper.GoodsMapper;
+import com.example.shop.model.AddressEntity;
 import com.example.shop.model.CartEntity;
 import com.example.shop.model.GoodsEntity;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,13 @@ import java.util.Map;
 public class CartService {
 
     @Resource
-    CartMapper cartMapper;
+    private CartMapper cartMapper;
 
     @Resource
-    GoodsMapper goodsMapper;
+    private GoodsMapper goodsMapper;
+
+    @Resource
+    private AddressMapper addressMapper;
 
     /**
      * 统计购物车数量
@@ -132,6 +137,15 @@ public class CartService {
      */
     public Map<String ,Object> checkout(Integer userId, Integer cartId, Integer addressId, Integer couponId){
         List<CartEntity> checkGoodsList = null;
+
+        //收货地址
+        AddressEntity addressEntity = null;
+        if(addressId == null || addressId.equals(0)){
+            addressEntity = addressMapper.selectByUserIdDefault(userId);
+        }else {
+            addressEntity = addressMapper.selectByUserIdAndId(userId, addressId);
+        }
+
         if(cartId == null || cartId.equals(0)){
             checkGoodsList = cartMapper.selectByUserIdAndChecked(userId, 1);
         }else {
@@ -152,6 +166,8 @@ public class CartService {
         data.put("goodsTotalPrice", goodsTotalPrice);
         //TODO 优惠劵价格
         data.put("actualPrice", goodsTotalPrice);
+        data.put("addressId", addressId);
+        data.put("checkedAddress", addressEntity);
         return data;
     }
 

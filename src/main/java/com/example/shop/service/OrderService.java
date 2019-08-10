@@ -8,6 +8,7 @@ import com.example.shop.model.GoodsOrderEntity;
 import com.example.shop.model.OrderEntity;
 import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.OrderUtil;
+import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,12 @@ public class OrderService {
      */
     public Object list(Integer userId, Integer showType, Integer page, Integer limit){
         //TODO 分页
-        List<OrderEntity> orderList = orderMapper.selectByUserId(userId, showType);
+        List<OrderEntity> orderList = null;
+        if(showType.equals(0)){
+            orderList = orderMapper.selectByUserId(userId);
+        }else{
+            orderList = orderMapper.selectByUserIdAndStatus(userId, showType);
+        }
         List<Map<String, Object>> orderMapList = new ArrayList<>(orderList.size());
         for(OrderEntity order : orderList){
             Map<String, Object> orderMap = new HashMap<>();
@@ -167,5 +173,19 @@ public class OrderService {
 
         data.put("orderId", orderId);
         return data;
+    }
+
+    //@Transactional
+    public void cancel(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.delete(orderId);
+        //TODO 库存回滚
+    }
+
+    public void prepay(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        //logger.info(body);
+        //logger.info(String.valueOf(orderId));
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_WAIT);
     }
 }

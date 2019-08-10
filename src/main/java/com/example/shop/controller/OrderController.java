@@ -69,4 +69,27 @@ public class OrderController {
         data = orderService.submit(userId, body);
         return ShopUtil.getJSONString(0, "成功", data);
     }
+
+    @PostMapping("cancel")
+    public String cancel(NativeWebRequest request, @RequestBody String body){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        orderService.cancel(userId, body);
+        return ShopUtil.getJSONString(0, "成功");
+    }
+
+
+    @PostMapping("prepay")
+    public String prepay(NativeWebRequest request, @RequestBody String body){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        orderService.prepay(userId, body);
+        return ShopUtil.getJSONString(0, "成功");
+    }
 }
