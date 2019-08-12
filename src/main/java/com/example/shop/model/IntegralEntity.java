@@ -7,11 +7,9 @@ import java.math.BigDecimal;
  */
 public class IntegralEntity {
     private int id;
-    private String username;
     private BigDecimal changeIntegral;
     private BigDecimal currentIntegral;
     private int userId;
-    private int orderId;
     private boolean deleted;
 
     public int getId() {
@@ -20,14 +18,6 @@ public class IntegralEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public BigDecimal getChangeIntegral() {
@@ -52,14 +42,6 @@ public class IntegralEntity {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
     }
 
     public boolean isDeleted() {

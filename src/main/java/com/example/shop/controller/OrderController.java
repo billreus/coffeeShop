@@ -70,6 +70,12 @@ public class OrderController {
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
+    /**
+     * 取消订单
+     * @param request
+     * @param body
+     * @return
+     */
     @PostMapping("cancel")
     public String cancel(NativeWebRequest request, @RequestBody String body){
         String token = request.getHeader("X-Litemall-Token");
@@ -81,7 +87,46 @@ public class OrderController {
         return ShopUtil.getJSONString(0, "成功");
     }
 
+    /**
+     * 删除订单
+     * @param request
+     * @param body
+     * @return
+     */
+    @PostMapping("delete")
+    public String delete(NativeWebRequest request, @RequestBody String body){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        orderService.delete(userId, body);
+        return ShopUtil.getJSONString(0, "成功");
+    }
 
+    /**
+     * 订单退款
+     * @param request
+     * @param body
+     * @return
+     */
+    @PostMapping("refund")
+    public String refund(NativeWebRequest request, @RequestBody String body){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        orderService.refund(userId, body);
+        return ShopUtil.getJSONString(0, "成功");
+    }
+
+    /**
+     * 订单付款
+     * @param request
+     * @param body
+     * @return
+     */
     @PostMapping("prepay")
     public String prepay(NativeWebRequest request, @RequestBody String body){
         String token = request.getHeader("X-Litemall-Token");
@@ -90,6 +135,23 @@ public class OrderController {
         }
         int userId = UserToken.getUserId(token);
         orderService.prepay(userId, body);
+        return ShopUtil.getJSONString(0, "成功");
+    }
+
+    /**
+     * 确认收货
+     * @param request
+     * @param body
+     * @return
+     */
+    @PostMapping("confirm")
+    public String confirm(NativeWebRequest request, @RequestBody String body){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        orderService.confirm(userId, body);
         return ShopUtil.getJSONString(0, "成功");
     }
 }

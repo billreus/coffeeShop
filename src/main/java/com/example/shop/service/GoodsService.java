@@ -3,10 +3,8 @@ package com.example.shop.service;
 import com.example.shop.mapper.AttributeMapper;
 import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.mapper.GoodsMapper;
-import com.example.shop.model.AttributeEntity;
-import com.example.shop.model.CartEntity;
-import com.example.shop.model.CategoryEntity;
-import com.example.shop.model.GoodsEntity;
+import com.example.shop.mapper.StockMapper;
+import com.example.shop.model.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +26,8 @@ public class GoodsService {
     @Resource
     AttributeMapper attributeMapper;
 
+    @Resource
+    StockMapper stockMapper;
     /**
      * 商品总数
      * @return
@@ -86,9 +86,13 @@ public class GoodsService {
         GoodsEntity goods = goodsMapper.selectById(id);
         List<AttributeEntity> attribute = attributeMapper.selectByGoodsId(id);
 
+        StockEntity stock = stockMapper.selectByGoodsId(goods.getId());
+        Integer stockNumber = stock.getStock();
+
         Map<String, Object> data = new HashMap<>();
         data.put("info", goods);
         data.put("attribute", attribute);
+        data.put("stock", stockNumber);
         return data;
     }
 

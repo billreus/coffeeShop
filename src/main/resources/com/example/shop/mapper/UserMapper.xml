@@ -33,6 +33,13 @@
         WHERE id=#{id}
     </update>
 
+    <!--更新level-->
+    <update id="updateLevelById">
+        UPDATE shop_user
+        SET user_level=#{userLevel}
+        WHERE id=#{id}
+    </update>
+
     <!--通过id查询-->
     <select id="selectById" resultType="com.example.shop.model.UserEntity" parameterType="java.lang.Integer">
         SELECT *

@@ -145,7 +145,7 @@ Page({
         }
 
         const orderId = res.data.orderId;
-        util.request(api.OrderPrepay, {
+/*        util.request(api.OrderPrepay, {
           orderId: orderId
         }, 'POST').then(function(res) {
           if (res.errno === 0) {
@@ -185,6 +185,12 @@ Page({
           url: '/pages/payResult/payResult?status=0&orderId=' + orderId
         });
       }
+      */
+
+      util.redirect('/pages/payResult/payResult');
+      
+      }
     });
+    
   }
 });

@@ -39,6 +39,8 @@ public interface UserMapper {
      */
      int updateLastLoginTimeById(UserEntity userEntity);
 
+     int updateLevelById(UserEntity userEntity);
+
      /**
      * 通过id查询
      * @param id

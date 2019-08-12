@@ -9,6 +9,7 @@ Page({
     //canShare: false,
     id: 0,
     goods: {},
+    stock:0,
     groupon: [], //该商品支持的团购规格
     grouponLink: {}, //参与的团购
     attribute: [],
@@ -161,6 +162,7 @@ let info = res.data.info;
 info.gallery = JSON.parse(info.gallery);
         that.setData({
           goods: info,
+          stock: res.data.stock,
           attribute: res.data.attribute,
           issueList: res.data.issue,
           comment: res.data.comment,
@@ -550,15 +552,18 @@ info.gallery = JSON.parse(info.gallery);
               wx.navigateTo({
                 url: '/pages/checkout/checkout'
               })
+              
             } catch (e) {}
 
           } else {
+            
             wx.showToast({
               image: '/static/images/icon_error.png',
               title: res.errmsg,
               mask: true
             });
           }
+          //util.redirect('/pages/checkout/checkout');
         });
     }
 

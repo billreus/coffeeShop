@@ -163,33 +163,16 @@ Page({
       });
     };
   },
-  bindPhoneNumber: function(e) {
-    if (e.detail.errMsg !== "getPhoneNumber:ok") {
-      // 拒绝授权
-      return;
-    }
-
-    if (!this.data.hasLogin) {
-      wx.showToast({
-        title: '绑定失败：请先登录',
-        icon: 'none',
-        duration: 2000
+  goReset: function(e) {
+    if (this.data.hasLogin) {
+      wx.navigateTo({
+        url: "/pages/auth/reset/reset"
       });
-      return;
-    }
-
-    util.request(api.AuthBindPhone, {
-      iv: e.detail.iv,
-      encryptedData: e.detail.encryptedData
-    }, 'POST').then(function(res) {
-      if (res.errno === 0) {
-        wx.showToast({
-          title: '绑定手机号码成功',
-          icon: 'success',
-          duration: 2000
-        });
-      }
-    });
+    } else {
+      wx.navigateTo({
+        url: "/pages/auth/login/login"
+      });
+    };
   },
   goAfterSale: function() {
     wx.showToast({

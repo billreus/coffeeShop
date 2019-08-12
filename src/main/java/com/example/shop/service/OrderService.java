@@ -1,14 +1,9 @@
 package com.example.shop.service;
 
-import com.example.shop.mapper.CartMapper;
-import com.example.shop.mapper.GoodsOrderMapper;
-import com.example.shop.mapper.OrderMapper;
-import com.example.shop.model.CartEntity;
-import com.example.shop.model.GoodsOrderEntity;
-import com.example.shop.model.OrderEntity;
+import com.example.shop.mapper.*;
+import com.example.shop.model.*;
 import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.OrderUtil;
-import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,6 +30,20 @@ public class OrderService {
     @Resource
     private CartMapper cartMapper;
 
+    @Resource
+    private AddressMapper addressMapper;
+
+    @Resource
+    private IntegralMapper integralMapper;
+
+    @Resource
+    private StockMapper stockMapper;
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private OperateIntegralMapper operateIntegralMapper;
     /**
      * 订单列表
      * @param userId
@@ -113,6 +122,10 @@ public class OrderService {
         Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
 
         Map<String, Object> data = new HashMap<>();
+
+        //地址
+        AddressEntity address = addressMapper.selectByUserIdAndId(userId, addressId);
+
         //订单商品
         List<CartEntity> cartList =null;
         if(cartId == null){
@@ -130,10 +143,24 @@ public class OrderService {
         for (CartEntity cart : cartList){
             checkedGoodPrice = checkedGoodPrice.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
         }
+
         //TODO 优惠劵价格和减完价格
+        UserEntity user = userMapper.selectById(userId);
+        Integer level = user.getUserLevel();
+        OperateIntegralEntity operate = operateIntegralMapper.selectByLevel(level);
+
         BigDecimal orderPrice = checkedGoodPrice;
-        BigDecimal couponPrice = new BigDecimal(0.00);
-        BigDecimal actualPrice = checkedGoodPrice;
+        BigDecimal couponPrice = checkedGoodPrice.subtract(checkedGoodPrice.multiply(operate.getDiscount()));
+        BigDecimal actualPrice = orderPrice.subtract(couponPrice);
+
+        //TODO 判断库存
+        //更新库存
+        for(CartEntity cart : cartList){
+            Integer reduceStock = cart.getNumber();
+            Integer stock = stockMapper.selectByGoodsId(cart.getGoodsId()).getStock();
+            Integer updateStock = stock - reduceStock;
+            stockMapper.updateByGoodsId(updateStock, cart.getGoodsId());
+        }
 
         //订单
         Integer orderId = null;
@@ -142,15 +169,17 @@ public class OrderService {
         //TODO 生成单号
         orderEntity.setOrderSn("1000");
         orderEntity.setOrderStatus(OrderUtil.STATUS_CREATE);
-        orderEntity.setConsignee("a先生");
-        orderEntity.setMobile("13131313135");
-        orderEntity.setAddress("dizilalalla");
+        orderEntity.setConsignee(address.getName());
+        orderEntity.setMobile(address.getTel());
+        String detailAddress = address.getProvince()+address.getCity()+address.getCounty()+" "+address.getAddressDetail();
+        orderEntity.setAddress(detailAddress);
         orderEntity.setOrderPrice(orderPrice);
         //积分,优惠
         orderEntity.setCouponPrice(couponPrice);
-        orderEntity.setOrderIntegral(100);
+        int integral=actualPrice.intValue();
+        orderEntity.setOrderIntegral(integral);
         orderEntity.setActualPrice(actualPrice);
-        orderEntity.setMessage("");
+        orderEntity.setMessage(message);
 
         //添加订单,记录订单id
         orderId = orderMapper.insert(orderEntity);
@@ -169,7 +198,22 @@ public class OrderService {
         //删除购物车信息
         cartMapper.delete(userId, true);
 
-        // TODO 库存 优惠劵
+        //存积分
+        IntegralEntity integralEntity = integralMapper.selectByUserId(userId);
+        if(integralEntity == null){
+            integralEntity = new IntegralEntity();
+            integralEntity.setUserId(userId);
+            integralEntity.setChangeIntegral(actualPrice);
+            integralEntity.setCurrentIntegral(actualPrice);
+            integralMapper.insert(integralEntity);
+        }else {
+            BigDecimal currentIntegral = integralEntity.getCurrentIntegral();
+            BigDecimal setIntegral = currentIntegral.add(actualPrice);
+            integralMapper.updateByUserId(userId, actualPrice, setIntegral);
+        }
+
+        //减库存
+
 
         data.put("orderId", orderId);
         return data;
@@ -178,14 +222,29 @@ public class OrderService {
     //@Transactional
     public void cancel(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_CANCEL);
+        //TODO 库存回滚
+    }
+
+    public void delete(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.delete(orderId);
+        //TODO 逻辑删除
+    }
+
+    public void refund(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);
         //TODO 库存回滚
     }
 
     public void prepay(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        //logger.info(body);
-        //logger.info(String.valueOf(orderId));
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_WAIT);
+    }
+
+    public void confirm(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_FINISH);
     }
 }

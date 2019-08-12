@@ -1,12 +1,16 @@
 package com.example.shop.service;
 
+import com.example.shop.mapper.IntegralMapper;
 import com.example.shop.mapper.UserMapper;
+import com.example.shop.model.IntegralEntity;
 import com.example.shop.model.UserEntity;
+import com.example.shop.util.LevelUtil;
 import com.example.shop.util.ShopUtil;
 import com.example.shop.util.UserToken;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +23,9 @@ import java.util.Map;
 public class UserService {
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private IntegralMapper integralMapper;
 
     /**
      * 新建用户
@@ -101,6 +108,13 @@ public class UserService {
         user.setLoginTime(time);
         userMapper.updateLastLoginTimeById(user);
 
+        //用户等级换算
+        IntegralEntity integralEntity = integralMapper.selectByUserId(user.getId());
+        BigDecimal integral = integralEntity.getCurrentIntegral();
+        Integer level = integral.divide(LevelUtil.levelDivide).intValue();
+        user.setUserLevel(level);
+        userMapper.updateLevelById(user);
+
         //token
         String token = UserToken.generateToken(user.getId());
         Map<String, Object> result = new HashMap<>();
@@ -108,5 +122,17 @@ public class UserService {
         result.put("userInfo", user);
 
         return result;
+    }
+
+    public void reset(Integer userId, String password, String mobile, String nickname){
+        UserEntity userEntity = userMapper.selectById(userId);
+        if(mobile != null){
+            userEntity.setMobile(mobile);
+            userMapper.update(userEntity);
+        }
+        if(nickname != null){
+            userEntity.setNickname(nickname);
+            userMapper.update(userEntity);
+        }
     }
 }

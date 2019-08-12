@@ -79,7 +79,7 @@
   </view>
   <view class='user_column'>
 
-    <button class="user_column_item_phone" open-type="getPhoneNumber" bindgetphonenumber="bindPhoneNumber">
+    <button class="user_column_item_phone" bindtap="goReset">
       <image class='user_column_item_image' src='/static/images/mobile.png'></image>
       <view class='user_column_item_text'>更改密码</view>
     </button>

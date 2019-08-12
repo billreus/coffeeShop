@@ -57,13 +57,14 @@
           <text class="txt">￥{{orderInfo.goodsPrice}}</text>
         </view>
         <view class="t">
-          <text class="label">积分：</text>
-          <text class="txt">￥{{orderInfo.orderIntegral}}</text>
-        </view>
-        <view class="t">
           <text class="label">优惠：</text>
           <text class="txt">￥-{{orderInfo.couponPrice}}</text>
         </view>
+        <view class="t">
+          <text class="label">积分：</text>
+          <text class="txt">{{orderInfo.orderIntegral}}</text>
+        </view>
+        
       </view>
       <view class="pay-fee">
         <text class="label">实付：</text>
@@ -72,7 +73,7 @@
     </view>
   </view>
 
-  <!-- 物流信息,仅收货状态下可见 -->
+  <!-- 物流信息,仅收货状态下可见 
   <view class="order-express" bindtap="expandDetail" wx:if="{{ handleOption.confirm }}">
     <view class="order-express">
       <view class="title">
@@ -87,5 +88,5 @@
         <view class="acceptTime">{{iitem.AcceptTime}}</view>
       </view>
     </view>
-  </view>
+  </view>-->
 </view>

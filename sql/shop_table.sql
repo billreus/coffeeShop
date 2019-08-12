@@ -122,7 +122,7 @@ CREATE TABLE `shop_order`(
     `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
     `user_id` int(11) NOT NULL COMMENT '用户表的id',
     `order_sn` varchar(63) NOT NULL COMMENT '订单编号',
-    `order_status` smallint(1) NOT NULL COMMENT '订单状态（0：未完成 1：完成 2：取消）',
+    `order_status` smallint(1) NOT NULL COMMENT '订单状态',
     `consignee` varchar(63) NOT NULL COMMENT '收货人名称',
     `mobile` varchar(63) NOT NULL COMMENT '收货人手机号',
     `address` varchar(127) NOT NULL COMMENT '收货地址',
@@ -158,22 +158,12 @@ CREATE TABLE `shop_goods_order`(
 DROP TABLE IF EXISTS `shop_integral`;
 CREATE TABLE `shop_integral`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `username` varchar(63) NOT NULL COMMENT '用户名',
-    `change_integral` varchar(63) DEFAULT NULL COMMENT '积分变化',
-    `current_integral` varchar(63) DEFAULT NULL COMMENT  '总积分',
+    `change_integral` decimal(10,2) DEFAULT 0 COMMENT '积分变化',
+    `current_integral` decimal(10,2) DEFAULT 0 COMMENT  '总积分',
     `user_id` int(11) DEFAULT NULL COMMENT '用户id',
-    `order_id` int(11) DEFAULT NULL COMMENT '订单id',
-    `order_sn` varchar(63) NOT NULL COMMENT '订单编号',
-    `goods_name` varchar(127) DEFAULT NULL COMMENT '商品名称',
-    `pic_url` varchar(255) DEFAULT NULL COMMENT '商品图片或者商品货品图片',
-    `goods_type` varchar(63) DEFAULT NULL COMMENT '商品类型',
-    `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
-    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
-    `goods_count` int(11) DEFAULT NULL COMMENT '购买数量',
-    `total_price` decimal(10,2) NOT NULL COMMENT '支付总价',
-    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
     `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0:正常1:删除）',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `user_id` (`user_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户积分表';
 
 DROP TABLE IF EXISTS `shop_operate_integral`;

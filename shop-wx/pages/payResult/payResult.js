@@ -15,7 +15,7 @@ Page({
       //orderId: options.id,
       status: options.status === '1' ? true : false
     })
-    console.log(options.orderId)
+    //console.log(options.orderId)
   },
   onReady: function() {
   

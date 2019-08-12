@@ -40,7 +40,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 2,
 			"list": [
 				{
 					"id": -1,
@@ -54,6 +54,12 @@
 					"name": "商品详情",
 					"pathName": "pages/goods/goods",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "用户信息重置",
+					"pathName": "pages/auth/reset/reset",
 					"scene": null
 				}
 			]

@@ -5,6 +5,7 @@
     "pages/checkout/checkout",
     "pages/ucenter/index/index",
     "pages/goods/goods",
+    "pages/auth/reset/reset",
     "pages/catalog/catalog",
     "pages/category/category",
     "pages/index/index",

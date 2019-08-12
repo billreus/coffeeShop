@@ -3,6 +3,7 @@ package com.example.shop.controller;
 import com.example.shop.service.UserService;
 import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.ShopUtil;
+import com.example.shop.util.UserToken;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -82,5 +83,19 @@ public class UserController {
         }else {
             return ShopUtil.getJSONString(0, "退出成功");
         }
+    }
+
+    @PostMapping("reset")
+    public String reset(NativeWebRequest request, @RequestBody String body){
+        String token = request.getHeader("X-Litemall-Token");
+        if(token == null || token.isEmpty()){
+            return ShopUtil.getJSONString(501, "请登录");
+        }
+        int userId = UserToken.getUserId(token);
+        String password = JacksonUtil.parseString(body, "password");
+        String mobile = JacksonUtil.parseString(body, "mobile");
+        String nickname = JacksonUtil.parseString(body, "nickname");
+        userService.reset(userId, password, mobile, nickname);
+        return ShopUtil.getJSONString(0, "修改成功");
     }
 }

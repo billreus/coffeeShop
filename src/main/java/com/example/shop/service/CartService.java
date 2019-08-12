@@ -1,11 +1,7 @@
 package com.example.shop.service;
 
-import com.example.shop.mapper.AddressMapper;
-import com.example.shop.mapper.CartMapper;
-import com.example.shop.mapper.GoodsMapper;
-import com.example.shop.model.AddressEntity;
-import com.example.shop.model.CartEntity;
-import com.example.shop.model.GoodsEntity;
+import com.example.shop.mapper.*;
+import com.example.shop.model.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +23,11 @@ public class CartService {
     @Resource
     private AddressMapper addressMapper;
 
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private OperateIntegralMapper operateIntegralMapper;
     /**
      * 统计购物车数量
      * @param userId
@@ -160,12 +161,21 @@ public class CartService {
             int number = checkGoods.getNumber();
             goodsTotalPrice = goodsTotalPrice.add(price.multiply(new BigDecimal(number)));
         }
+        //积分折扣价
+        UserEntity user = userMapper.selectById(userId);
+        Integer level = user.getUserLevel();
+        OperateIntegralEntity operate = operateIntegralMapper.selectByLevel(level);
+        BigDecimal couponPrice = goodsTotalPrice.subtract(goodsTotalPrice.multiply(operate.getDiscount()));
+        BigDecimal actualPrice = goodsTotalPrice.subtract(couponPrice);
 
         Map<String, Object> data = new HashMap<>();
         data.put("checkedGoodsList", checkGoodsList);
         data.put("goodsTotalPrice", goodsTotalPrice);
         //TODO 优惠劵价格
-        data.put("actualPrice", goodsTotalPrice);
+        //积分
+        data.put("freightPrice", actualPrice);
+        data.put("couponPrice", couponPrice);
+        data.put("actualPrice", actualPrice);
         data.put("addressId", addressId);
         data.put("checkedAddress", addressEntity);
         return data;
