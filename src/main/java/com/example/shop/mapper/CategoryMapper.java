@@ -31,4 +31,15 @@ public interface CategoryMapper {
      * @return
      */
     List<CategoryEntity> selectByPid(Integer pid);
+
+    /**
+     * 添加类目
+     * @param categoryEntity
+     * @return
+     */
+    int insert(CategoryEntity categoryEntity);
+
+    int deletedById(Integer id);
+
+    int updateById(CategoryEntity categoryEntity);
 }

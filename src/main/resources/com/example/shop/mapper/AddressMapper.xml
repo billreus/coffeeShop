@@ -38,4 +38,19 @@
         DELETE FROM shop_address
         WHERE id=#{id}
     </delete>
+
+    <select id="findAllList" resultType="com.example.shop.model.AddressEntity">
+        SELECT *
+        FROM shop.shop_address
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_Id=#{userId}
+            </if>
+
+            <if test="name != null and name != ''">
+                and name=#{name}
+            </if>
+
+        </where>
+    </select>
 </mapper>

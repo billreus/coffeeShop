@@ -41,4 +41,6 @@ public interface AddressMapper {
      * @return
      */
     int delete(Integer id);
+
+    List<AddressEntity> findAllList(String userId, String name);
 }

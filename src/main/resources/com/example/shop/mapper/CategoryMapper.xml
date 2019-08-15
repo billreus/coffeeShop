@@ -6,21 +6,39 @@
     <!-- 查询一级目录-->
     <select id="selectByLevel" resultType="com.example.shop.model.CategoryEntity">
         SELECT *
-        FROM shop_category
-        WHERE level=#{level};
+        FROM shop.shop_category
+        WHERE level=#{level} AND deleted= 0;
     </select>
 
     <!-- 通过id查询目录-->
     <select id="selectById" resultType="com.example.shop.model.CategoryEntity">
         SELECT *
-        FROM shop_category
-        WHERE id=#{id};
+        FROM shop.shop_category
+        WHERE id=#{id} AND deleted=0;
     </select>
 
     <!-- 通过Pid查询目录-->
     <select id="selectByPid" resultType="com.example.shop.model.CategoryEntity">
         SELECT *
-        FROM shop_category
-        WHERE pid=#{pid};
+        FROM shop.shop_category
+        WHERE pid=#{pid} AND deleted=0;
     </select>
+
+    <insert id="insert">
+        INSERT INTO
+        shop_category(name, keywords, pid, icon_url, pic_url, level)
+        VALUES (#{name}, #{keywords}, #{pid}, #{iconUrl}, #{picUrl}, #{level})
+    </insert>
+
+    <update id="deletedById">
+        UPDATE shop.shop_category
+        SET deleted=1
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateById">
+        UPDATE shop.shop_category
+        SET name=#{name}, keywords=#{keywords}, pid=#{pid},icon_url=#{iconUrl},pic_url=#{picUrl},level=#{level}
+        WHERE id=#{id}
+    </update>
 </mapper>

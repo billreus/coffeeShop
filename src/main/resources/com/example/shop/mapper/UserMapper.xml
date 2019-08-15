@@ -52,11 +52,31 @@
         FROM shop_user
         WHERE username=#{username};
     </select>
+    <select id="selectByMobile" resultType="com.example.shop.model.UserEntity">
+        SELECT *
+        FROM shop_user
+        WHERE mobile=#{mobile};
+    </select>
+    <select id="selectByUserNameAndMobile" resultType="com.example.shop.model.UserEntity">
+        SELECT *
+        FROM shop_user
+        WHERE username=#{username} AND mobile=#{mobile};
+    </select>
     <!--查询所有用户-->
     <select id="findAllList" resultType="com.example.shop.model.UserEntity">
         SELECT *
-        FROM shop_user
-        ORDER BY id=#{id};
+        FROM shop.shop_user
+
+        <where>
+            <if test="username != null and username != ''">
+                and username=#{username}
+            </if>
+
+            <if test="mobile != null and mobile != ''">
+                and mobile=#{mobile}
+            </if>
+
+        </where>
     </select>
     <!--查询用户总数-->
     <select id="findAllCount" resultType="long">

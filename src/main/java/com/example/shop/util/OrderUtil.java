@@ -12,7 +12,7 @@ public class OrderUtil {
 
     public static final int STATUS_CREATE = 1;
     public static final int STATUS_WAIT = 2;
-    //public static final int STATUS_WAIT = 3;
+    public static final int STATUS_SHOP = 3;
     public static final int STATUS_FINISH = 4;
     public static final int STATUS_CANCEL = 5;
     public static final int STATUS_REFUND = 6;

@@ -6,7 +6,7 @@ CREATE TABLE `shop_user`(
     `gender` tinyint(3) NOT NULL DEFAULT '0' COMMENT '性别：0未知，1男，2女',
     `birthday` date DEFAULT NULL COMMENT '生日',
     `login_time` datetime DEFAULT NULL COMMENT '最近一次登录时间',
-    `user_level` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0 普通用户，1 VIP用户，2 高级VIP用户',
+    `user_level` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户等级',
     `nickname` varchar(63) NOT NULL DEFAULT '' COMMENT '用户昵称或网络名称',
     `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '用户手机号码',
     `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像图片',
@@ -30,6 +30,7 @@ CREATE TABLE `shop_admin`(
     `add_time` datetime DEFAULT NULL COMMENT '创建时间',
     `update_time` datetime DEFAULT NULL COMMENT '更新时间',
     `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+    `role_ids` varchar(127) DEFAULT '[]' COMMENT '角色列表',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
@@ -166,18 +167,13 @@ CREATE TABLE `shop_integral`(
     KEY `user_id` (`user_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户积分表';
 
-DROP TABLE IF EXISTS `shop_operate_integral`;
-CREATE TABLE `shop_operate_integral`(
+DROP TABLE IF EXISTS `shop_integral`;
+CREATE TABLE `shop_integral`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
-    `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
-    `retail_price` decimal(10,2) DEFAULT '10000.00' COMMENT '零售价',
-    `integral` varchar(63) DEFAULT NULL COMMENT  '积分',
-    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
-    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
-    `start_time` datetime DEFAULT NULL COMMENT '生效时间',
-    `end_time` datetime DEFAULT NULL COMMENT '失效时间',
-    `message` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
-    PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分运营表';
+    `change_integral` decimal(10,2) DEFAULT 0 COMMENT '积分变化',
+    `current_integral` decimal(10,2) DEFAULT 0 COMMENT  '总积分',
+    `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0:正常1:删除）',
+    PRIMARY KEY (`id`),
+    KEY `user_id` (`user_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户积分表';

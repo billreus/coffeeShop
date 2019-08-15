@@ -39,6 +39,3 @@ mybatis:
 wx:
   app-id: wx5d4516d35b1ed464
   app-secret: 1071013f73a0ffb0252d1822a9e503ef
-
-  #thymeleaf:
-    #prefix: classpath:/templates/

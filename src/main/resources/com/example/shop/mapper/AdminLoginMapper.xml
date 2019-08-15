@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.shop.mapper.AdminLoginMapper">
+    <!--通过用户名查询-->
+    <select id="selectByUserName" resultType="com.example.shop.model.AdminEntity">
+        SELECT *
+        FROM shop_admin
+        WHERE username=#{username};
+    </select>
+
+    <select id="selectById" resultType="com.example.shop.model.AdminEntity">
+        SELECT *
+        FROM shop_admin
+        WHERE id=#{id};
+    </select>
+</mapper>

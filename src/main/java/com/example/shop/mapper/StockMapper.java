@@ -9,4 +9,6 @@ public interface StockMapper {
     int updateByGoodsId(Integer stock, Integer goodsId);
 
     StockEntity selectByGoodsId(Integer goodsId);
+
+    long count();
 }

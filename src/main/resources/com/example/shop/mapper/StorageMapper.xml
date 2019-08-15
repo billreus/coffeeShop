@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.mapper.StorageMapper">
+    <select id="selectByKey" resultType="StorageEntity">
+        SELECT *
+        FROM shop_storage
+        WHERE shop_storage.key=#{key};
+    </select>
+
+    <insert id="insert">
+        INSERT INTO
+            shop.shop_storage(`key`,name,type,size,url)
+        VALUES(#{key},#{name},#{type},#{size},#{url})
+    </insert>
+
+</mapper>

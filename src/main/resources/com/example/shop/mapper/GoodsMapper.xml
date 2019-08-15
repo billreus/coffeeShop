@@ -7,18 +7,49 @@
         SELECT
             COUNT(1)
         FROM shop_goods
-        WHERE shop_goods.is_on_sale = '1'
+        WHERE shop_goods.is_on_sale = '1' AND deleted = 0
     </select>
 
     <select id="selectByCategoryId" resultType="com.example.shop.model.GoodsEntity">
         SELECT *
         FROM shop_goods
-        WHERE category_id =#{categoryId};
+        WHERE category_id =#{categoryId} AND deleted = 0;
     </select>
 
     <select id="selectById" resultType="com.example.shop.model.GoodsEntity">
         SELECT *
         FROM shop_goods
-        WHERE id =#{id};
+        WHERE id =#{id} AND deleted = 0;
     </select>
+
+    <select id="selectByName" resultType="com.example.shop.model.GoodsEntity">
+            SELECT *
+            FROM shop_goods
+            WHERE name =#{name} AND deleted = 0;
+    </select>
+
+    <select id="selectByGoodsId" resultType="com.example.shop.model.GoodsEntity">
+            SELECT *
+            FROM shop_goods
+            WHERE goods_id =#{goodsId} AND deleted = 0;
+    </select>
+
+    <select id="selectByNameAndGoodsId" resultType="com.example.shop.model.GoodsEntity">
+                SELECT *
+                FROM shop_goods
+                WHERE goods_id =#{goodsId} AND name =#{name} AND deleted = 0;
+        </select>
+
+    <select id="findAllList" resultType="com.example.shop.model.GoodsEntity">
+            SELECT *
+            FROM shop_goods
+            WHERE deleted = 0
+            ORDER BY id=#{id};
+        </select>
+
+    <update id="deleted">
+        UPDATE shop_goods
+        SET shop_goods.deleted = 1
+        WHERE id =#{id}
+    </update>
 </mapper>

@@ -10,7 +10,7 @@
     <view class="service-policy">
       <view class="item">30天无忧退货</view>
       <view class="item">48小时快速退款</view>
-      <view class="item">满88元免邮费</view>
+      <view class="item">全场免邮费</view>
     </view>
     <view class="no-cart" wx:if="{{cartGoods.length <= 0}}">
       <view class="c">
@@ -26,12 +26,13 @@
               <view class="checkbox {{item.checked ? 'checked' : ''}}" bindtap="checkedItem" data-item-index="{{index}}"></view>
               <view class="cart-goods">
                 <image class="img" src="{{item.picUrl}}"></image>
+                
                 <view class="info">
                   <view class="t">
                     <text class="name">{{item.goodsName}}</text>
                     <text class="num">x{{item.number}}</text>
                   </view>
-                  <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{item.goodsSpecificationValues||''}}</view>
+                  <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{isEditCart ? item.goodsName : ''}}</view>
                   <view class="b">
                     <text class="price">￥{{item.price}}</text>
                     <view class="selnum">

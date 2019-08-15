@@ -14,4 +14,10 @@
         FROM shop_stock
         WHERE goods_id =#{goodsId}
     </select>
+
+    <select id="count" resultType="long">
+        SELECT count(1)
+        FROM shop_stock
+        WHERE shop_stock.deleted = 0
+    </select>
 </mapper>

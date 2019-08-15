@@ -47,4 +47,8 @@ public interface OrderMapper {
      * @return
      */
     int delete(Integer id);
+
+    long count();
+
+    List<OrderEntity> findAllList(String userId, String orderSn, Integer orderStatusArray);
 }

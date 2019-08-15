@@ -6,25 +6,25 @@
     <!-- 通过用户Id查询-->
     <select id="selectByUserId" resultType="OrderEntity">
         SELECT *
-        FROM shop_order
+        FROM shop.shop_order
         WHERE user_id =#{userId};
     </select>
 
     <select id="selectByUserIdAndStatus" resultType="OrderEntity">
         SELECT *
-        FROM shop_order
+        FROM shop.shop_order
         WHERE user_id =#{userId} AND order_status=#{orderStatus};
     </select>
 
     <!-- 通过用户Id查询-->
     <select id="selectById" resultType="OrderEntity">
         SELECT *
-        FROM shop_order
+        FROM shop.shop_order
         WHERE id =#{id};
     </select>
 
     <update id="updateStatus">
-        UPDATE shop_order
+        UPDATE shop.shop_order
         SET order_status =#{orderStatus}
         WHERE id=#{id}
     </update>
@@ -45,4 +45,31 @@
         DELETE FROM shop_order
         WHERE id=#{id}
     </delete>
+
+    <select id="count" resultType="long">
+        SELECT
+            COUNT(1)
+        FROM
+            shop_order
+        WHERE shop_order.deleted = 0
+    </select>
+
+    <select id="findAllList" resultType="com.example.shop.model.OrderEntity">
+        SELECT *
+        FROM shop.shop_order
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id=#{userId}
+            </if>
+
+            <if test="orderSn != null and orderSn != ''">
+                and order_sn=#{orderSn}
+            </if>
+
+            <if test="orderStatusArray != null and orderStatusArray != ''">
+                and order_status=#{orderStatusArray}
+            </if>
+
+        </where>
+    </select>
 </mapper>

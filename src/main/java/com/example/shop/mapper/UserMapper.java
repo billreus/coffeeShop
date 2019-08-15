@@ -55,11 +55,14 @@ public interface UserMapper {
      */
      UserEntity selectByUserName(String username);
 
+     UserEntity selectByMobile(String mobile);
+
+     List<UserEntity> selectByUserNameAndMobile(String username, String mobile);
     /**
      *查询所有用户
      * @return
      */
-     List<UserEntity> findAllList();
+     List<UserEntity> findAllList(String username, String mobile);
 
     /**
      * 查询用户总数
