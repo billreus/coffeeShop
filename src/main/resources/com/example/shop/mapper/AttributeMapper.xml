@@ -11,4 +11,15 @@
         WHERE goods_id =#{goodsId};
     </select>
 
+    <update id="update">
+        UPDATE shop.shop_attribute
+        SET goods_id=#{goodsId}, attribute=#{attribute}, value=#{value}, create_date=#{createDate},
+            update_date=#{updateDate}, deleted=#{deleted}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO shop.shop_attribute(goods_id, attribute, value)
+        VALUES (#{goodsId} ,#{attribute} ,#{value} )
+    </insert>
 </mapper>

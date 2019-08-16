@@ -52,4 +52,12 @@
         SET shop_goods.deleted = 1
         WHERE id =#{id}
     </update>
+
+    <update id="update">
+        UPDATE shop_goods
+        SET category_id=#{categoryId}, goods_Id=#{goodsId}, gallery=#{gallery}, name=#{name}, brief=#{brief},keywords=#{keywords},
+            pic_url=#{picUrl}, unit=#{unit}, original_price=#{originalPrice}, retail_price=#{retailPrice}, create_date=#{createDate},
+            update_by=#{updateBy}, update_date=#{updateDate}, remarks=#{remarks}, is_on_sale=#{isOnSale}, deleted=#{deleted}
+        WHERE id=#{id}
+    </update>
 </mapper>

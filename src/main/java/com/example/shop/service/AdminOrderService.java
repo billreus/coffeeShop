@@ -1,15 +1,13 @@
 package com.example.shop.service;
 
-import com.example.shop.mapper.GoodsOrderMapper;
-import com.example.shop.mapper.OrderMapper;
-import com.example.shop.mapper.UserMapper;
-import com.example.shop.model.GoodsOrderEntity;
-import com.example.shop.model.OrderEntity;
-import com.example.shop.model.UserEntity;
+import com.example.shop.mapper.*;
+import com.example.shop.model.*;
 import com.example.shop.util.OrderUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +24,12 @@ public class AdminOrderService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private IntegralMapper integralMapper;
+
+    @Resource
+    private CategoryMapper categoryMapper;
 
     public Map<String, Object> list(String userId, String orderSn, List<Integer> orderStatusArray,
                                     Integer page, Integer limit, String sort, String order){
@@ -62,6 +66,21 @@ public class AdminOrderService {
     }
 
     public void ship(Integer orderId){
-        orderMapper.updateStatus(orderId, OrderUtil.STATUS_FINISH);
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_SHOP);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void refund(Integer orderId, Integer refundMoney){
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);
+        OrderEntity orderEntity = orderMapper.selectById(orderId);
+        Integer userId = orderEntity.getUserId();
+        IntegralEntity integralEntity = integralMapper.selectByUserId(userId);
+
+        BigDecimal changeIntegral = new BigDecimal(-refundMoney);
+        BigDecimal currentIntegral = integralEntity.getCurrentIntegral();
+        currentIntegral = currentIntegral.add(changeIntegral);
+        integralMapper.updateByUserId(userId, changeIntegral, currentIntegral);
+    }
+
+
 }

@@ -12,4 +12,8 @@ import java.util.List;
 public interface AttributeMapper {
 
     List<AttributeEntity> selectByGoodsId(Integer goodsId);
+
+    int update(AttributeEntity attributeEntity);
+
+    int insert(AttributeEntity attributeEntity);
 }

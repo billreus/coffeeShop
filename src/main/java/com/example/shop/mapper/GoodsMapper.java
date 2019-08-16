@@ -24,4 +24,6 @@ public interface GoodsMapper {
     List<GoodsEntity> selectByNameAndGoodsId(String name, String goodsId);
 
     int deleted(Integer goodsId);
+
+    int update(GoodsEntity goodsEntity);
 }
