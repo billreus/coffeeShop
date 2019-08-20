@@ -1,5 +1,6 @@
 package com.example.shop.controller;
 
+import com.example.shop.annotation.LoginUser;
 import com.example.shop.service.UserCenterService;
 import com.example.shop.util.ShopUtil;
 import com.example.shop.util.UserToken;
@@ -27,12 +28,7 @@ public class UserCenterController {
      * @return
      */
     @GetMapping("index")
-    public Object list(NativeWebRequest request){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public Object list(@LoginUser Integer userId){
         Map<String, Object> data = new HashMap<>();
         data.put("order", userCenterService.list(userId));
 

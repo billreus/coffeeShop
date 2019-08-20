@@ -44,4 +44,15 @@ public class AdminUserService {
         data.put("pages", 1);
         return data;
     }
+
+    public void state(Integer id){
+        UserEntity userEntity = userMapper.selectById(id);
+        if(userEntity.getStatus() == 0){
+            userMapper.updateState(1, id);
+        }
+        if(userEntity.getStatus() == 1){
+            userMapper.updateState(0, id);
+        }
+
+    }
 }

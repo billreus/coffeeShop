@@ -1,6 +1,7 @@
 package com.example.shop.mapper;
 
 import com.example.shop.model.CategoryEntity;
+import com.example.shop.service.IndexService;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,6 +18,12 @@ public interface CategoryMapper {
      * @return
      */
     List<CategoryEntity> selectByLevel(String level);
+
+    /**
+     * 所有未删除的种类
+     * @return
+     */
+    List<CategoryEntity> findAllList(Integer limit);
 
     /**
      * 通过id查询

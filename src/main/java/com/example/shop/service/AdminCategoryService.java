@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 后台分类管理
+ */
 @Service
 public class AdminCategoryService {
 

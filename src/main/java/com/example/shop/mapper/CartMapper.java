@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 购物车
+ */
 @Mapper
 public interface CartMapper {
     /**
@@ -75,4 +78,6 @@ public interface CartMapper {
      * @return
      */
     int delete(@Param("userId") Integer userId,@Param("checked") boolean checked);
+
+    int deleteByGoodsId(Integer goodsId);
 }

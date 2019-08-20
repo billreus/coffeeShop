@@ -6,10 +6,25 @@ import java.math.BigDecimal;
  * 积分实体类
  */
 public class IntegralEntity {
+    /**
+     * id
+     */
     private int id;
+    /**
+     * 积分变化
+     */
     private BigDecimal changeIntegral;
+    /**
+     * 当前积分
+     */
     private BigDecimal currentIntegral;
+    /**
+     * 用户id
+     */
     private int userId;
+    /**
+     * 逻辑删除
+     */
     private boolean deleted;
 
     public int getId() {

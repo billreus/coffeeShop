@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/cart/cart",
     "pages/payResult/payResult",
     "pages/checkout/checkout",
@@ -8,7 +9,7 @@
     "pages/auth/reset/reset",
     "pages/catalog/catalog",
     "pages/category/category",
-    "pages/index/index",
+    "pages/search/search",
     "pages/ucenter/address/address",
     "pages/ucenter/addressAdd/addressAdd",
     "pages/ucenter/feedback/feedback",

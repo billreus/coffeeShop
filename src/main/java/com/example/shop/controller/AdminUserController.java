@@ -30,4 +30,10 @@ public class AdminUserController {
         Map<String, Object> data = adminUserService.list(username, mobile, page, limit, sort, order);
         return ShopUtil.getJSONString(0, "成功", data);
     }
+
+    @GetMapping("/state")
+    public String state(Integer id){
+        adminUserService.state(id);
+        return ShopUtil.getJSONString(0, "成功");
+    }
 }

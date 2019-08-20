@@ -39,6 +39,8 @@ public interface UserMapper {
      */
      int updateLastLoginTimeById(UserEntity userEntity);
 
+     int updateState(Integer status, Integer id);
+
      int updateLevelById(UserEntity userEntity);
 
      /**
@@ -47,6 +49,8 @@ public interface UserMapper {
      * @return
      */
      UserEntity selectById(Integer id);
+
+     UserEntity selectByOpenId(String OpenId);
 
     /**
      * 通过用户名查询

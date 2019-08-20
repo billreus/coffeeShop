@@ -17,6 +17,10 @@ public class StockEntity {
      */
     private int stock;
     /**
+     * 销量
+     */
+    private int saleCount;
+    /**
      * 创建时间
      */
     private String createDate;
@@ -51,6 +55,14 @@ public class StockEntity {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public int getSaleCount() {
+        return saleCount;
+    }
+
+    public void setSaleCount(int saleCount) {
+        this.saleCount = saleCount;
     }
 
     public String getCreateDate() {

@@ -2,14 +2,38 @@ package com.example.shop.model;
 
 import java.util.List;
 
+/**
+ * 后台分类管理实体类
+ */
 public class AdminCategoryEntity {
 
+    /**
+     * id
+     */
     private Integer id;
+    /**
+     * 类名
+     */
     private String name;
+    /**
+     * 关键字
+     */
     private String keywords;
+    /**
+     * 类目图标
+     */
     private String iconUrl;
+    /**
+     * 类目图片
+     */
     private String picUrl;
+    /**
+     * 类目等级
+     */
     private String level;
+    /**
+     * 子类列表
+     */
     private List<AdminCategoryEntity> children;
 
     public Integer getId() {

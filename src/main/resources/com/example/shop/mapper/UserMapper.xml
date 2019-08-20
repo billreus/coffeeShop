@@ -7,8 +7,8 @@
     <!--新建用户-->
     <insert id="insert">
         INSERT INTO
-        shop_user(username,password,mobile,nickname,avatar,login_time)
-        VALUES(#{username},#{password},#{mobile},#{nickname},#{avatar},#{loginTime}  )
+        shop.shop_user(username,password,mobile,nickname,avatar,login_time,wechat_openid, session_key)
+        VALUES(#{username},#{password},#{mobile},#{nickname},#{avatar},#{loginTime},#{wechatOpenid} ,#{sessionKey}   )
     </insert>
 
     <!--更新用户-->
@@ -33,6 +33,12 @@
         WHERE id=#{id}
     </update>
 
+    <update id="updateState">
+        UPDATE shop.shop_user
+        SET status=#{status}
+        WHERE id=#{id}
+    </update>
+
     <!--更新level-->
     <update id="updateLevelById">
         UPDATE shop_user
@@ -45,6 +51,12 @@
         SELECT *
         FROM shop_user
         WHERE id=#{id};
+    </select>
+
+    <select id="selectByOpenId" resultType="com.example.shop.model.UserEntity">
+        SELECT *
+        FROM shop.shop_user
+        WHERE wechat_openid=#{wechatOpenid};
     </select>
     <!--通过用户名查询-->
     <select id="selectByUserName" resultType="com.example.shop.model.UserEntity">

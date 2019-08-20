@@ -4,8 +4,17 @@ package com.example.shop.model;
  * 商品后台更新实体类
  */
 public class GoodsUpdateEntity {
+    /**
+     * 商品参数
+     */
     AttributeEntity[] attributes;
+    /**
+     * 商品
+     */
     GoodsEntity goods;
+    /**
+     * 库存
+     */
     StockEntity[] products;
 
     public GoodsEntity getGoods() {

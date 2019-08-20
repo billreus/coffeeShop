@@ -23,21 +23,27 @@
         <view class="group-item">
           <view class="goods">
             <view class="item {{isEditCart ? 'edit' : ''}}" wx:for="{{cartGoods}}" wx:key="id">
-              <view class="checkbox {{item.checked ? 'checked' : ''}}" bindtap="checkedItem" data-item-index="{{index}}"></view>
+              <view class="checkbox {{item.cartEntity.checked ? 'checked' : ''}}" bindtap="checkedItem" data-item-index="{{index}}"></view>
               <view class="cart-goods">
-                <image class="img" src="{{item.picUrl}}"></image>
+                <image class="img" src="{{item.cartEntity.picUrl}}"></image>
                 
                 <view class="info">
                   <view class="t">
-                    <text class="name">{{item.goodsName}}</text>
-                    <text class="num">x{{item.number}}</text>
+                    <text class="name">{{item.cartEntity.goodsName}}</text>
+                    <text class="num">x{{item.cartEntity.number}}</text>
                   </view>
-                  <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{isEditCart ? item.goodsName : ''}}</view>
+                  
+                  <view class="attr">
+                    <text class="at">{{ isEditCart ? item.cartEntity.goodsName: ''}}</text>
+                    <text class="att">{{ isEditCart ? '库存:' : ''}}{{ isEditCart ? item.stock : ''}}</text>
+                  </view>
+                    
                   <view class="b">
-                    <text class="price">￥{{item.price}}</text>
+                    
+                    <text class="price">￥{{item.cartEntity.price}}</text>
                     <view class="selnum">
                       <view class="cut" bindtap="cutNumber" data-item-index="{{index}}">-</view>
-                      <input value="{{item.number}}" class="number" disabled="true" type="number" />
+                      <input value="{{item.cartEntity.number}}" class="number" disabled="true" type="number" />
                       <view class="add" bindtap="addNumber" data-item-index="{{index}}">+</view>
                     </view>
                   </view>

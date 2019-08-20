@@ -4,17 +4,53 @@ package com.example.shop.model;
  * 地址实体类
  */
 public class AddressEntity {
+    /**
+     * id
+     */
     private int id;
+    /**
+     * 姓名
+     */
     private String name;
+    /**
+     * 用户表id
+     */
     private int userId;
+    /**
+     * 省
+     */
     private String province;
+    /**
+     * 市
+     */
     private String city;
+    /**
+     * 地区
+     */
     private String county;
+    /**
+     * 具体地址
+     */
     private String addressDetail;
+    /**
+     * 电话
+     */
     private String tel;
+    /**
+     * 是否默认地址
+     */
     private boolean isDefault;
+    /**
+     * 添加时间
+     */
     private String addTime;
+    /**
+     * 更新时间
+     */
     private String updateTime;
+    /**
+     * 逻辑删除;
+     */
     private boolean deleted;
 
     public int getId() {

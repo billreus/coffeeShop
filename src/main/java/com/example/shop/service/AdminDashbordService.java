@@ -11,6 +11,9 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 后台主页面板
+ */
 @Service
 public class AdminDashbordService {
 

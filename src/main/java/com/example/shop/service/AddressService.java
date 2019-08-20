@@ -38,7 +38,7 @@ public class AddressService {
      */
     public int save(Integer userId, AddressEntity addressEntity){
         if(addressEntity.isDefault()){
-            addressMapper.updateDefaultByUserId(userId);
+            addressMapper.updateDefault0ByUserId(userId);
         }
         if(addressEntity.getId() == 0){
             addressEntity.setUserId(userId);

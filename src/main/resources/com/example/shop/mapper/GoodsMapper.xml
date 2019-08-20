@@ -13,39 +13,57 @@
     <select id="selectByCategoryId" resultType="com.example.shop.model.GoodsEntity">
         SELECT *
         FROM shop_goods
-        WHERE category_id =#{categoryId} AND deleted = 0;
+        WHERE category_id =#{categoryId} AND deleted = 0 AND shop_goods.is_on_sale = 1
     </select>
 
     <select id="selectById" resultType="com.example.shop.model.GoodsEntity">
         SELECT *
         FROM shop_goods
-        WHERE id =#{id} AND deleted = 0;
+        WHERE id =#{id} AND deleted = 0 AND shop_goods.is_on_sale = 1;
     </select>
 
     <select id="selectByName" resultType="com.example.shop.model.GoodsEntity">
             SELECT *
             FROM shop_goods
-            WHERE name =#{name} AND deleted = 0;
+            WHERE name =#{name} AND deleted = 0 AND shop_goods.is_on_sale = 1;
     </select>
 
     <select id="selectByGoodsId" resultType="com.example.shop.model.GoodsEntity">
             SELECT *
             FROM shop_goods
-            WHERE goods_id =#{goodsId} AND deleted = 0;
+            WHERE goods_id =#{goodsId} AND deleted = 0 AND shop_goods.is_on_sale = 1;
     </select>
 
     <select id="selectByNameAndGoodsId" resultType="com.example.shop.model.GoodsEntity">
                 SELECT *
                 FROM shop_goods
-                WHERE goods_id =#{goodsId} AND name =#{name} AND deleted = 0;
+                WHERE goods_id =#{goodsId} AND name =#{name} AND deleted = 0 AND shop_goods.is_on_sale = 1;
         </select>
 
     <select id="findAllList" resultType="com.example.shop.model.GoodsEntity">
             SELECT *
             FROM shop_goods
-            WHERE deleted = 0
-            ORDER BY id=#{id};
+            <where>
+                        <if test="goodsId != null and goodsId != ''">
+                            goods_id=#{goodsId} AND deleted = 0
+                        </if>
+
+                        <if test="name != null and name != ''">
+                            and name=#{name} AND deleted = 0
+                        </if>
+
+            </where>
+
         </select>
+
+    <select id="findList" resultType="com.example.shop.model.GoodsEntity">
+                SELECT *
+                FROM shop_goods
+                WHERE deleted = 0 AND shop_goods.is_on_sale = 1
+                ORDER BY ${order} DESC
+                LIMIT #{limit}
+
+    </select>
 
     <update id="deleted">
         UPDATE shop_goods

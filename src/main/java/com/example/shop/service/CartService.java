@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 购物车
+ */
 @Service
 public class CartService {
 
@@ -28,6 +31,10 @@ public class CartService {
 
     @Resource
     private OperateIntegralMapper operateIntegralMapper;
+
+    @Resource
+    private StockMapper stockMapper;
+
     /**
      * 统计购物车数量
      * @param userId
@@ -49,18 +56,32 @@ public class CartService {
      */
     public Map<String, Object> index(Integer userId){
         List<CartEntity> cartList = cartMapper.selectByUserId(userId);
+        List<CartStockEntity> cartStock = new ArrayList<>();
+
+        //总数，勾选数，总价，勾选总价
         int count=0;
         int checkedGoodsCount = 0;
         BigDecimal amount = new BigDecimal(0.00);
         BigDecimal checkedGoodsAmount = new BigDecimal(0.00);
         for(CartEntity cart : cartList){
+            Integer goodsId = cart.getGoodsId();
+            GoodsEntity goods = goodsMapper.selectById(goodsId);
+            if(goods == null){
+                cartMapper.deleteByGoodsId(goodsId);
+            }
             count += cart.getNumber();
             amount = amount.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
             if(cart.isChecked()){
                 checkedGoodsCount += cart.getNumber();
                 checkedGoodsAmount = checkedGoodsAmount.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
             }
+            StockEntity stockEntity = stockMapper.selectByGoodsId(cart.getGoodsId());
+            CartStockEntity cartStockEntity = new CartStockEntity();
+            cartStockEntity.setCartEntity(cart);
+            cartStockEntity.setStock(stockEntity.getStock());
+            cartStock.add(cartStockEntity);
         }
+
         Map<String, Object> cartTotal = new HashMap<>();
         cartTotal.put("goodsCount", count);
         cartTotal.put("goodsAmount", amount);
@@ -68,7 +89,7 @@ public class CartService {
         cartTotal.put("checkedGoodsAmount", checkedGoodsAmount);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("cartList", cartList);
+        map.put("cartList", cartStock);
         map.put("cartTotal", cartTotal);
         return map;
     }
@@ -87,7 +108,17 @@ public class CartService {
             res.put("失败", "number参数错误");
             return res;
         }
-        //TODO 判断库存，商品一致性
+        //商品已下架
+        GoodsEntity goods = goodsMapper.selectById(goodsId);
+        if(goods == null){
+            cartMapper.deleteByGoodsId(goodsId);
+        }
+        //判断库存
+        StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        if(number > stockEntity.getStock()){
+            res.put("失败","库存不足");
+            return res;
+        }
         CartEntity exchangeCart = cartMapper.selectById(id);
         exchangeCart.setNumber(number);
         cartMapper.updateById(exchangeCart);
@@ -157,6 +188,12 @@ public class CartService {
 
         BigDecimal goodsTotalPrice = new BigDecimal(0);
         for(CartEntity checkGoods : checkGoodsList){
+            Integer goodsId = checkGoods.getGoodsId();
+            GoodsEntity goods = goodsMapper.selectById(goodsId);
+            if(goods == null){
+                cartMapper.deleteByGoodsId(goodsId);
+            }
+
             BigDecimal price = checkGoods.getPrice();
             int number = checkGoods.getNumber();
             goodsTotalPrice = goodsTotalPrice.add(price.multiply(new BigDecimal(number)));
@@ -171,7 +208,7 @@ public class CartService {
         Map<String, Object> data = new HashMap<>();
         data.put("checkedGoodsList", checkGoodsList);
         data.put("goodsTotalPrice", goodsTotalPrice);
-        //TODO 优惠劵价格
+
         //积分
         data.put("freightPrice", actualPrice);
         data.put("couponPrice", couponPrice);

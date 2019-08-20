@@ -1,5 +1,8 @@
 package com.example.shop.model;
 
+/**
+ * 管理员实体类
+ */
 public class AdminEntity {
     /**
      * id

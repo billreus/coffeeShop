@@ -1,5 +1,6 @@
 package com.example.shop.controller;
 
+import com.example.shop.annotation.LoginUser;
 import com.example.shop.service.OrderService;
 import com.example.shop.util.ShopUtil;
 import com.example.shop.util.UserToken;
@@ -27,15 +28,10 @@ public class OrderController {
      * @return
      */
     @GetMapping("list")
-    public String list(NativeWebRequest request,
+    public String list(@LoginUser Integer userId,
                        @RequestParam(defaultValue = "0") Integer showType,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
         Object data = orderService.list(userId, showType, page, limit);
         return ShopUtil.getJSONString(0, "成功", data);
     }
@@ -47,24 +43,14 @@ public class OrderController {
      * @return
      */
     @GetMapping("detail")
-    public String detail(NativeWebRequest request, Integer orderId){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String detail(@LoginUser Integer userId, Integer orderId){
         Map<String, Object> data = new HashMap<>();
         data = orderService.detail(userId, orderId);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
     @PostMapping("submit")
-    public String submit(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String submit(@LoginUser Integer userId, @RequestBody String body){
         Map<String, Object> data = new HashMap<>();
         data = orderService.submit(userId, body);
         return ShopUtil.getJSONString(0, "成功", data);
@@ -77,12 +63,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("cancel")
-    public String cancel(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String cancel(@LoginUser Integer userId, @RequestBody String body){
         orderService.cancel(userId, body);
         return ShopUtil.getJSONString(0, "成功");
     }
@@ -94,12 +75,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("delete")
-    public String delete(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String delete(@LoginUser Integer userId, @RequestBody String body){
         orderService.delete(userId, body);
         return ShopUtil.getJSONString(0, "成功");
     }
@@ -111,12 +87,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("refund")
-    public String refund(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String refund(@LoginUser Integer userId, @RequestBody String body){
         orderService.refund(userId, body);
         return ShopUtil.getJSONString(0, "成功");
     }
@@ -128,12 +99,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("prepay")
-    public String prepay(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String prepay(@LoginUser Integer userId, @RequestBody String body){
         orderService.prepay(userId, body);
         return ShopUtil.getJSONString(0, "成功");
     }
@@ -145,12 +111,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("confirm")
-    public String confirm(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String confirm(@LoginUser Integer userId, @RequestBody String body){
         orderService.confirm(userId, body);
         return ShopUtil.getJSONString(0, "成功");
     }

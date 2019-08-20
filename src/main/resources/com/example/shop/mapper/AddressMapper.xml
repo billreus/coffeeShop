@@ -28,6 +28,12 @@
         WHERE user_id =#{userId}
     </update>
 
+    <update id="updateDefault0ByUserId">
+        UPDATE shop_address
+        SET is_default = 0
+        WHERE user_id =#{userId}
+    </update>
+
     <insert id="insert">
         INSERT INTO
             shop_address(name, user_id, province, city, county, address_detail, tel, is_default)

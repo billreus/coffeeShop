@@ -654,6 +654,9 @@ info.gallery = JSON.parse(info.gallery);
     });
   },
   addNumber: function() {
+    if(this.data.number >= this.data.stock){
+      return
+    }
     this.setData({
       number: this.data.number + 1
     });

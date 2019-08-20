@@ -38,15 +38,15 @@ Page({
     let that = this;
     util.request(api.IndexUrl).then(function(res) {
       if (res.errno === 0) {
-        let banner = res.data.banner;
-        banner.gallery = JSON.parse(banner.gallery);
+        //let banner = res.data.banner;
+        //banner.picUrl = JSON.parse(banner.picUrl);
         that.setData({
           newGoods: res.data.newGoodsList,
           hotGoods: res.data.hotGoodsList,
           topics: res.data.topicList,
           brands: res.data.brandList,
           floorGoods: res.data.floorGoodsList,
-          banner:banner,
+          banner:res.data.banner,
           groupons: res.data.grouponList,
           channel: res.data.channel,
           coupon: res.data.couponList

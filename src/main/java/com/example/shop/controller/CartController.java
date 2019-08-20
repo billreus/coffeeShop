@@ -2,6 +2,7 @@ package com.example.shop.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.shop.annotation.LoginUser;
 import com.example.shop.model.CartEntity;
 import com.example.shop.service.CartService;
 import com.example.shop.util.JacksonUtil;
@@ -31,44 +32,30 @@ public class CartController {
      * @return
      */
     @GetMapping("goodscount")
-    public String goodCount(NativeWebRequest request){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(0, "成功", 0);
-        }
-        int userId = UserToken.getUserId(token);
+    public String goodCount(@LoginUser Integer userId){
         int goodCount = cartService.count(userId);
-        return ShopUtil.getJSONString(0, "成功", goodCount);
+        return ShopUtil.getJSONString(0, "成功读取商品数", goodCount);
     }
 
     /**
      * 购物车主页
-     * @param request
+     * @param userId
      * @return
      */
     @GetMapping("index")
-    public String index(NativeWebRequest request){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录", 0);
-        }
-        int userId = UserToken.getUserId(token);
+    public String index(@LoginUser Integer userId){
         Map<String, Object> data = cartService.index(userId);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
     /**
      * 购物车数量编辑
-     * @param request
+     * @param userId
      * @param cart
      * @return
      */
     @PostMapping("update")
-    public String update(NativeWebRequest request, @RequestBody CartEntity cart){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
+    public String update(@LoginUser Integer userId, @RequestBody CartEntity cart){
         if(cart == null){
             return ShopUtil.getJSONString(401, "参数不对");
         }
@@ -82,17 +69,12 @@ public class CartController {
 
     /**
      * 购物车打勾
-     * @param request
+     * @param userId
      * @param body
      * @return
      */
     @PostMapping("checked")
-    public String checked(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String checked(@LoginUser Integer userId, @RequestBody String body){
         if(body == null){
             return ShopUtil.getJSONString(401, "参数不对");
         }
@@ -106,22 +88,17 @@ public class CartController {
         }
         Boolean isChecked = (checkValue == 1);
         cartService.checked(checkedList, userId, isChecked);
-        return index(request);
+        return index(userId);
     }
 
     /**
      * 购物车删除
-     * @param request
+     * @param userId
      * @param body
      * @return
      */
     @PostMapping("delete")
-    public String delete(NativeWebRequest request, @RequestBody String body){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String delete(@LoginUser Integer userId, @RequestBody String body){
         if(body == null){
             return ShopUtil.getJSONString(401, "参数不对");
         }
@@ -131,7 +108,7 @@ public class CartController {
             return ShopUtil.getJSONString(401, "错误");
         }
         cartService.delete(deleteList, userId);
-        return index(request);
+        return index(userId);
     }
 
     /**
@@ -141,17 +118,12 @@ public class CartController {
      * @return
      */
     @PostMapping("add")
-    public Object add(NativeWebRequest request, @RequestBody CartEntity cart){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public Object add(@LoginUser Integer userId, @RequestBody CartEntity cart){
         if(cart == null){
             return ShopUtil.getJSONString(401, "参数不对");
         }
         cartService.add(userId, cart);
-        return goodCount(request);
+        return goodCount(userId);
     }
 
     /**
@@ -163,24 +135,14 @@ public class CartController {
      * @return
      */
     @GetMapping("checkout")
-    public String checkout(NativeWebRequest request, Integer cartId, Integer addressId, Integer couponId){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String checkout(@LoginUser Integer userId, Integer cartId, Integer addressId, Integer couponId){
         Map<String, Object> data = new HashMap<>();
         data = cartService.checkout(userId, cartId, addressId, couponId);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
     @PostMapping("fastadd")
-    public String fastAdd(NativeWebRequest request, @RequestBody CartEntity cartEntity){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String fastAdd(@LoginUser Integer userId, @RequestBody CartEntity cartEntity){
         Integer data = cartService.fastAdd(userId, cartEntity);
         return ShopUtil.getJSONString(0, "成功", data);
     }

@@ -10,6 +10,13 @@
         WHERE level=#{level} AND deleted= 0;
     </select>
 
+    <select id="findAllList" resultType="com.example.shop.model.CategoryEntity">
+        SELECT *
+        FROM shop.shop_category
+        WHERE deleted= 0
+        LIMIT #{limit}
+    </select>
+
     <!-- 通过id查询目录-->
     <select id="selectById" resultType="com.example.shop.model.CategoryEntity">
         SELECT *
@@ -26,7 +33,7 @@
 
     <insert id="insert">
         INSERT INTO
-        shop_category(name, keywords, pid, icon_url, pic_url, level)
+        shop.shop_category(name, keywords, pid, icon_url, pic_url, level)
         VALUES (#{name}, #{keywords}, #{pid}, #{iconUrl}, #{picUrl}, #{level})
     </insert>
 

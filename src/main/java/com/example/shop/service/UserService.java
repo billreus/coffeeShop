@@ -4,6 +4,7 @@ import com.example.shop.mapper.IntegralMapper;
 import com.example.shop.mapper.UserMapper;
 import com.example.shop.model.IntegralEntity;
 import com.example.shop.model.UserEntity;
+import com.example.shop.model.UserInfoEntity;
 import com.example.shop.util.LevelUtil;
 import com.example.shop.util.ShopUtil;
 import com.example.shop.util.UserToken;
@@ -34,7 +35,7 @@ public class UserService {
      * @param phone 手机号
      * @return
      */
-    public Map<String, Object> register(String username, String password, String phone){
+    public Map<String, Object> register(String username, String password, String phone, String openId){
         Map<String, Object> map = new HashMap<>();
         if(username == null || username.length() == 0){
             map.put("name", "用户名不能为空");
@@ -53,7 +54,15 @@ public class UserService {
             map.put("name", "用户名已经被注册");
             return map;
         }
+
         UserEntity userEntity = new UserEntity();
+        userEntity = userMapper.selectByOpenId(openId);
+        if(userEntity != null){
+            map.put("name", "用户已经注册");
+            return map;
+        }
+
+        userEntity.setWechatOpenid(openId);
         userEntity.setUsername(username);
         userEntity.setMobile(phone);
         userEntity.setPassword(ShopUtil.MD5(password));
@@ -65,9 +74,34 @@ public class UserService {
         userEntity.setLoginTime(time);
         userMapper.insert(userEntity);
 
-        //更新登录状态
-
         //token
+        String token = UserToken.generateToken(userEntity.getId());
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("userInfo", userEntity);
+        return result;
+    }
+
+    public Map<String, Object> loginByWeixin(String sessionKey, String openId, UserInfoEntity userInfo){
+        UserEntity userEntity = userMapper.selectByOpenId(openId);
+        if(userEntity == null){
+            userEntity = new UserEntity();
+            userEntity.setUsername(openId);
+            userEntity.setPassword(ShopUtil.MD5(openId));
+            userEntity.setWechatOpenid(openId);
+            userEntity.setMobile("");
+            userEntity.setSessionKey(sessionKey);
+            userEntity.setNickname(userInfo.getNickName());
+            userEntity.setGender(userInfo.getGender());
+            userEntity.setAvatar(userInfo.getAvatarUrl());
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = formatter.format(date);
+            userEntity.setLoginTime(time);
+            userMapper.insert(userEntity);
+        }else {
+            userEntity.setSessionKey(sessionKey);
+        }
         String token = UserToken.generateToken(userEntity.getId());
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
@@ -124,15 +158,24 @@ public class UserService {
         return result;
     }
 
+    /**
+     * 更新用户信息
+     * @param userId
+     * @param password
+     * @param mobile
+     * @param nickname
+     */
     public void reset(Integer userId, String password, String mobile, String nickname){
         UserEntity userEntity = userMapper.selectById(userId);
         if(mobile != null){
             userEntity.setMobile(mobile);
-            userMapper.update(userEntity);
         }
         if(nickname != null){
             userEntity.setNickname(nickname);
-            userMapper.update(userEntity);
         }
+        if(password != null){
+            userEntity.setPassword(password);
+        }
+        userMapper.update(userEntity);
     }
 }

@@ -9,12 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用户中心
+ */
 @Service
 public class UserCenterService {
 
     @Resource
     private OrderMapper orderMapper;
 
+    /**
+     * 用户中心各种订单数量统计
+     * @param userId
+     * @return
+     */
     public Map<String, Object> list(Integer userId){
         List<OrderEntity> orders = orderMapper.selectByUserId(userId);
         int unpaid = 0;

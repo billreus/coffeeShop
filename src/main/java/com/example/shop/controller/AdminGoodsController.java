@@ -68,6 +68,11 @@ public class AdminGoodsController {
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
+    /**
+     * 更新商品，库存，商品参数
+     * @param goodsUpdateEntity
+     * @return
+     */
     @PostMapping("/update")
     public String update(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
         adminGoodsService.update(goodsUpdateEntity);

@@ -1,11 +1,13 @@
 package com.example.shop.mapper;
 
-import com.example.shop.model.CategoryEntity;
 import com.example.shop.model.GoodsEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 商品
+ */
 @Mapper
 public interface GoodsMapper {
 
@@ -15,7 +17,9 @@ public interface GoodsMapper {
 
     GoodsEntity selectById(Integer Id);
 
-    List<GoodsEntity> findAllList();
+    List<GoodsEntity> findAllList(String goodsId, String name);
+
+    List<GoodsEntity> findList(Integer limit, String order);
 
     GoodsEntity selectByName(String name);
 

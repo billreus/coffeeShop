@@ -61,4 +61,9 @@
         WHERE user_id=#{userId} AND checked=#{checked}
     </delete>
 
+    <delete id="deleteByGoodsId">
+        DELETE FROM shop.shop_cart
+        WHERE goods_id=#{goodsId}
+    </delete>
+
 </mapper>

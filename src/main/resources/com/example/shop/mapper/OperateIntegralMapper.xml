@@ -6,7 +6,33 @@
 <mapper namespace="com.example.shop.mapper.OperateIntegralMapper">
     <select id="selectByLevel" resultType="OperateIntegralEntity">
         SELECT *
-        FROM shop_operate_integral
-        WHERE level=#{level}
+        FROM shop.shop_operate_integral
+        WHERE deleted = 0 AND level=#{level}
     </select>
+
+    <select id="findAllList" resultType="com.example.shop.model.OperateIntegralEntity">
+        SELECT *
+        FROM shop.shop_operate_integral
+        WHERE deleted = 0
+        ORDER BY id=#{id};
+    </select>
+
+    <update id="delete">
+        UPDATE shop.shop_operate_integral
+        SET deleted = 1
+        WHERE id=#{id}
+    </update>
+
+    <update id="update">
+        UPDATE shop.shop_operate_integral
+        SET level=#{level},discount=#{discount}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO
+            shop.shop_operate_integral(level, discount)
+        VALUES (#{level}, #{discount})
+    </insert>
+
 </mapper>

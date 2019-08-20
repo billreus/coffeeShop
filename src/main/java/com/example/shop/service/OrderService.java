@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
+import com.example.shop.util.CharUtil;
 import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.OrderUtil;
 import org.slf4j.Logger;
@@ -16,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 订单
+ */
 @Service
 public class OrderService {
 
@@ -96,6 +100,7 @@ public class OrderService {
         orderDetail.put("addTime", order.getAddTime());
         orderDetail.put("orderSn", order.getOrderSn());
         orderDetail.put("actualPrice", order.getActualPrice());
+        //订单状态文字
         orderDetail.put("orderStatusText", OrderUtil.getOrderStatusText(status));
         orderDetail.put("consignee", order.getConsignee());
         orderDetail.put("mobile", order.getMobile());
@@ -103,6 +108,7 @@ public class OrderService {
         orderDetail.put("goodsPrice",order.getOrderPrice());
         orderDetail.put("couponPrice", order.getCouponPrice());
         orderDetail.put("orderIntegral", order.getOrderIntegral());
+        //每种不同状态订单对应不同操作的按钮
         orderDetail.put("handleOption", OrderUtil.build(status));
 
         List<GoodsOrderEntity> orderGoodsList = goodsOrderMapper.selectByOrderId(order.getId());
@@ -144,7 +150,7 @@ public class OrderService {
             checkedGoodPrice = checkedGoodPrice.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
         }
 
-        //TODO 优惠劵价格和减完价格
+        //优惠价格和减完价格
         UserEntity user = userMapper.selectById(userId);
         Integer level = user.getUserLevel();
         OperateIntegralEntity operate = operateIntegralMapper.selectByLevel(level);
@@ -153,21 +159,23 @@ public class OrderService {
         BigDecimal couponPrice = checkedGoodPrice.subtract(checkedGoodPrice.multiply(operate.getDiscount()));
         BigDecimal actualPrice = orderPrice.subtract(couponPrice);
 
-        //TODO 判断库存
         //更新库存
         for(CartEntity cart : cartList){
             Integer reduceStock = cart.getNumber();
             Integer stock = stockMapper.selectByGoodsId(cart.getGoodsId()).getStock();
+            if(reduceStock > stock){
+                //判断库存
+                return data;
+            }
             Integer updateStock = stock - reduceStock;
             stockMapper.updateByGoodsId(updateStock, cart.getGoodsId());
         }
 
         //订单
-        Integer orderId = null;
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUserId(userId);
-        //TODO 生成单号
-        orderEntity.setOrderSn("1000");
+        //TODO 生成单号有可能重复
+        orderEntity.setOrderSn(CharUtil.getRandomNum(8));
         orderEntity.setOrderStatus(OrderUtil.STATUS_CREATE);
         orderEntity.setConsignee(address.getName());
         orderEntity.setMobile(address.getTel());
@@ -182,7 +190,7 @@ public class OrderService {
         orderEntity.setMessage(message);
 
         //添加订单,记录订单id
-        orderId = orderMapper.insert(orderEntity);
+        Integer orderId = orderMapper.insert(orderEntity);
 
         for(CartEntity cartGoods : cartList){
             GoodsOrderEntity goodsOrderEntity = new GoodsOrderEntity();
@@ -200,6 +208,7 @@ public class OrderService {
 
         //存积分
         IntegralEntity integralEntity = integralMapper.selectByUserId(userId);
+        //积分表中没记录的新用户
         if(integralEntity == null){
             integralEntity = new IntegralEntity();
             integralEntity.setUserId(userId);
@@ -212,17 +221,15 @@ public class OrderService {
             integralMapper.updateByUserId(userId, actualPrice, setIntegral);
         }
 
-        //减库存
-
-
         data.put("orderId", orderId);
         return data;
     }
 
-    //@Transactional
+    @Transactional
     public void cancel(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_CANCEL);
+
         //TODO 库存回滚
     }
 

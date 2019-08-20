@@ -5,21 +5,23 @@
       <image class="icon"></image>
       <text class="txt">商品搜索, 共{{goodsCount}}款好物</text>
     </navigator>
-  </view>
+</view>
+
   <swiper class="banner" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-    <swiper-item wx:for="{{banner.gallery}}" wx:key="id">
-      <!-- <navigator url="{{item.link}}"> -->
-      <image src="{{item}}" background-size="cover"></image>
-      <!-- </navigator> -->
+    <swiper-item wx:for="{{banner}}" wx:key="id">
+      <navigator url="/pages/goods/goods?id={{item.id}}"> 
+      <image src="{{item.picUrl}}" background-size="cover"></image>
+       </navigator>
     </swiper-item>
   </swiper>
+  
   <view class="m-menu">
     <navigator class="item" url="/pages/category/category?id={{item.id}}" wx:for="{{channel}}" wx:key="id">
       <image src="{{item.iconUrl}}" background-size="cover"></image>
       <text>{{item.name}}</text>
     </navigator>
   </view>
-
+  <!--
   <view class="a-section a-coupon" wx:if="{{coupon.length > 0}}">
     <view class="h">
       <view class="title">
@@ -103,12 +105,12 @@
         </navigator>
       </view>
     </view>
-  </view>
+  </view>-->
   <view class="a-section a-new" wx:if="{{newGoods.length > 0}}">
     <view class="h">
       <view>
         <navigator url="../newGoods/newGoods">
-          <text class="txt">周一周四 · 新品首发</text>
+          <text class="txt">最新商品</text>
         </navigator>
       </view>
     </view>
@@ -146,7 +148,7 @@
       </view>
     </view>
   </view>
-
+<!--
   <view class="a-section a-topic" wx:if="topics.length > 0">
     <view class="h">
       <view>
@@ -188,5 +190,5 @@
     <navigator url="/pages/category/category?id={{item.id}}" class="t">
       <view class="txt">{{'更多'+item.name+'好物 >'}}</view>
     </navigator>
-  </view>
+  </view>-->
 </view>

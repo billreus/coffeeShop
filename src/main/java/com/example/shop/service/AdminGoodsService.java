@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 后台商品管理
+ */
 @Service
 public class AdminGoodsService {
 
@@ -45,17 +48,8 @@ public class AdminGoodsService {
      */
     public Map<String, Object> list(String goodsId, String name, Integer page, Integer limit,
                                     String sort, String order){
-        List<GoodsEntity> goodsEntityList = new ArrayList<>();
-        if(name == null && goodsId == null){
-            goodsEntityList = goodsMapper.findAllList();
-        }else if(goodsId == null){
-            GoodsEntity goodsEntity = goodsMapper.selectByName(name);
-            goodsEntityList.add(goodsEntity);
-        }else if(name == null){
-            goodsEntityList = goodsMapper.selectByGoodsId(goodsId);
-        }else {
-            goodsEntityList = goodsMapper.selectByNameAndGoodsId(name, goodsId);
-        }
+        List<GoodsEntity> goodsEntityList =  goodsMapper.findAllList(name, goodsId);
+
         Map<String, Object> data = new HashMap<>();
         data.put("list", goodsEntityList);
         //TODO 分页

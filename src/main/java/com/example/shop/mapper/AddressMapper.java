@@ -27,7 +27,7 @@ public interface AddressMapper {
      * @return
      */
     int updateDefaultByUserId(Integer userId);
-
+    int updateDefault0ByUserId(Integer userId);
     /**
      * 添加地址
      * @param addressEntity

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * 管理员登录
+ */
 @Service
 public class AdminLoginService {
 

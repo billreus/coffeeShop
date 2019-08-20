@@ -18,17 +18,17 @@ public class JwtUtil {
     /**
      * 密钥
      */
-    static final String SECRET = "Shop321Token123";
+    private static final String SECRET = "Shop321Token123";
 
     /**
      * 签名生成者
      */
-    static final  String ISSUSER = "admin";
+    private static final  String ISSUSER = "admin";
 
     /**
      * 签名主题
      */
-    static final String SUBJECT = "this is shop token";
+    private static final String SUBJECT = "this is shop token";
     /**
      * 签名观众
      */

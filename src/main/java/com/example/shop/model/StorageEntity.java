@@ -1,14 +1,44 @@
 package com.example.shop.model;
 
+/**
+ * 图片存储实体类
+ */
 public class StorageEntity {
+    /**
+     * id
+     */
     private int id;
+    /**
+     * 存储文件名
+     */
     private String key;
+    /**
+     * 原文件名
+     */
     private String name;
+    /**
+     * 格式
+     */
     private String type;
+    /**
+     * 文件大小
+     */
     private Integer size;
+    /**
+     * 文件url
+     */
     private String url;
+    /**
+     * 添加时间
+     */
     private String addTime;
+    /**
+     * 更新时间
+     */
     private String updateTime;
+    /**
+     * 逻辑删除
+     */
     private boolean deleted;
 
     public int getId() {

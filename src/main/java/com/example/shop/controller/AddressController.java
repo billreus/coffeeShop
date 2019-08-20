@@ -1,5 +1,6 @@
 package com.example.shop.controller;
 
+import com.example.shop.annotation.LoginUser;
 import com.example.shop.model.AddressEntity;
 import com.example.shop.service.AddressService;
 import com.example.shop.util.ShopUtil;
@@ -12,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 地址管理
+ */
 @RestController
 @RequestMapping("/wx/address")
 public class AddressController {
@@ -20,46 +24,26 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping("list")
-    public String list(NativeWebRequest request){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String list(@LoginUser Integer userId){
         Map<String, Object> data = addressService.list(userId);
 
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
     @PostMapping("save")
-    public String save(NativeWebRequest request, @RequestBody AddressEntity addressEntity){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String save(@LoginUser Integer userId, @RequestBody AddressEntity addressEntity){
         int data = addressService.save(userId, addressEntity);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
     @GetMapping("detail")
-    public String detail(NativeWebRequest request, Integer id){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String detail(@LoginUser Integer userId, Integer id){
         Object data = addressService.detail(userId, id);
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
     @PostMapping("delete")
-    public String delete(NativeWebRequest request, @RequestBody AddressEntity addressEntity){
-        String token = request.getHeader("X-Litemall-Token");
-        if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
-        }
-        int userId = UserToken.getUserId(token);
+    public String delete(@LoginUser Integer userId, @RequestBody AddressEntity addressEntity){
         addressService.delete(userId, addressEntity);
         return ShopUtil.getJSONString(0, "成功");
     }
