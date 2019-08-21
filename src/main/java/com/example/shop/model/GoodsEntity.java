@@ -74,7 +74,7 @@ public class GoodsEntity implements Serializable {
     /**
      * 是否上架
      */
-    private boolean isOnSale;
+    private boolean onSale;
     /**
      * 物理删除
      */
@@ -209,11 +209,11 @@ public class GoodsEntity implements Serializable {
     }
 
     public boolean isOnSale() {
-        return isOnSale;
+        return onSale;
     }
 
     public void setOnSale(boolean onSale) {
-        isOnSale = onSale;
+        this.onSale = onSale;
     }
 
     public boolean isDeleted() {

@@ -89,6 +89,8 @@
             </if>
 
         </where>
+        LIMIT ${pages},${limit}
+
     </select>
     <!--查询用户总数-->
     <select id="findAllCount" resultType="long">

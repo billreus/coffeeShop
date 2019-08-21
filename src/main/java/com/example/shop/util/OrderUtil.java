@@ -62,7 +62,6 @@ public class OrderUtil {
         }
         if(status == 4){
             orderHandleEntity.setRebuy(true);
-            orderHandleEntity.setRefund(true);
         }
         if(status == 5 || status == 6){
             orderHandleEntity.setDelete(true);

@@ -48,15 +48,16 @@ public class AdminGoodsService {
      */
     public Map<String, Object> list(String goodsId, String name, Integer page, Integer limit,
                                     String sort, String order){
-        List<GoodsEntity> goodsEntityList =  goodsMapper.findAllList(name, goodsId);
+        long count = goodsMapper.findSaleCount();
+        Integer start = (page-1)*limit;
+        List<GoodsEntity> goodsEntityList =  goodsMapper.findAllList(name, goodsId,start,limit);
 
         Map<String, Object> data = new HashMap<>();
         data.put("list", goodsEntityList);
-        //TODO 分页
-        data.put("total", goodsEntityList.size());
-        data.put("page", 1);
-        data.put("limit", goodsEntityList.size());
-        data.put("pages", 1);
+        data.put("total", count);
+        data.put("page", page);
+        data.put("limit", limit);
+        data.put("pages", count/limit);
         return data;
     }
 
@@ -121,7 +122,8 @@ public class AdminGoodsService {
 
         Integer updateStock = stock[0].getStock();
         Integer goodsId = stock[0].getGoodsId();
-        stockMapper.updateByGoodsId(updateStock, goodsId);
+        Integer saleCount = stock[0].getSaleCount();
+        stockMapper.updateByGoodsId(updateStock, saleCount,goodsId);
 
         goodsMapper.update(goods);
 
@@ -135,5 +137,21 @@ public class AdminGoodsService {
             }
         }
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void create(GoodsUpdateEntity goodsUpdateEntity){
+        GoodsEntity goods = goodsUpdateEntity.getGoods();
+        AttributeEntity[] attributes = goodsUpdateEntity.getAttributes();
+        StockEntity[] stock = goodsUpdateEntity.getProducts();
+
+        stockMapper.insert(stock[0]);
+
+        goodsMapper.insert(goods);
+
+        for(AttributeEntity attributeEntity : attributes){
+            attributeEntity.setGoodsId(goods.getId());
+            attributeMapper.insert(attributeEntity);
+        }
     }
 }

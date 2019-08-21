@@ -64,6 +64,7 @@ public interface CartMapper {
      */
     int updateCheckById(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId, @Param("checked") boolean checked);
 
+    int updateNumber(@Param("number") Integer number, @Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
     /**
      * 增加购物车
      * @param cartEntity

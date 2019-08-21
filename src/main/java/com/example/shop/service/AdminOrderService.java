@@ -37,23 +37,23 @@ public class AdminOrderService {
     public Map<String, Object> list(String userId, String orderSn, List<Integer> orderStatusArray,
                                     Integer page, Integer limit, String sort, String order){
         List<OrderEntity> orderEntityList = new ArrayList<>();
-        //TODO 搜索
+        long count = orderMapper.count();
+        Integer start = (page-1)*limit;
         if(orderStatusArray == null){
-            orderEntityList = orderMapper.findAllList(userId, orderSn, null);
+            orderEntityList = orderMapper.findAllList(userId, orderSn, null,start,limit);
         }else {
             for(Integer orderStatus: orderStatusArray){
-                List<OrderEntity> orderList = orderMapper.findAllList(userId, orderSn, orderStatus);
+                List<OrderEntity> orderList = orderMapper.findAllList(userId, orderSn, orderStatus,start,limit);
                 orderEntityList.addAll(orderList);
             }
         }
 
         Map<String, Object> data = new HashMap<>();
         data.put("list", orderEntityList);
-        //TODO 分页
-        data.put("total", orderEntityList.size());
-        data.put("page", 1);
-        data.put("limit", orderEntityList.size());
-        data.put("pages", 1);
+        data.put("total", count);
+        data.put("page", page);
+        data.put("limit", limit);
+        data.put("pages", count/limit);
         return data;
     }
 

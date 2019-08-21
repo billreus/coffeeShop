@@ -5,7 +5,7 @@
 <mapper namespace="com.example.shop.mapper.StockMapper">
     <update id="updateByGoodsId">
         UPDATE shop.shop_stock
-        SET stock =#{stock}
+        SET stock =#{stock}, sale_count=#{saleCount}
         WHERE goods_id =#{goodsId} AND deleted=0
     </update>
 
@@ -28,4 +28,10 @@
         ORDER BY sale_count DESC
         LIMIT 5
     </select>
+
+    <insert id="insert">
+        INSERT INTO shop.shop_stock(goods_id, stock,  create_date, update_date)
+        VALUES (#{goodsId}, #{stock}, #{createDate}, #{updateDate})
+
+    </insert>
 </mapper>

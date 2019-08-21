@@ -21,15 +21,16 @@ public class AdminOperateIntegralService {
 
     public Map<String, Object> list(Integer page, Integer limit, String sort, String order){
         List<OperateIntegralEntity> integralList = new ArrayList<>();
-        integralList = operateIntegralMapper.findAllList();
-
+        long count = operateIntegralMapper.count();
+        Integer start = (page-1)*limit;
+        integralList = operateIntegralMapper.findAllList(start, limit);
         Map<String, Object> data = new HashMap<>();
         data.put("list", integralList);
-        //TODO 分页
-        data.put("total", integralList.size());
-        data.put("page", 1);
-        data.put("limit", integralList.size());
-        data.put("pages", 1);
+        // 分页
+        data.put("total", count);
+        data.put("page", page);
+        data.put("limit", limit);
+        data.put("pages", count/limit);
         return data;
     }
 

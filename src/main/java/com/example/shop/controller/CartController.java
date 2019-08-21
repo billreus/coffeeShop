@@ -113,22 +113,24 @@ public class CartController {
 
     /**
      * 添加购物车
-     * @param request
      * @param cart
      * @return
      */
     @PostMapping("add")
     public Object add(@LoginUser Integer userId, @RequestBody CartEntity cart){
-        if(cart == null){
+        if(cart == null || userId == null){
             return ShopUtil.getJSONString(401, "参数不对");
         }
-        cartService.add(userId, cart);
-        return goodCount(userId);
+        String res = cartService.add(userId, cart);
+        if( "success".equals(res)){
+            return goodCount(userId);
+        }else {
+            return ShopUtil.getJSONString(402, "库存和商品错误");
+        }
     }
 
     /**
-     * 购物车下单
-     * @param request
+     * 购物车去下单
      * @param cartId
      * @param addressId
      * @param couponId
@@ -138,12 +140,30 @@ public class CartController {
     public String checkout(@LoginUser Integer userId, Integer cartId, Integer addressId, Integer couponId){
         Map<String, Object> data = new HashMap<>();
         data = cartService.checkout(userId, cartId, addressId, couponId);
-        return ShopUtil.getJSONString(0, "成功", data);
+        if(data == null){
+            return ShopUtil.getJSONString(401, "参数错误");
+        }else {
+            return ShopUtil.getJSONString(0, "成功", data);
+        }
     }
 
+    /**
+     * 直接购买
+     * 相对于添加购物车，会重置相同物品购物车中的数量，并直接跳转到购物车页面
+     * @param userId
+     * @param cartEntity
+     * @return
+     */
     @PostMapping("fastadd")
     public String fastAdd(@LoginUser Integer userId, @RequestBody CartEntity cartEntity){
+        if(userId == null || cartEntity == null){
+            return ShopUtil.getJSONString(401, "参数错误");
+        }
         Integer data = cartService.fastAdd(userId, cartEntity);
-        return ShopUtil.getJSONString(0, "成功", data);
+        if(data == 0){
+            return ShopUtil.getJSONString(402, "参数错误");
+        }else {
+            return ShopUtil.getJSONString(0, "成功", data);
+        }
     }
 }

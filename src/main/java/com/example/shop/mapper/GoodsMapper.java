@@ -17,7 +17,7 @@ public interface GoodsMapper {
 
     GoodsEntity selectById(Integer Id);
 
-    List<GoodsEntity> findAllList(String goodsId, String name);
+    List<GoodsEntity> findAllList(String goodsId, String name, Integer pages, Integer limit);
 
     List<GoodsEntity> findList(Integer limit, String order);
 
@@ -30,4 +30,6 @@ public interface GoodsMapper {
     int deleted(Integer goodsId);
 
     int update(GoodsEntity goodsEntity);
+
+    int insert(GoodsEntity goodsEntity);
 }

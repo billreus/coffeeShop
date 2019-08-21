@@ -3,6 +3,7 @@ package com.example.shop.service;
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -144,19 +145,41 @@ public class CartService {
 
     }
 
-    public void add(Integer userId, CartEntity cart){
+    @Transactional
+    public String add(Integer userId, CartEntity cart){
         Integer number = cart.getNumber();
         Integer goodsId = cart.getGoodsId();
-        //TODO 购物车错误判断
+        if(number<=0){
+            return "err 数量错误";
+        }
         GoodsEntity goods = goodsMapper.selectById(goodsId);
-        cart.setUserId(userId);
-        cart.setGoodsSn(goods.getGoodsId());
-        cart.setGoodsName(goods.getName());
-        cart.setPrice(goods.getRetailPrice());
-        cart.setChecked(true);
-        cart.setPicUrl(goods.getPicUrl());
-        cartMapper.insertCart(cart);
-
+        //商品不在售卖
+        if(goods == null || !goods.isOnSale()){
+            return "err 商品下架";
+        }
+        //库存不足
+        StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        if(number > stockEntity.getStock()){
+            return "err 库存不足";
+        }
+        CartEntity existCart = cartMapper.selectByUserIdAndGoodsId(userId, goodsId);
+        if(existCart == null){
+            cart.setUserId(userId);
+            cart.setGoodsSn(goods.getGoodsId());
+            cart.setGoodsName(goods.getName());
+            cart.setPrice(goods.getRetailPrice());
+            cart.setChecked(true);
+            cart.setPicUrl(goods.getPicUrl());
+            cartMapper.insertCart(cart);
+        }else{
+            Integer newNumber = existCart.getNumber() + number;
+            //判断库存
+            if(newNumber>stockEntity.getStock()){
+                return "err 库存不足";
+            }
+            cartMapper.updateNumber(newNumber, userId, goodsId);
+        }
+        return "success";
     }
 
     /**
@@ -167,6 +190,7 @@ public class CartService {
      * @param couponId
      * @return
      */
+    @Transactional
     public Map<String ,Object> checkout(Integer userId, Integer cartId, Integer addressId, Integer couponId){
         List<CartEntity> checkGoodsList = null;
 
@@ -178,6 +202,7 @@ public class CartService {
             addressEntity = addressMapper.selectByUserIdAndId(userId, addressId);
         }
 
+        //购物车选中的商品
         if(cartId == null || cartId.equals(0)){
             checkGoodsList = cartMapper.selectByUserIdAndChecked(userId, 1);
         }else {
@@ -218,12 +243,24 @@ public class CartService {
         return data;
     }
 
+    @Transactional
     public Integer fastAdd(Integer userId, CartEntity cartEntity){
         Integer number = cartEntity.getNumber();
         Integer goodsId = cartEntity.getGoodsId();
-
-        //查询商品表是否有此商品
+        if(number<=0){
+            return 0;
+        }
         GoodsEntity goods = goodsMapper.selectById(goodsId);
+        //商品不在售卖
+        if(goods == null || !goods.isOnSale()){
+            return 0;
+        }
+        //库存不足
+        StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        if(number > stockEntity.getStock()){
+            return 0;
+        }
+
         //查询购物车是否有此商品
         CartEntity existCart = cartMapper.selectByUserIdAndGoodsId(userId, goodsId);
         if(existCart == null){
@@ -235,7 +272,7 @@ public class CartService {
             cartEntity.setChecked(true);
             cartMapper.insertCart(cartEntity);
         }else{
-            existCart.setNumber(number);
+            cartMapper.updateNumber(number, userId, goodsId);
         }
         return existCart == null ? cartEntity.getId() : existCart.getId();
     }

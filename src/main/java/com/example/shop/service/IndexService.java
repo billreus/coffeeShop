@@ -35,7 +35,9 @@ public class IndexService {
         List<StockEntity> stockEntityList = stockMapper.saleCount();
         for(StockEntity stockEntity : stockEntityList){
             Integer goodsId = stockEntity.getGoodsId();
-            hotGoodsList.add(goodsMapper.selectById(goodsId));
+            if (goodsMapper.selectById(goodsId) != null){
+                hotGoodsList.add(goodsMapper.selectById(goodsId));
+            }
         }
 
         Map<String, Object> data = new HashMap<>();

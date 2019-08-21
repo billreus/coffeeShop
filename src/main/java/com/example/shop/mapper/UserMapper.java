@@ -66,7 +66,7 @@ public interface UserMapper {
      *查询所有用户
      * @return
      */
-     List<UserEntity> findAllList(String username, String mobile);
+     List<UserEntity> findAllList(String username, String mobile, Integer pages, Integer limit);
 
     /**
      * 查询用户总数

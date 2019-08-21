@@ -7,20 +7,20 @@
     <select id="selectByUserId" resultType="OrderEntity">
         SELECT *
         FROM shop.shop_order
-        WHERE user_id =#{userId};
+        WHERE user_id =#{userId} AND deleted=0;
     </select>
 
     <select id="selectByUserIdAndStatus" resultType="OrderEntity">
         SELECT *
         FROM shop.shop_order
-        WHERE user_id =#{userId} AND order_status=#{orderStatus};
+        WHERE user_id =#{userId} AND order_status=#{orderStatus} AND deleted=0;
     </select>
 
     <!-- 通过用户Id查询-->
     <select id="selectById" resultType="OrderEntity">
         SELECT *
         FROM shop.shop_order
-        WHERE id =#{id};
+        WHERE id =#{id} AND deleted=0;
     </select>
 
     <update id="updateStatus">
@@ -41,10 +41,11 @@
                #{orderIntegral}, #{actualPrice}, #{addTime}, #{endTime}, #{message}, #{deleted})
     </insert>
 
-    <delete id="delete">
-        DELETE FROM shop_order
+    <update id="delete">
+        UPDATE shop.shop_order
+        SET deleted = 1
         WHERE id=#{id}
-    </delete>
+    </update>
 
     <select id="count" resultType="long">
         SELECT
@@ -59,17 +60,18 @@
         FROM shop.shop_order
         <where>
             <if test="userId != null and userId != ''">
-                and user_id=#{userId}
+                and user_id=#{userId} AND deleted=0
             </if>
 
             <if test="orderSn != null and orderSn != ''">
-                and order_sn=#{orderSn}
+                and order_sn=#{orderSn} AND deleted=0
             </if>
 
             <if test="orderStatusArray != null and orderStatusArray != ''">
-                and order_status=#{orderStatusArray}
+                and order_status=#{orderStatusArray} AND deleted=0
             </if>
 
         </where>
+        LIMIT ${pages},${limit}
     </select>
 </mapper>

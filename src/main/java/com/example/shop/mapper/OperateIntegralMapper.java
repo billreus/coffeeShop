@@ -13,11 +13,13 @@ public interface OperateIntegralMapper {
 
     OperateIntegralEntity selectByLevel(Integer level);
 
-    List<OperateIntegralEntity> findAllList();
+    List<OperateIntegralEntity> findAllList(Integer pages, Integer limit);
 
     int delete(OperateIntegralEntity operateIntegralEntity);
 
     int update(OperateIntegralEntity operateIntegralEntity);
 
     int insert(OperateIntegralEntity operateIntegralEntity);
+
+    long count();
 }

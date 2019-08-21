@@ -1,3 +1,28 @@
+DROP TABLE IF EXISTS `shop_goods`;
+CREATE TABLE `shop_goods`(
+                             `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                             `category_id` int(11) NOT NULL COMMENT '商品类别id',
+                             `goods_id` varchar(63) NOT NULL COMMENT '商品编号id',
+                             `gallery` varchar(1023) DEFAULT NULL COMMENT '商品宣传图片列表，采用JSON数组格式',
+                             `name` varchar(127) DEFAULT NULL COMMENT '商品名称',
+                             `brief` varchar(255) DEFAULT NULL COMMENT '商品介绍',
+                             `keywords` varchar(255) DEFAULT NULL COMMENT '关键字',
+                             `pic_url` varchar(255) DEFAULT NULL COMMENT '图片',
+                             `unit` varchar(31) DEFAULT '’件‘' COMMENT '商品单位，例如件、盒',
+                             `original_price` decimal(10,2) DEFAULT '0.00' COMMENT '原价',
+                             `retail_price` decimal(10,2) DEFAULT '0.00' COMMENT '零售价',
+                             `create_by` varchar(63) DEFAULT NULL COMMENT '创建者',
+                             `create_date` datetime DEFAULT NULL COMMENT '创建时间',
+                             `update_by` varchar(63) DEFAULT NULL COMMENT '更新者',
+                             `update_date` datetime DEFAULT NULL COMMENT '更新时间',
+                             `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
+                             `on_sale` tinyint(1) DEFAULT '1' COMMENT '是否上架，默认上架',
+                             `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除（0：正常 1：删除）',
+                             PRIMARY KEY (`id`),
+                             KEY `category_id` (`category_id`),
+                             KEY `goods_id` (`goods_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+
 INSERT INTO `shop_goods` VALUES (1,6,'1','["http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg", "http://yanxuan.nosdn.127.net/0c9eb81c7594dbe42802ff1ebbece51a.jpg", "http://yanxuan.nosdn.127.net/8cfc7b6bfd28687ab3399da08e5ba61b.jpg", "http://yanxuan.nosdn.127.net/b98cfd7f197b62abd1679321eae253a6.jpg"]','水洗四件套1','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg','件',919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
                                 (2,6,'1','["http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg", "http://yanxuan.nosdn.127.net/0c9eb81c7594dbe42802ff1ebbece51a.jpg", "http://yanxuan.nosdn.127.net/8cfc7b6bfd28687ab3399da08e5ba61b.jpg", "http://yanxuan.nosdn.127.net/b98cfd7f197b62abd1679321eae253a6.jpg"]','水洗四件套2','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg','件',919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
                                 (3,6,'1','["http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg", "http://yanxuan.nosdn.127.net/0c9eb81c7594dbe42802ff1ebbece51a.jpg", "http://yanxuan.nosdn.127.net/8cfc7b6bfd28687ab3399da08e5ba61b.jpg", "http://yanxuan.nosdn.127.net/b98cfd7f197b62abd1679321eae253a6.jpg"]','水洗四件套3','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg','件',919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
@@ -18,13 +43,3 @@ INSERT INTO `shop_goods` VALUES (1,6,'1','["http://yanxuan.nosdn.127.net/4eb09e0
                                 (18,17,'1','["http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg", "http://yanxuan.nosdn.127.net/0c9eb81c7594dbe42802ff1ebbece51a.jpg", "http://yanxuan.nosdn.127.net/8cfc7b6bfd28687ab3399da08e5ba61b.jpg", "http://yanxuan.nosdn.127.net/b98cfd7f197b62abd1679321eae253a6.jpg"]','水洗四件套18','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg','件',919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
                                 (19,18,'1','["http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg", "http://yanxuan.nosdn.127.net/0c9eb81c7594dbe42802ff1ebbece51a.jpg", "http://yanxuan.nosdn.127.net/8cfc7b6bfd28687ab3399da08e5ba61b.jpg", "http://yanxuan.nosdn.127.net/b98cfd7f197b62abd1679321eae253a6.jpg"]','水洗四件套19','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg','件',919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0),
                                 (20,19,'1','["http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg", "http://yanxuan.nosdn.127.net/0c9eb81c7594dbe42802ff1ebbece51a.jpg", "http://yanxuan.nosdn.127.net/8cfc7b6bfd28687ab3399da08e5ba61b.jpg", "http://yanxuan.nosdn.127.net/b98cfd7f197b62abd1679321eae253a6.jpg"]','水洗四件套20','设计师原款，精致绣花','','http://yanxuan.nosdn.127.net/4eb09e08ac9de543d2291d27a6be0b54.jpg','件',919.00,899.00,'bbb','2018-02-01 00:00:00','b1','2018-02-01 00:00:00','',1,0);
-INSERT INTO `shop_attribute` VALUES (1, 1, '参数名1：', '参数1', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (2, 1, '参数名2：', '参数2', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (3, 1, '参数名3：', '参数3', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (4, 1, '参数名4：', '参数4', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (5, 1, '参数名5：', '参数5', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (6, 2, '参数名1：', '参数1', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (7, 2, '参数名2：', '参数2', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (8, 3, '参数名3：', '参数1', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (9, 4, '参数名4：', '参数1', '2018-02-01 00:00:00','2018-02-01 00:00:00',0),
-                                    (10, 5, '参数名5：', '参数1', '2018-02-01 00:00:00','2018-02-01 00:00:00',0);

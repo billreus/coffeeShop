@@ -23,7 +23,7 @@
     </view>
   </view>
 
-  <view class="coupon-box">
+  <!--<view class="coupon-box">
     <view class="coupon-item" bindtap="selectCoupon">
       <view class="l" wx:if="{{couponId == 0}}">
         <text class="name">没有可用的优惠券</text>
@@ -42,10 +42,10 @@
       </view>
     </view>
   </view>
-
   <view class="message-box">
     <input class="message-item" bindinput="bindMessageInput" placeholder="如需要，请输入留言" value="{{message}}" />
-  </view>
+  </view>-->
+
 
   <view class="order-box">
     <view class="order-item">

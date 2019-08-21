@@ -21,14 +21,16 @@ public class AdminAddressService {
 
     public Map<String, Object> list(String name, String userId, Integer page, Integer limit,
                                     String sort, String order){
-        List<AddressEntity> addressEntityList = addressMapper.findAllList(userId, name);
+        Integer start = (page-1)*limit;
+        long count = addressMapper.findAllCount();
+        List<AddressEntity> addressEntityList = addressMapper.findAllList(userId, name, limit, start);
         Map<String, Object> data = new HashMap<>();
         data.put("list", addressEntityList);
-        //TODO 分页
-        data.put("total", addressEntityList.size());
-        data.put("page", 1);
-        data.put("limit", addressEntityList.size());
-        data.put("pages", 1);
+        // 分页
+        data.put("total", count);
+        data.put("page", page);
+        data.put("limit", limit);
+        data.put("pages", count/limit);
         return data;
     }
 

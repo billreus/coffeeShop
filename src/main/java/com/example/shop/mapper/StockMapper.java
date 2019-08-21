@@ -11,7 +11,14 @@ import java.util.List;
 @Mapper
 public interface StockMapper {
 
-    int updateByGoodsId(Integer stock, Integer goodsId);
+    /**
+     * 通过商品id更新库存和销量
+     * @param stock 库存
+     * @param saleCount 销量
+     * @param goodsId 商品id
+     * @return null
+     */
+    int updateByGoodsId(Integer stock, Integer saleCount, Integer goodsId);
 
     StockEntity selectByGoodsId(Integer goodsId);
 
@@ -26,4 +33,6 @@ public interface StockMapper {
      * @return
      */
     List<StockEntity> saleCount();
+
+    int insert(StockEntity stockEntity);
 }

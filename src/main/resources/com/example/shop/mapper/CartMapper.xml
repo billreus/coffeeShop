@@ -6,26 +6,26 @@
     <!-- 统计购物车中商品数量 -->
     <select id="selectByUserId" resultType="CartEntity">
         SELECT *
-        FROM shop_cart
+        FROM shop.shop_cart
         WHERE user_id =#{userId};
     </select>
 
     <!-- 通过Id查询-->
     <select id="selectById" resultType="CartEntity">
         SELECT *
-        FROM shop_cart
-        WHERE id =#{id};
+        FROM shop.shop_cart
+        WHERE id =#{id} AND deleted = 0;
     </select>
 
     <select id="selectByUserIdAndChecked" resultType="CartEntity">
         SELECT *
-        FROM shop_cart
-        WHERE user_id =#{userId} AND checked =#{checked};
+        FROM shop.shop_cart
+        WHERE user_id =#{userId} AND checked =#{checked} AND deleted = 0;
     </select>
 
     <!-- 通过id更新购物车商品数量-->
     <select id="updateById" resultType="CartEntity">
-        UPDATE shop_cart
+        UPDATE shop.shop_cart
         SET number=#{number}
         WHERE id =#{id};
     </select>
@@ -33,8 +33,8 @@
     <!-- 通过用户id和商品id删除购物车-->
     <select id="selectByUserIdAndGoodsId" resultType="CartEntity">
         SELECT *
-        FROM shop_cart
-        WHERE user_id=#{userId} AND goods_id=#{goodsId} ;
+        FROM shop.shop_cart
+        WHERE user_id=#{userId} AND goods_id=#{goodsId}
     </select>
 
     <!-- 通过用户id和商品id删除购物车-->
@@ -47,6 +47,12 @@
     <update id="updateCheckById">
         UPDATE shop_cart
         SET checked=#{checked}
+        WHERE user_id=#{userId} AND goods_id=#{goodsId};
+    </update>
+
+    <update id="updateNumber">
+        UPDATE shop.shop_cart
+        SET number=#{number}
         WHERE user_id=#{userId} AND goods_id=#{goodsId};
     </update>
 

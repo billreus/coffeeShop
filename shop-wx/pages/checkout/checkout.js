@@ -189,6 +189,10 @@ Page({
 
       util.redirect('/pages/payResult/payResult');
       
+      }else{
+        wx.switchTab({
+          url: '/pages/cart/cart'
+        })
       }
     });
     

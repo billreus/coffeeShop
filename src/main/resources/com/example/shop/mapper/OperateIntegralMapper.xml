@@ -14,7 +14,7 @@
         SELECT *
         FROM shop.shop_operate_integral
         WHERE deleted = 0
-        ORDER BY id=#{id};
+        LIMIT ${pages},${limit}
     </select>
 
     <update id="delete">
@@ -34,5 +34,12 @@
             shop.shop_operate_integral(level, discount)
         VALUES (#{level}, #{discount})
     </insert>
+
+    <select id="count" resultType="long">
+        SELECT
+               COUNT(1)
+        FROM shop.shop_operate_integral
+        WHERE deleted = 0
+    </select>
 
 </mapper>

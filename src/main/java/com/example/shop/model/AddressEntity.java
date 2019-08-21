@@ -117,7 +117,7 @@ public class AddressEntity {
         this.tel = tel;
     }
 
-    public boolean isDefault() {
+    public boolean isIsDefault() {
         return isDefault;
     }
 

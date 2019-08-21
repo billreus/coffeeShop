@@ -135,6 +135,7 @@ public class OrderService {
         //订单商品
         List<CartEntity> cartList =null;
         if(cartId == null){
+            data = null;
             return data;
         }
         if(cartId.equals(0)){
@@ -163,18 +164,19 @@ public class OrderService {
         for(CartEntity cart : cartList){
             Integer reduceStock = cart.getNumber();
             Integer stock = stockMapper.selectByGoodsId(cart.getGoodsId()).getStock();
+            Integer saleCount = stockMapper.selectByGoodsId(cart.getGoodsId()).getSaleCount();
             if(reduceStock > stock){
-                //判断库存
+                data = null;
                 return data;
             }
             Integer updateStock = stock - reduceStock;
-            stockMapper.updateByGoodsId(updateStock, cart.getGoodsId());
+            Integer updateSaleCount = saleCount + reduceStock;
+            stockMapper.updateByGoodsId(updateStock, updateSaleCount,cart.getGoodsId());
         }
 
         //订单
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUserId(userId);
-        //TODO 生成单号有可能重复
         orderEntity.setOrderSn(CharUtil.getRandomNum(8));
         orderEntity.setOrderStatus(OrderUtil.STATUS_CREATE);
         orderEntity.setConsignee(address.getName());
@@ -206,6 +208,54 @@ public class OrderService {
         //删除购物车信息
         cartMapper.delete(userId, true);
 
+
+
+        data.put("orderId", orderId);
+        return data;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void cancel(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_CANCEL);
+        List<GoodsOrderEntity> goodsOrderEntity = goodsOrderMapper.selectByOrderId(orderId);
+        //库存,销量回滚
+        for(GoodsOrderEntity goodsOrder : goodsOrderEntity){
+            StockEntity stockEntity = stockMapper.selectByGoodsId(goodsOrder.getGoodsId());
+            Integer backStock = goodsOrder.getGoodsCount()+stockEntity.getStock();
+            Integer backSaleCount  = stockEntity.getSaleCount() - goodsOrder.getGoodsCount();
+            stockMapper.updateByGoodsId(backStock, backSaleCount,goodsOrder.getGoodsId());
+        }
+    }
+
+    public void delete(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.delete(orderId);
+    }
+
+    public void refund(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);
+        List<GoodsOrderEntity> goodsOrderEntity = goodsOrderMapper.selectByOrderId(orderId);
+        //库存,销量回滚
+        for(GoodsOrderEntity goodsOrder : goodsOrderEntity){
+            StockEntity stockEntity = stockMapper.selectByGoodsId(goodsOrder.getGoodsId());
+            Integer backStock = goodsOrder.getGoodsCount()+stockEntity.getStock();
+            Integer backSaleCount  = stockEntity.getSaleCount() - goodsOrder.getGoodsCount();
+            stockMapper.updateByGoodsId(backStock, backSaleCount,goodsOrder.getGoodsId());
+        }
+    }
+
+    public void prepay(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_WAIT);
+
+    }
+
+    public void confirm(Integer userId, String body){
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        orderMapper.updateStatus(orderId, OrderUtil.STATUS_FINISH);
+        BigDecimal actualPrice = orderMapper.selectById(orderId).getActualPrice();
         //存积分
         IntegralEntity integralEntity = integralMapper.selectByUserId(userId);
         //积分表中没记录的新用户
@@ -220,38 +270,5 @@ public class OrderService {
             BigDecimal setIntegral = currentIntegral.add(actualPrice);
             integralMapper.updateByUserId(userId, actualPrice, setIntegral);
         }
-
-        data.put("orderId", orderId);
-        return data;
-    }
-
-    @Transactional
-    public void cancel(Integer userId, String body){
-        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        orderMapper.updateStatus(orderId, OrderUtil.STATUS_CANCEL);
-
-        //TODO 库存回滚
-    }
-
-    public void delete(Integer userId, String body){
-        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        orderMapper.delete(orderId);
-        //TODO 逻辑删除
-    }
-
-    public void refund(Integer userId, String body){
-        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);
-        //TODO 库存回滚
-    }
-
-    public void prepay(Integer userId, String body){
-        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        orderMapper.updateStatus(orderId, OrderUtil.STATUS_WAIT);
-    }
-
-    public void confirm(Integer userId, String body){
-        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        orderMapper.updateStatus(orderId, OrderUtil.STATUS_FINISH);
     }
 }

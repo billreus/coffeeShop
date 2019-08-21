@@ -563,7 +563,9 @@ info.gallery = JSON.parse(info.gallery);
               mask: true
             });
           }
-          //util.redirect('/pages/checkout/checkout');
+          wx.switchTab({
+            url:'/pages/cart/cart'
+          })
         });
     }
 

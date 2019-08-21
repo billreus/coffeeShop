@@ -42,5 +42,9 @@ public interface AddressMapper {
      */
     int delete(Integer id);
 
-    List<AddressEntity> findAllList(String userId, String name);
+    List<AddressEntity> findAllList(String userId, String name, Integer limit, Integer pages);
+
+    int update(AddressEntity addressEntity);
+
+    long findAllCount();
 }

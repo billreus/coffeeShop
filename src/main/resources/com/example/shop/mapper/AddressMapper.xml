@@ -6,42 +6,42 @@
 
     <select id="selectByUserId" resultType="AddressEntity">
         SELECT *
-        FROM shop_address
+        FROM shop.shop_address
         WHERE user_id =#{userId}
     </select>
 
     <select id="selectByUserIdAndId" resultType="AddressEntity">
         SELECT *
-        FROM shop_address
+        FROM shop.shop_address
         WHERE user_id =#{userId} AND id =#{id}
     </select>
 
     <select id="selectByUserIdDefault" resultType="AddressEntity">
         SELECT *
-        FROM shop_address
+        FROM shop.shop_address
         WHERE user_id =#{userId} AND is_default = 1
     </select>
 
     <update id="updateDefaultByUserId">
-        UPDATE shop_address
+        UPDATE shop.shop_address
         SET is_default = 1
         WHERE user_id =#{userId}
     </update>
 
     <update id="updateDefault0ByUserId">
-        UPDATE shop_address
+        UPDATE shop.shop_address
         SET is_default = 0
         WHERE user_id =#{userId}
     </update>
 
     <insert id="insert">
         INSERT INTO
-            shop_address(name, user_id, province, city, county, address_detail, tel, is_default)
+            shop.shop_address(name, user_id, province, city, county, address_detail, tel, is_default)
         VALUES (#{name}, #{userId}, #{province}, #{city}, #{county}, #{addressDetail}, #{tel}, #{isDefault})
     </insert>
 
     <delete id="delete">
-        DELETE FROM shop_address
+        DELETE FROM shop.shop_address
         WHERE id=#{id}
     </delete>
 
@@ -58,5 +58,21 @@
             </if>
 
         </where>
+        LIMIT ${pages},${limit}
+    </select>
+
+    <update id="update">
+        UPDATE shop.shop_address
+        SET name=#{name}, user_id=#{userId},province=#{province},city=#{city},county=#{county},
+            address_detail=#{addressDetail},tel=#{tel},is_default=#{isDefault},add_time=#{addTime},
+            update_time=#{updateTime}
+        WHERE id=#{id}
+    </update>
+
+    <select id="findAllCount" resultType="long">
+        SELECT
+            COUNT(1)
+        FROM shop.shop_address
+        WHERE deleted = 0
     </select>
 </mapper>

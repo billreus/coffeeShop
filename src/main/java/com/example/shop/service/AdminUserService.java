@@ -34,14 +34,17 @@ public class AdminUserService {
      * @return
      */
     public Map<String, Object> list(String username, String mobile, Integer page, Integer limit, String sort, String order){
-        List<UserEntity> userEntityList = userMapper.findAllList(username, mobile);
+
+        long count = userMapper.findAllCount();
+        Integer start = (page-1)*limit;
+        List<UserEntity> userEntityList = userMapper.findAllList(username, mobile,start,limit);
         Map<String, Object> data = new HashMap<>();
         data.put("list", userEntityList);
-        //TODO 分页
-        data.put("total", userEntityList.size());
-        data.put("page", 1);
-        data.put("limit", userEntityList.size());
-        data.put("pages", 1);
+        // 分页
+        data.put("total", count);
+        data.put("page", page);
+        data.put("limit", limit);
+        data.put("pages", count/limit);
         return data;
     }
 

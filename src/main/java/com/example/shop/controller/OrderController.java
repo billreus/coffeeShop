@@ -23,7 +23,6 @@ public class OrderController {
 
     /**
      * 订单列表
-     * @param request
      * @param showType
      * @return
      */
@@ -38,7 +37,6 @@ public class OrderController {
 
     /**
      * 订单详情页
-     * @param request
      * @param orderId
      * @return
      */
@@ -53,12 +51,15 @@ public class OrderController {
     public String submit(@LoginUser Integer userId, @RequestBody String body){
         Map<String, Object> data = new HashMap<>();
         data = orderService.submit(userId, body);
-        return ShopUtil.getJSONString(0, "成功", data);
+        if(data == null){
+            return ShopUtil.getJSONString(401, "参数失败");
+        }else{
+            return ShopUtil.getJSONString(0, "成功", data);
+        }
     }
 
     /**
      * 取消订单
-     * @param request
      * @param body
      * @return
      */
@@ -70,7 +71,6 @@ public class OrderController {
 
     /**
      * 删除订单
-     * @param request
      * @param body
      * @return
      */
@@ -82,7 +82,6 @@ public class OrderController {
 
     /**
      * 订单退款
-     * @param request
      * @param body
      * @return
      */
@@ -94,7 +93,6 @@ public class OrderController {
 
     /**
      * 订单付款
-     * @param request
      * @param body
      * @return
      */
@@ -106,7 +104,6 @@ public class OrderController {
 
     /**
      * 确认收货
-     * @param request
      * @param body
      * @return
      */

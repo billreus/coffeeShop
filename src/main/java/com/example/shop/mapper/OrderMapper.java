@@ -50,5 +50,5 @@ public interface OrderMapper {
 
     long count();
 
-    List<OrderEntity> findAllList(String userId, String orderSn, Integer orderStatusArray);
+    List<OrderEntity> findAllList(String userId, String orderSn, Integer orderStatusArray, Integer pages, Integer limit);
 }

@@ -78,4 +78,10 @@ public class AdminGoodsController {
         adminGoodsService.update(goodsUpdateEntity);
         return ShopUtil.getJSONString(0, "成功");
     }
+
+    @PostMapping("/create")
+    public String create(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
+        adminGoodsService.create(goodsUpdateEntity);
+        return ShopUtil.getJSONString(0, "成功");
+    }
 }
