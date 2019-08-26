@@ -74,6 +74,7 @@ module.exports = {
   OrderConfirm: WxApiRoot + 'order/confirm', //确认收货
   OrderGoods: WxApiRoot + 'order/goods', // 代评价商品信息
   OrderComment: WxApiRoot + 'order/comment', // 评价订单商品信息
+  OrderWait: WxApiRoot + 'order/wait', // 订单生成轮询
 
   FeedbackAdd: WxApiRoot + 'feedback/submit', //添加反馈
   FootprintList: WxApiRoot + 'footprint/list', //足迹列表

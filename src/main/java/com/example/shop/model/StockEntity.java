@@ -1,9 +1,11 @@
 package com.example.shop.model;
 
+import java.io.Serializable;
+
 /**
  * 商品库存实体类
  */
-public class StockEntity {
+public class StockEntity implements Serializable {
     /**
      * id
      */

@@ -1,11 +1,12 @@
 package com.example.shop.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 购物车实体类
  */
-public class CartEntity {
+public class CartEntity implements Serializable {
     /**
      * id
      */

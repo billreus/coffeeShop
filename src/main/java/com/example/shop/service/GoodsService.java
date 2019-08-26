@@ -1,13 +1,14 @@
 package com.example.shop.service;
 
-import com.example.shop.mapper.AttributeMapper;
-import com.example.shop.mapper.CategoryMapper;
-import com.example.shop.mapper.GoodsMapper;
-import com.example.shop.mapper.StockMapper;
+import com.example.shop.mapper.*;
 import com.example.shop.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,17 +18,31 @@ import java.util.Map;
  */
 @Service
 public class GoodsService {
-    @Resource
-    GoodsMapper goodsMapper;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final String key = "stock";
 
     @Resource
-    CategoryMapper categoryMapper;
+    private GoodsMapper goodsMapper;
 
     @Resource
-    AttributeMapper attributeMapper;
+    private CategoryMapper categoryMapper;
 
     @Resource
-    StockMapper stockMapper;
+    private AttributeMapper attributeMapper;
+
+    @Resource
+    private StockMapper stockMapper;
+
+    @Resource
+    private CommentMapper commentMapper;
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private RedisTemplate redisTemplate;
     /**
      * 商品总数
      * @return
@@ -71,7 +86,6 @@ public class GoodsService {
      */
     public Map<String, Object> list(Integer categoryId, Integer page, Integer limit){
         List<GoodsEntity> goodsList = goodsMapper.selectByCategoryId(categoryId);
-
         Map<String, Object> data = new HashMap<>();
         data.put("list", goodsList);
         return data;
@@ -86,13 +100,41 @@ public class GoodsService {
         GoodsEntity goods = goodsMapper.selectById(id);
         List<AttributeEntity> attribute = attributeMapper.selectByGoodsId(id);
 
-        StockEntity stock = stockMapper.selectByGoodsId(goods.getId());
-        Integer stockNumber = stock.getStock();
+        //StockEntity stock = stockMapper.selectByGoodsId(goods.getId());
+        //Integer stockNumber = stock.getStock();
+        // 缓存读取库存
+        StockEntity stock = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
+        if(stock == null){
+            stock = stockMapper.selectByGoodsId(goods.getId());
+            redisTemplate.boundHashOps(key).put(goods.getId(), stock);
+            logger.info("findAll -> 从数据库中读取放入缓存中");
+        }else{
+            logger.info("findAll -> 从缓存中读取");
+        }
+
+        List<CommentEntity> comments = commentMapper.selectByGoodsId(id);
+        List<Map<String, Object>> commentsVo = new ArrayList<>(comments.size());
+        long commentCount = comments.size();
+        for(CommentEntity comment : comments){
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", comment.getId());
+            map.put("addTime", comment.getAddTime());
+            map.put("content", comment.getContent());
+            UserEntity user = userMapper.selectById(comment.getUserId());
+            map.put("nickname", user == null ? "" : user.getNickname());
+            map.put("avatar", user == null ? "" : user.getAvatar());
+            map.put("picList", comment.getPicUrls());
+            commentsVo.add(map);
+        }
+        Map<String, Object> commentList = new HashMap<>();
+        commentList.put("count", commentCount);
+        commentList.put("data", commentsVo);
 
         Map<String, Object> data = new HashMap<>();
         data.put("info", goods);
+        data.put("comment", commentList);
         data.put("attribute", attribute);
-        data.put("stock", stockNumber);
+        data.put("stock", stock.getStock());
         return data;
     }
 

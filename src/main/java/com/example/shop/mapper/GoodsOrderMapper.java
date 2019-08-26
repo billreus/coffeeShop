@@ -13,5 +13,11 @@ public interface GoodsOrderMapper {
 
     List<GoodsOrderEntity> selectByOrderId(Integer orderId);
 
+    GoodsOrderEntity selectById(Integer id);
+
+    List<GoodsOrderEntity> selectByOrderIdAndGoodsId(Integer orderId, Integer goodsId);
+
     int insert(GoodsOrderEntity goodsOrderEntity);
+
+    int updateComment(GoodsOrderEntity goodsOrderEntity);
 }

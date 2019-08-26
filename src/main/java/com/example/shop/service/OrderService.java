@@ -2,11 +2,17 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
+import com.example.shop.mq.DelayedSender;
+import com.example.shop.mq.MQSender;
+import com.example.shop.redis.RedisLock;
 import com.example.shop.util.CharUtil;
 import com.example.shop.util.JacksonUtil;
 import com.example.shop.util.OrderUtil;
+import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +30,8 @@ import java.util.Map;
 public class OrderService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final String key = "stock";
 
     @Resource
     private OrderMapper orderMapper;
@@ -48,6 +56,23 @@ public class OrderService {
 
     @Resource
     private OperateIntegralMapper operateIntegralMapper;
+
+    @Resource
+    private CommentMapper commentMapper;
+
+    @Resource
+    private DelayedSender sender;
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+
+    @Resource
+    private MQSender mqSender;
+
     /**
      * 订单列表
      * @param userId
@@ -122,10 +147,7 @@ public class OrderService {
     public Map<String, Object> submit(Integer userId, String body){
         Integer cartId = JacksonUtil.parseInteger(body, "cartId");
         Integer addressId = JacksonUtil.parseInteger(body, "addressId");
-        Integer couponId = JacksonUtil.parseInteger(body, "couponId");
         String message = JacksonUtil.parseString(body, "message");
-        Integer grouponRulesId = JacksonUtil.parseInteger(body, "grouponRulesId");
-        Integer grouponLinkId = JacksonUtil.parseInteger(body, "grouponLinkId");
 
         Map<String, Object> data = new HashMap<>();
 
@@ -162,18 +184,37 @@ public class OrderService {
 
         //更新库存
         for(CartEntity cart : cartList){
-            Integer reduceStock = cart.getNumber();
-            Integer stock = stockMapper.selectByGoodsId(cart.getGoodsId()).getStock();
-            Integer saleCount = stockMapper.selectByGoodsId(cart.getGoodsId()).getSaleCount();
-            if(reduceStock > stock){
-                data = null;
-                return data;
-            }
-            Integer updateStock = stock - reduceStock;
-            Integer updateSaleCount = saleCount + reduceStock;
-            stockMapper.updateByGoodsId(updateStock, updateSaleCount,cart.getGoodsId());
-        }
 
+            RedisLock redisLock = new RedisLock( stringRedisTemplate, "redisLock:" +  cart.getGoodsId(), 5 * 60, 500);
+            try {
+                long now = System.currentTimeMillis();
+                if (redisLock.lock()) {
+                    logger.info("=" + (System.currentTimeMillis() - now));
+                    Integer reduceStock = cart.getNumber();
+                    StockEntity stockEntity = stockMapper.selectByGoodsId(cart.getGoodsId());
+                    Integer stock = stockEntity.getStock();
+                    Integer saleCount = stockEntity.getSaleCount();
+                    if(reduceStock > stock){
+                        data = null;
+                        return data;
+                    }
+                    Integer updateStock = stock - reduceStock;
+                    Integer updateSaleCount = saleCount + reduceStock;
+                    stockMapper.updateByGoodsId(updateStock, updateSaleCount,cart.getGoodsId());
+                    //redis更新
+                    stockEntity.setStock(updateStock);
+                    stockEntity.setSaleCount(updateSaleCount);
+                    redisTemplate.boundHashOps(key).put(stockEntity.getGoodsId(), stockEntity);
+                    logger.info("j:");
+                } else {
+                    logger.info("k:");
+                }
+            } catch (Exception e) {
+                logger.info(e.getMessage(), e);
+            } finally {
+                redisLock.unlock();
+            }
+        }
         //订单
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUserId(userId);
@@ -192,7 +233,8 @@ public class OrderService {
         orderEntity.setMessage(message);
 
         //添加订单,记录订单id
-        Integer orderId = orderMapper.insert(orderEntity);
+        orderMapper.insert(orderEntity);
+        Integer orderId = orderEntity.getId();
 
         for(CartEntity cartGoods : cartList){
             GoodsOrderEntity goodsOrderEntity = new GoodsOrderEntity();
@@ -208,8 +250,7 @@ public class OrderService {
         //删除购物车信息
         cartMapper.delete(userId, true);
 
-
-
+        sender.send(orderId);
         data.put("orderId", orderId);
         return data;
     }
@@ -225,6 +266,10 @@ public class OrderService {
             Integer backStock = goodsOrder.getGoodsCount()+stockEntity.getStock();
             Integer backSaleCount  = stockEntity.getSaleCount() - goodsOrder.getGoodsCount();
             stockMapper.updateByGoodsId(backStock, backSaleCount,goodsOrder.getGoodsId());
+            //redis更新
+            stockEntity.setStock(backStock);
+            stockEntity.setSaleCount(backSaleCount);
+            redisTemplate.boundHashOps(key).put(stockEntity.getGoodsId(), stockEntity);
         }
     }
 
@@ -243,6 +288,10 @@ public class OrderService {
             Integer backStock = goodsOrder.getGoodsCount()+stockEntity.getStock();
             Integer backSaleCount  = stockEntity.getSaleCount() - goodsOrder.getGoodsCount();
             stockMapper.updateByGoodsId(backStock, backSaleCount,goodsOrder.getGoodsId());
+            //redis更新
+            stockEntity.setStock(backStock);
+            stockEntity.setSaleCount(backSaleCount);
+            redisTemplate.boundHashOps(key).put(stockEntity.getGoodsId(), stockEntity);
         }
     }
 
@@ -270,5 +319,61 @@ public class OrderService {
             BigDecimal setIntegral = currentIntegral.add(actualPrice);
             integralMapper.updateByUserId(userId, actualPrice, setIntegral);
         }
+    }
+
+    public GoodsOrderEntity goods(Integer userId, Integer orderId, Integer goodsId){
+        List<GoodsOrderEntity> goodsOrderEntityList = goodsOrderMapper.selectByOrderIdAndGoodsId(orderId, goodsId);
+        GoodsOrderEntity goodsOrderEntity = goodsOrderEntityList.get(0);
+        return goodsOrderEntity;
+    }
+
+    public Object comment(Integer userId, String body){
+        Integer orderGoodsId = JacksonUtil.parseInteger(body, "orderGoodsId");
+        if(orderGoodsId == null){
+            return ShopUtil.getJSONString(401, "no orderGoodsId");
+        }
+        GoodsOrderEntity goodsOrderEntity = goodsOrderMapper.selectById(orderGoodsId);
+        Integer orderId = goodsOrderEntity.getOrderId();
+        OrderEntity order = orderMapper.selectById(orderId);
+        Integer commentId = goodsOrderEntity.getComment();
+        if(commentId == -1){
+            return ShopUtil.getJSONString(401, "评论过期");
+        }
+        if (commentId != 0) {
+            return ShopUtil.getJSONString(401, "已论过");
+        }
+        String content = JacksonUtil.parseString(body, "content");
+        Integer star = JacksonUtil.parseInteger(body, "star");
+        if (star == null || star < 0 || star > 5) {
+            return ShopUtil.getJSONString(401, "参数错误");
+        }
+        Boolean hasPicture = JacksonUtil.parseBoolean(body, "hasPicture");
+        List<String> picUrls = JacksonUtil.parseStringList(body, "picUrls");
+        if (hasPicture == null || !hasPicture) {
+            picUrls = new ArrayList<>(0);
+        }
+
+        // 1. 创建评价
+        CommentEntity comment = new CommentEntity();
+        comment.setUserId(userId);
+        comment.setType(0);
+        comment.setValueId(goodsOrderEntity.getGoodsId());
+        comment.setStar(star);
+        comment.setContent(content);
+        commentMapper.insert(comment);
+
+        // 2. 更新订单商品的评价列表
+        goodsOrderEntity.setComment(comment.getId());
+        goodsOrderMapper.updateComment(goodsOrderEntity);
+
+        // 3. 更新订单中未评价的订单商品可评价数量
+//        Short commentCount = order.getComments();
+//        if (commentCount > 0) {
+//            commentCount--;
+//        }
+//        order.setComments(commentCount);
+//        orderService.updateWithOptimisticLocker(order);
+
+        return ShopUtil.getJSONString(0, "成功");
     }
 }

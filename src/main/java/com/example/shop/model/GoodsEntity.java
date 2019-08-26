@@ -70,7 +70,7 @@ public class GoodsEntity implements Serializable {
     /**
      * 备注
      */
-    private String remarks;
+    private String detail;
     /**
      * 是否上架
      */
@@ -200,12 +200,12 @@ public class GoodsEntity implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public String getRemarks() {
-        return remarks;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public boolean isOnSale() {

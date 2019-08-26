@@ -2,6 +2,9 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,10 @@ import java.util.Map;
  */
 @Service
 public class CartService {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final String key = "stock";
 
     @Resource
     private CartMapper cartMapper;
@@ -35,6 +42,9 @@ public class CartService {
 
     @Resource
     private StockMapper stockMapper;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     /**
      * 统计购物车数量
@@ -76,7 +86,16 @@ public class CartService {
                 checkedGoodsCount += cart.getNumber();
                 checkedGoodsAmount = checkedGoodsAmount.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
             }
-            StockEntity stockEntity = stockMapper.selectByGoodsId(cart.getGoodsId());
+            //StockEntity stockEntity = stockMapper.selectByGoodsId(cart.getGoodsId());
+            StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
+            if(stockEntity == null){
+                stockEntity = stockMapper.selectByGoodsId(goods.getId());
+                redisTemplate.boundHashOps(key).put(goods.getId(), stockEntity);
+                logger.info("findAll -> 从数据库中读取放入缓存中");
+            }else{
+                logger.info("findAll -> 从缓存中读取");
+            }
+
             CartStockEntity cartStockEntity = new CartStockEntity();
             cartStockEntity.setCartEntity(cart);
             cartStockEntity.setStock(stockEntity.getStock());
@@ -115,7 +134,16 @@ public class CartService {
             cartMapper.deleteByGoodsId(goodsId);
         }
         //判断库存
-        StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        //StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
+        if(stockEntity == null){
+            stockEntity = stockMapper.selectByGoodsId(goods.getId());
+            redisTemplate.boundHashOps(key).put(goods.getId(), stockEntity);
+            logger.info("findAll -> 从数据库中读取放入缓存中");
+        }else{
+            logger.info("findAll -> 从缓存中读取");
+        }
+
         if(number > stockEntity.getStock()){
             res.put("失败","库存不足");
             return res;
@@ -158,7 +186,16 @@ public class CartService {
             return "err 商品下架";
         }
         //库存不足
-        StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        //StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
+        if(stockEntity == null){
+            stockEntity = stockMapper.selectByGoodsId(goods.getId());
+            redisTemplate.boundHashOps(key).put(goods.getId(), stockEntity);
+            logger.info("findAll -> 从数据库中读取放入缓存中");
+        }else{
+            logger.info("findAll -> 从缓存中读取");
+        }
+
         if(number > stockEntity.getStock()){
             return "err 库存不足";
         }
@@ -256,7 +293,16 @@ public class CartService {
             return 0;
         }
         //库存不足
-        StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        //StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
+        if(stockEntity == null){
+            stockEntity = stockMapper.selectByGoodsId(goods.getId());
+            redisTemplate.boundHashOps(key).put(goods.getId(), stockEntity);
+            logger.info("findAll -> 从数据库中读取放入缓存中");
+        }else{
+            logger.info("findAll -> 从缓存中读取");
+        }
+
         if(number > stockEntity.getStock()){
             return 0;
         }

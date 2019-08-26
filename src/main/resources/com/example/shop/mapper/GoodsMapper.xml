@@ -77,15 +77,15 @@
         UPDATE shop_goods
         SET category_id=#{categoryId}, goods_Id=#{goodsId}, gallery=#{gallery}, name=#{name}, brief=#{brief},keywords=#{keywords},
             pic_url=#{picUrl}, unit=#{unit}, original_price=#{originalPrice}, retail_price=#{retailPrice}, create_date=#{createDate},
-            update_by=#{updateBy}, update_date=#{updateDate}, remarks=#{remarks}, on_sale=#{onSale}, deleted=#{deleted}
+            update_by=#{updateBy}, update_date=#{updateDate}, detail=#{detail}, on_sale=#{onSale}, deleted=#{deleted}
         WHERE id=#{id}
     </update>
 
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.shop.model.GoodsEntity">
             INSERT INTO shop_goods(category_id, goods_id, gallery, name, brief, keywords, pic_url, unit, original_price,
-                                    retail_price, create_date, update_date, remarks, on_sale)
+                                    retail_price, create_date, update_date, detail, on_sale)
             VALUES(#{categoryId}, #{goodsId}, #{gallery}, #{name}, #{brief},#{keywords},
                                   #{picUrl}, #{unit}, #{originalPrice}, #{retailPrice}, #{createDate},
-                                   #{updateDate}, #{remarks}, #{onSale})
+                                   #{updateDate}, #{detail}, #{onSale})
         </insert>
 </mapper>

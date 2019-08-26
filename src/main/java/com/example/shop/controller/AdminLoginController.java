@@ -31,7 +31,7 @@ public class AdminLoginController {
     private AdminLoginService adminLoginService;
 
     @PostMapping("/login")
-    public String login(@RequestBody String body, HttpServletRequest request){
+    public String login(@RequestBody String body){
 
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
@@ -42,7 +42,6 @@ public class AdminLoginController {
 
     @GetMapping("/info")
     public String info(String token){
-        //String token = request.getHeader("X-Litemall-Token");
         if(token == null || token.isEmpty()){
             return ShopUtil.getJSONString(501, "请登录");
         }

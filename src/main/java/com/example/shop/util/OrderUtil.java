@@ -62,9 +62,11 @@ public class OrderUtil {
         }
         if(status == 4){
             orderHandleEntity.setRebuy(true);
+            orderHandleEntity.setComment(true);
         }
         if(status == 5 || status == 6){
             orderHandleEntity.setDelete(true);
+
         }
         return orderHandleEntity;
     }

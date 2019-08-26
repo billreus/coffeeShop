@@ -23,6 +23,39 @@ spring:
       max-wait: 60000
       #间隔多久进行一次检测，检测需要关闭的空闲连接
       time-between-eviction-runs-millis: 60000
+  #配置缓存,初始缓存容量,最大容量,过期时间
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=200,expireAfterWrite=50s
+  #mq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    #redis缓存
+  redis:
+    #redis数据库索引，默认是0
+    database: 1
+    #redis服务器地址，这里用本地的redis
+    host: 127.0.0.1
+    # Redis服务器连接密码（默认为空）
+    password:
+      #redis服务器连接端口，默认是6379
+    port: 6379
+      # 连接超时时间（毫秒）
+    timeout: 1000
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
 
 #mybatis配置
 mybatis:

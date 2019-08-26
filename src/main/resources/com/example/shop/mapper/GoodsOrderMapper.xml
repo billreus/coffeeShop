@@ -6,8 +6,20 @@
     <!-- 通过用户Id查询-->
     <select id="selectByOrderId" resultType="GoodsOrderEntity">
         SELECT *
-        FROM shop_goods_order
+        FROM shop.shop_goods_order
         WHERE order_id =#{orderId};
+    </select>
+
+    <select id="selectById" resultType="GoodsOrderEntity">
+        SELECT *
+        FROM shop.shop_goods_order
+        WHERE id =#{id};
+    </select>
+
+    <select id="selectByOrderIdAndGoodsId" resultType="GoodsOrderEntity">
+        SELECT *
+        FROM shop.shop_goods_order
+        WHERE order_id =#{orderId} AND goods_id=#{goodsId};
     </select>
 
     <insert id="insert">
@@ -17,5 +29,11 @@
         VALUES (#{goodsId}, #{orderId}, #{goodsName}, #{picUrl}, #{goodsType}, #{actualPrice}, #{goodsCount}, #{addTime},
                 #{updateTime}, #{deleted})
     </insert>
+
+    <update id="updateComment">
+        UPDATE shop.shop_goods_order
+        SET comment=#{comment}
+        WHERE id=#{id}
+    </update>
 
 </mapper>

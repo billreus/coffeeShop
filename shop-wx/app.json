@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/comment/comment",
+    "pages/commentPost/commentPost",
     "pages/cart/cart",
     "pages/payResult/payResult",
     "pages/checkout/checkout",

@@ -47,6 +47,10 @@ public class GoodsOrderEntity {
      */
     private String updateTime;
     /**
+     * 评论关联id
+     */
+    private Integer comment;
+    /**
      * 逻辑删除
      */
     private boolean deleted;
@@ -113,6 +117,14 @@ public class GoodsOrderEntity {
 
     public void setGoodsCount(int goodsCount) {
         this.goodsCount = goodsCount;
+    }
+
+    public Integer getComment() {
+        return comment;
+    }
+
+    public void setComment(Integer comment) {
+        this.comment = comment;
     }
 
     public String getAddTime() {

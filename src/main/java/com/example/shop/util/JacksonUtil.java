@@ -53,4 +53,36 @@ public class JacksonUtil {
         }
         return null;
     }
+
+    public static List<String> parseStringList(String body, String field) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node;
+        try {
+            node = mapper.readTree(body);
+            JsonNode leaf = node.get(field);
+
+            if (leaf != null){
+                return mapper.convertValue(leaf, new TypeReference<List<String>>() {
+                });
+            }
+        } catch (IOException e) {
+
+        }
+        return null;
+    }
+
+    public static Boolean parseBoolean(String body, String field) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node;
+        try {
+            node = mapper.readTree(body);
+            JsonNode leaf = node.get(field);
+            if (leaf != null){
+                return leaf.asBoolean();
+            }
+        } catch (IOException e) {
+
+        }
+        return null;
+    }
 }

@@ -30,15 +30,12 @@
     </update>
 
     <!-- 添加订单 -->
-    <insert id="insert">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-            select LAST_INSERT_ID()
-        </selectKey>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.shop.model.OrderEntity">
         INSERT INTO
-            shop_order(user_id, order_sn, order_status, consignee, mobile, address, order_price, coupon_price,
+            shop.shop_order(user_id, order_sn, order_status, consignee, mobile, address, order_price, coupon_price,
                        order_integral, actual_price, add_time, end_time, message, deleted)
         VALUES(#{userId}, #{orderSn}, #{orderStatus}, #{consignee}, #{mobile}, #{address}, #{orderPrice}, #{couponPrice},
-               #{orderIntegral}, #{actualPrice}, #{addTime}, #{endTime}, #{message}, #{deleted})
+               #{orderIntegral}, #{actualPrice}, #{addTime}, #{endTime}, #{message}, #{deleted});
     </insert>
 
     <update id="delete">

@@ -1,6 +1,8 @@
 package com.example.shop.controller;
 
 import com.example.shop.annotation.LoginUser;
+import com.example.shop.model.GoodsOrderEntity;
+import com.example.shop.model.OrderEntity;
 import com.example.shop.service.OrderService;
 import com.example.shop.util.ShopUtil;
 import com.example.shop.util.UserToken;
@@ -111,5 +113,27 @@ public class OrderController {
     public String confirm(@LoginUser Integer userId, @RequestBody String body){
         orderService.confirm(userId, body);
         return ShopUtil.getJSONString(0, "成功");
+    }
+
+    /**
+     * 带评价商品信息
+     * @param userId
+     * @param orderId
+     * @param goodsId
+     * @return
+     */
+    @GetMapping("goods")
+    public String goods(@LoginUser Integer userId, Integer orderId, Integer goodsId){
+
+        GoodsOrderEntity goodsOrderEntity = orderService.goods(userId, orderId, goodsId);
+        return ShopUtil.getJSONString(0, "成功", goodsOrderEntity);
+    }
+
+    /**
+     * 评价商品
+     */
+    @PostMapping("comment")
+    public Object comment(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.comment(userId, body);
     }
 }

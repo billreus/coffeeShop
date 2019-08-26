@@ -7,6 +7,7 @@ import com.example.shop.mapper.StockMapper;
 import com.example.shop.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,17 +25,22 @@ public class AdminGoodsService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource
-    GoodsMapper goodsMapper;
+    private final String key = "goods";
 
     @Resource
-    AttributeMapper attributeMapper;
+    private RedisTemplate redisTemplate;
 
     @Resource
-    CategoryMapper categoryMapper;
+    private GoodsMapper goodsMapper;
 
     @Resource
-    StockMapper stockMapper;
+    private AttributeMapper attributeMapper;
+
+    @Resource
+    private CategoryMapper categoryMapper;
+
+    @Resource
+    private StockMapper stockMapper;
 
     /**
      * 商品列表
@@ -125,6 +131,11 @@ public class AdminGoodsService {
         Integer saleCount = stock[0].getSaleCount();
         stockMapper.updateByGoodsId(updateStock, saleCount,goodsId);
 
+        //redis
+        stock[0].setStock(updateStock);
+        stock[0].setSaleCount(saleCount);
+        redisTemplate.boundHashOps(key).put(stock[0].getGoodsId(), stock[0]);
+
         goodsMapper.update(goods);
 
         for(AttributeEntity attributeEntity : attributes){
@@ -145,12 +156,16 @@ public class AdminGoodsService {
         AttributeEntity[] attributes = goodsUpdateEntity.getAttributes();
         StockEntity[] stock = goodsUpdateEntity.getProducts();
 
-        stockMapper.insert(stock[0]);
-
         goodsMapper.insert(goods);
+        Integer goodsId = goods.getId();
+        StockEntity stockEntity  = stock[0];
+        stockEntity.setGoodsId(goodsId);
+        stockMapper.insert(stockEntity);
+//TODO WENTI
+        redisTemplate.boundHashOps(key).put(goodsId, stockEntity);
 
         for(AttributeEntity attributeEntity : attributes){
-            attributeEntity.setGoodsId(goods.getId());
+            attributeEntity.setGoodsId(goodsId);
             attributeMapper.insert(attributeEntity);
         }
     }

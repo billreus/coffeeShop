@@ -60,8 +60,6 @@ public class AdminLoginService {
         AdminEntity adminEntity = adminLoginMapper.selectById(userId);
         data.put("name", adminEntity.getUsername());
         data.put("avatar", adminEntity.getAvatar());
-        //Integer[] roleIds = adminEntity.getRoleIds();
-        //Set<String> roles = roleMapper.selectById(roleIds);
         List<String> perms = new ArrayList<>();
         perms.add("*");
         data.put("roles", 1);

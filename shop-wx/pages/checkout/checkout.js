@@ -143,8 +143,14 @@ Page({
         } catch (error) {
 
         }
-
         const orderId = res.data.orderId;
+        wx.setStorageSync("id", orderId);
+        // util.request(api.OrderWait,{
+        //   cartId: this.data.cartId,
+        //   addressId: this.data.addressId
+        // }, 'POST').then(res =>{
+        //   if(res.errno == )
+        // })
 /*        util.request(api.OrderPrepay, {
           orderId: orderId
         }, 'POST').then(function(res) {
