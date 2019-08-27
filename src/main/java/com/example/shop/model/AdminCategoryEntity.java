@@ -3,8 +3,10 @@ package com.example.shop.model;
 import java.util.List;
 
 /**
- * 后台分类管理实体类
- */
+* 后台分类管理实体类
+* @author liu
+* @date 15:37 2019/8/27
+**/
 public class AdminCategoryEntity {
 
     /**

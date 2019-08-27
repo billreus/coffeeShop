@@ -1,4 +1,4 @@
-package com.example.shop.controller;
+/*package com.example.shop.controller;
 
 import com.example.shop.util.ShopUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,4 +16,4 @@ public class AdminIndexController {
         data.put("data", "hello world, this is admin index service");
         return ShopUtil.getJSONString(0, "成功", data);
     }
-}
+}*/

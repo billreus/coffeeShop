@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 图片存储实体类
- */
+* 图片存储实体类
+* @author liu
+* @date 15:42 2019/8/27
+**/
 public class StorageEntity {
     /**
      * id

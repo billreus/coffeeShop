@@ -14,23 +14,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.file.Path;
 
-
+/**
+* 前端获取图片
+* @author liu
+* @date 15:33 2019/8/27
+* @param
+* @return
+**/
 @RestController
 @RequestMapping("/wx/storage")
 public class WxStorageController {
-
+    /**
+     * 存储表接口
+     */
     @Autowired
     private StorageMapper storageMapper;
-
+    /**
+     * 存储操作
+     */
     @Autowired
     private StorageService storageService;
 
+    /**
+     * 读取图片
+     * @param key
+     * @return
+     */
     @GetMapping("/fetch/{key:.+}")
     public ResponseEntity<Resource> fetch(@PathVariable String key){
         StorageEntity storageEntity = storageMapper.selectByKey(key);
         String type = storageEntity.getType();
         MediaType mediaType = MediaType.parseMediaType(type);
-
         Resource file = storageService.loadAsResource(key);
         if(file == null){
             return ResponseEntity.notFound().build();

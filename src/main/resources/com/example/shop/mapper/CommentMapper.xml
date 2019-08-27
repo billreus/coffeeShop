@@ -5,8 +5,8 @@
 <mapper namespace="com.example.shop.mapper.CommentMapper">
     <insert id="insert">
         INSERT INTO
-            shop.shop_comment(value_id, type, content, user_id, has_picture, pic_urls, star, add_time, update_time, deleted)
-        VALUES (#{valueId}, #{type}, #{content}, #{userId}, #{hasPicture}, #{picUrls}, #{star}, #{addTime}, #{updateTime},#{deleted})
+            shop.shop_comment(value_id, type, content, user_id, star, add_time, update_time, deleted)
+        VALUES (#{valueId}, #{type}, #{content}, #{userId}, #{star}, #{addTime}, #{updateTime},#{deleted})
     </insert>
 
     <select id="selectByGoodsId" resultType="com.example.shop.model.CommentEntity">

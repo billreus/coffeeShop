@@ -6,8 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
- * 库存
- */
+* 库存表接口
+* @author liu
+* @date 15:34 2019/8/27
+**/
 @Mapper
 public interface StockMapper {
 
@@ -20,6 +22,11 @@ public interface StockMapper {
      */
     int updateByGoodsId(Integer stock, Integer saleCount, Integer goodsId);
 
+    /**
+     * 通过商品id查询
+     * @param goodsId
+     * @return
+     */
     StockEntity selectByGoodsId(Integer goodsId);
 
     /**
@@ -34,5 +41,10 @@ public interface StockMapper {
      */
     List<StockEntity> saleCount();
 
+    /**
+     * 添加
+     * @param stockEntity
+     * @return
+     */
     int insert(StockEntity stockEntity);
 }

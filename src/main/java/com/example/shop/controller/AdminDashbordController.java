@@ -11,15 +11,24 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * 后台主界面数量信息显示
- */
+* 后台主界面数量信息显示
+* @author liu
+* @date 11:26 2019/8/27
+**/
 @RestController
 @RequestMapping("/admin/dashboard")
 public class AdminDashbordController {
 
+    /**
+     * 主页接口
+     */
     @Resource
     private AdminDashbordService adminDashbordService;
 
+    /**
+     * 后台主页信息
+     * @return
+     */
     @GetMapping("")
     public String info(){
         Map<String, Object> data = adminDashbordService.info();

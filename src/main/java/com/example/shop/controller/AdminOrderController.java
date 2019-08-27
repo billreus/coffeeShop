@@ -9,13 +9,34 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 后台订单管理
+ * @author liu
+ * @date 14:06 2019/8/27
+ * @param
+ * @return
+ **/
 @RestController
 @RequestMapping("/admin/order")
 public class AdminOrderController {
 
+    /**
+     * 后台订单操作接口
+     */
     @Resource
     private AdminOrderService adminOrderService;
 
+    /**
+     * 订单列表
+     * @param userId
+     * @param orderSn
+     * @param orderStatusArray
+     * @param page
+     * @param limit
+     * @param sort
+     * @param order
+     * @return
+     */
     @GetMapping("/list")
     public String list(String userId, String orderSn,
                        @RequestParam(required = false) List<Integer> orderStatusArray,
@@ -27,6 +48,11 @@ public class AdminOrderController {
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
+    /**
+     * 订单详情
+     * @param id
+     * @return
+     */
     @GetMapping("/detail")
     public String detail(Integer id){
         Map<String, Object> data = adminOrderService.detail(id);

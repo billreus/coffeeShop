@@ -3,20 +3,43 @@ package com.example.shop.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+* 微信配置yml对象定义
+* @author liu
+* @date 10:28 2019/8/27
+**/
 @Configuration
 @ConfigurationProperties(prefix = "shop.wx")
 public class WxProperties {
 
+    /**
+     * wx用户id
+     */
     private String appId;
 
+    /**
+     * wx用户密钥
+     */
     private String appSecret;
 
+    /**
+     * wx支付商户id
+     */
     private String mchId;
 
+    /**
+     * wx支付商户key
+     */
     private String mchKey;
 
+    /**
+     * wx支付异步通知
+     */
     private String notifyUrl;
 
+    /**
+     * wx支付密钥
+     */
     private String keyPath;
 
     public String getNotifyUrl() {

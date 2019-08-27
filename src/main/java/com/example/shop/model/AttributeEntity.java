@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 商品参数实体类
- */
+* 商品参数实体类
+* @author liu
+* @date 15:38 2019/8/27
+**/
 public class AttributeEntity {
     /**
      * id

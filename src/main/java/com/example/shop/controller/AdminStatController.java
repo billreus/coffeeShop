@@ -11,13 +11,25 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+* 后台统计报表
+* @author liu
+* @date 14:12 2019/8/27
+**/
 @RestController
 @RequestMapping("admin/stat")
 public class AdminStatController {
 
+    /**
+     * 统计操作接口
+     */
     @Resource
     private AdminStatService adminStatService;
 
+    /**
+     * 用户统计
+     * @return
+     */
     @GetMapping("/user")
     public String statUser(){
         List<Map> rows = adminStatService.statUser();
@@ -28,6 +40,10 @@ public class AdminStatController {
         return ShopUtil.getJSONString(0, "成功", stat);
     }
 
+    /**
+     * 订单统计
+     * @return
+     */
     @GetMapping("/order")
     public String statOrder() {
         List<Map> rows = adminStatService.statOrder();
@@ -39,6 +55,10 @@ public class AdminStatController {
         return ShopUtil.getJSONString(0, "成功", stat);
     }
 
+    /**
+     * 商品统计
+     * @return
+     */
     @GetMapping("/goods")
     public Object statGoods() {
         List<Map> rows = adminStatService.statGoods();

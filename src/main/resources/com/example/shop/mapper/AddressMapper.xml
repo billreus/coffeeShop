@@ -36,8 +36,8 @@
 
     <insert id="insert">
         INSERT INTO
-            shop.shop_address(name, user_id, province, city, county, address_detail, tel, is_default)
-        VALUES (#{name}, #{userId}, #{province}, #{city}, #{county}, #{addressDetail}, #{tel}, #{isDefault})
+            shop.shop_address(name, user_id, province, city, county, address_detail, tel, add_time, update_time, is_default)
+        VALUES (#{name}, #{userId}, #{province}, #{city}, #{county}, #{addressDetail}, #{tel},#{addTime} ,#{updateTime} , #{isDefault})
     </insert>
 
     <delete id="delete">
@@ -64,8 +64,7 @@
     <update id="update">
         UPDATE shop.shop_address
         SET name=#{name}, user_id=#{userId},province=#{province},city=#{city},county=#{county},
-            address_detail=#{addressDetail},tel=#{tel},is_default=#{isDefault},add_time=#{addTime},
-            update_time=#{updateTime}
+            address_detail=#{addressDetail},tel=#{tel},is_default=#{isDefault},update_time=#{updateTime}
         WHERE id=#{id}
     </update>
 

@@ -28,26 +28,48 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 统一日志处理切面
- */
+* 统一日志处理切面
+* @author liu
+* @date 10:16 2019/8/27
+**/
 @Aspect
 @Component
 @Order(1)
 public class WebLogAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
 
+    /**
+    * 切面范围
+    * @author liu
+    * @date 10:18 2019/8/27
+    **/
     @Pointcut("execution(public * com.example.shop.controller.*.*(..))")
     public void webLog() {
     }
 
+    /**
+    * 方法前切面
+    * @author liu
+    * @date 10:19 2019/8/27
+    **/
     @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
     }
 
+    /**
+    * 方法后切面
+    * @author liu
+    * @date 10:20 2019/8/27
+    **/
     @AfterReturning(value = "webLog()", returning = "ret")
     public void doAfterReturning(Object ret) throws Throwable {
     }
 
+    /**
+    * 方法前后切面
+    * @author liu
+    * @date 10:22 2019/8/27
+    **/
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
@@ -60,10 +82,6 @@ public class WebLogAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-//        if (method.isAnnotationPresent(ApiOperation.class)) {
-//            ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-//            webLog.setDescription(apiOperation.value());
-//        }
         long endTime = System.currentTimeMillis();
         String urlStr = request.getRequestURL().toString();
         webLog.setBasePath(StrUtil.removeSuffix(urlStr, URLUtil.url(urlStr).getPath()));

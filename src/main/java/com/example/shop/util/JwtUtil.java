@@ -12,8 +12,10 @@ import java.rmi.MarshalledObject;
 import java.util.*;
 
 /**
- * JSON Web token
- */
+* JSON Web token
+* @author liu
+* @date 15:46 2019/8/27
+**/
 public class JwtUtil {
     /**
      * 密钥
@@ -34,6 +36,11 @@ public class JwtUtil {
      */
     static final String AUDIENCE = "APP";
 
+    /**
+     * 生成TOKEN
+     * @param userId
+     * @return
+     */
     public String createToken(Integer userId){
         try{
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
@@ -64,6 +71,11 @@ public class JwtUtil {
         return null;
     }
 
+    /**
+     * 校验token获取id
+     * @param token
+     * @return
+     */
     public Integer verifyTokenAndGetUserId(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
@@ -81,6 +93,17 @@ public class JwtUtil {
         return 0;
     }
 
+    /**
+     * 时间设置
+     * @param date
+     * @param year
+     * @param month
+     * @param day
+     * @param hour
+     * @param minute
+     * @param second
+     * @return
+     */
     public  Date getAfterDate(Date date, int year, int month, int day, int hour, int minute, int second){
         if(date == null){
             date = new Date();

@@ -14,12 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 订单
- */
+* 订单
+* @author liu
+* @date 14:53 2019/8/27
+* @param
+* @return
+**/
 @RestController
 @RequestMapping("wx/order")
 public class OrderController {
 
+    /**
+     * 商品业务接口
+     */
     @Resource
     OrderService orderService;
 
@@ -49,6 +56,12 @@ public class OrderController {
         return ShopUtil.getJSONString(0, "成功", data);
     }
 
+    /**
+     * 提交订单
+     * @param userId
+     * @param body
+     * @return
+     */
     @PostMapping("submit")
     public String submit(@LoginUser Integer userId, @RequestBody String body){
         Map<String, Object> data = new HashMap<>();

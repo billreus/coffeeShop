@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 商品后台更新实体类
- */
+* 商品后台更新实体类
+* @author liu
+* @date 15:41 2019/8/27
+**/
 public class GoodsUpdateEntity {
     /**
      * 商品参数

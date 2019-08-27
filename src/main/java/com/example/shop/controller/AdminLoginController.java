@@ -20,26 +20,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 后台管理员登录
- */
-
+ * 管理员登录
+ * @author liu
+ * @date 13:52 2019/8/27
+ * @param
+ * @return
+ **/
 @RestController
 @RequestMapping("/admin/auth")
 public class AdminLoginController {
 
+    public static final String ERROR = "error";
+    /**
+     * 管理员登录接口
+     */
     @Resource
     private AdminLoginService adminLoginService;
 
+    /**
+     * 管理员登录
+     * @param body
+     * @return
+     */
     @PostMapping("/login")
     public String login(@RequestBody String body){
-
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
 
         Map<String, Object> data = adminLoginService.login(username, password);
-        return ShopUtil.getJSONString(0, "成功",data);
+        if(data.containsKey(ERROR)){
+            return ShopUtil.getJSONString(401, "失败",data);
+        }else{
+            return ShopUtil.getJSONString(0, "成功",data);
+        }
     }
 
+    /**
+     * 管理员权限
+     * @param token
+     * @return
+     */
     @GetMapping("/info")
     public String info(String token){
         if(token == null || token.isEmpty()){

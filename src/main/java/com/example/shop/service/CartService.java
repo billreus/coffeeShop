@@ -17,32 +17,51 @@ import java.util.Map;
 
 /**
  * 购物车
- */
+ * @author liu
+ * @date 14:26 2019/8/27
+ **/
 @Service
 public class CartService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * redis中库存缓存key
+     */
     private final String key = "stock";
-
+    /**
+     * 购物车表接口
+     */
     @Resource
     private CartMapper cartMapper;
-
+    /**
+     * 商品表接口
+     */
     @Resource
     private GoodsMapper goodsMapper;
-
+    /**
+     * 地址表接口
+     */
     @Resource
     private AddressMapper addressMapper;
-
+    /**
+     * 用户表接口
+     */
     @Resource
     private UserMapper userMapper;
-
+    /**
+     * 积分规则表接口
+     */
     @Resource
     private OperateIntegralMapper operateIntegralMapper;
-
+    /**
+     * 库存表接口
+     */
     @Resource
     private StockMapper stockMapper;
-
+    /**
+     * redis操作接口
+     */
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -86,7 +105,6 @@ public class CartService {
                 checkedGoodsCount += cart.getNumber();
                 checkedGoodsAmount = checkedGoodsAmount.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
             }
-            //StockEntity stockEntity = stockMapper.selectByGoodsId(cart.getGoodsId());
             StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
             if(stockEntity == null){
                 stockEntity = stockMapper.selectByGoodsId(goods.getId());
@@ -134,7 +152,6 @@ public class CartService {
             cartMapper.deleteByGoodsId(goodsId);
         }
         //判断库存
-        //StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
         StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
         if(stockEntity == null){
             stockEntity = stockMapper.selectByGoodsId(goods.getId());
@@ -155,6 +172,12 @@ public class CartService {
         return res;
     }
 
+    /**
+     * 购物车勾选
+     * @param checkedList
+     * @param userId
+     * @param checkValue
+     */
     public void checked(List<Integer> checkedList, Integer userId, Boolean checkValue){
 
         for(int i=0; i<checkedList.size(); i++){
@@ -164,6 +187,11 @@ public class CartService {
 
     }
 
+    /**
+     * 购物车删除
+     * @param deleteList
+     * @param userId
+     */
     public void delete(List<Integer> deleteList, Integer userId){
 
         for(int i=0; i<deleteList.size(); i++){
@@ -173,6 +201,12 @@ public class CartService {
 
     }
 
+    /**
+     * 购物车添加
+     * @param userId
+     * @param cart
+     * @return
+     */
     @Transactional
     public String add(Integer userId, CartEntity cart){
         Integer number = cart.getNumber();
@@ -185,8 +219,7 @@ public class CartService {
         if(goods == null || !goods.isOnSale()){
             return "err 商品下架";
         }
-        //库存不足
-        //StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        //库存
         StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
         if(stockEntity == null){
             stockEntity = stockMapper.selectByGoodsId(goods.getId());
@@ -280,6 +313,12 @@ public class CartService {
         return data;
     }
 
+    /**
+     * 购物车现在购买
+     * @param userId
+     * @param cartEntity
+     * @return
+     */
     @Transactional
     public Integer fastAdd(Integer userId, CartEntity cartEntity){
         Integer number = cartEntity.getNumber();
@@ -292,8 +331,7 @@ public class CartService {
         if(goods == null || !goods.isOnSale()){
             return 0;
         }
-        //库存不足
-        //StockEntity stockEntity = stockMapper.selectByGoodsId(goodsId);
+        //库存
         StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
         if(stockEntity == null){
             stockEntity = stockMapper.selectByGoodsId(goods.getId());

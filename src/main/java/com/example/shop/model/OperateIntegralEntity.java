@@ -3,8 +3,10 @@ package com.example.shop.model;
 import java.math.BigDecimal;
 
 /**
- * 积分对应等级的折扣表
- */
+* 积分对应等级的折扣表
+* @author liu
+* @date 15:42 2019/8/27
+**/
 public class OperateIntegralEntity {
     /**
      * id

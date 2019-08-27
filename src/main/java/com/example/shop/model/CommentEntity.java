@@ -1,19 +1,54 @@
 package com.example.shop.model;
-
+/**
+* 评论实体类
+* @author liu
+* @date 15:39 2019/8/27
+**/
 public class CommentEntity {
     /**
      * id
      */
     private Integer id;
+    /**
+     * 管理id
+     */
     private Integer valueId;
+    /**
+     * 评论类型
+     */
     private Integer type;
+    /**
+     * 评论内容
+     */
     private String content;
+    /**
+     * 用户id
+     */
     private Integer userId;
-    private boolean hasPicture;
-    private String picUrls;
+    /**
+     * 评分
+     */
     private Integer star;
+    /**
+     * 添加时间
+     */
     private String addTime;
+    /**
+     * 更新时间
+     */
     private String updateTime;
+    /**
+     * 是否有图片
+     */
+    private boolean hasPicture;
+
+    /**
+     * 图片
+     */
+    private String[] picUrls;
+    /**
+     * 逻辑删除
+     */
     private boolean deleted;
 
     public Integer getId() {
@@ -54,22 +89,6 @@ public class CommentEntity {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public boolean isHasPicture() {
-        return hasPicture;
-    }
-
-    public void setHasPicture(boolean hasPicture) {
-        this.hasPicture = hasPicture;
-    }
-
-    public String getPicUrls() {
-        return picUrls;
-    }
-
-    public void setPicUrls(String picUrls) {
-        this.picUrls = picUrls;
     }
 
     public Integer getStar() {

@@ -3,8 +3,10 @@ package com.example.shop.model;
 import java.util.List;
 
 /**
- * 分类前端二级显示实体类
- */
+* 分类前端二级显示实体类
+* @author liu
+* @date 15:39 2019/8/27
+**/
 public class CateVoEntity {
     /**
      * id

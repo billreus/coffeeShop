@@ -15,13 +15,21 @@ import java.util.Map;
 
 /**
  * 用户中心
- */
+ * @author liu
+ * @date 15:18 2019/8/27
+ * @param
+ * @return
+ **/
 @RestController
 @RequestMapping("/wx/user")
 public class UserCenterController {
 
+    /**
+     * 用户中心统计
+     */
     @Resource
     private UserCenterService userCenterService;
+
     /**
      * 主页订单标签显示数量
      * @param
@@ -31,7 +39,6 @@ public class UserCenterController {
     public Object list(@LoginUser Integer userId){
         Map<String, Object> data = new HashMap<>();
         data.put("order", userCenterService.list(userId));
-
         return ShopUtil.getJSONString(0, "成功", data);
     }
 }

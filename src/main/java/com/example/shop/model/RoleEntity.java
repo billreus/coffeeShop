@@ -1,4 +1,4 @@
-package com.example.shop.model;
+/*package com.example.shop.model;
 
 public class RoleEntity {
     private int id;
@@ -65,3 +65,4 @@ public class RoleEntity {
         this.deleted = deleted;
     }
 }
+*/

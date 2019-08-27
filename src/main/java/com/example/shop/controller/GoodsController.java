@@ -10,13 +10,18 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * 商品
- * @author EDZ
- */
+* 商品
+* @author liu
+* @date 14:48 2019/8/27
+
+**/
 @RestController
 @RequestMapping("/wx/goods")
 public class GoodsController {
 
+    /**
+     * 商品操作
+     */
     @Resource
     private GoodsService goodsService;
 

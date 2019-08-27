@@ -13,9 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 延时队列消费者
- * @author Liu
- */
+* 延时队列消费者
+* @author liu
+* @date 15:43 2019/8/27
+**/
 @Component
 @RabbitListener(queues = "delayed.goods.order")
 public class DelayedReceiver {

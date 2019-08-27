@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 购物车实体类
- */
+* 购物车实体类
+* @author liu
+* @date 15:38 2019/8/27
+**/
 public class CartEntity implements Serializable {
     /**
      * id

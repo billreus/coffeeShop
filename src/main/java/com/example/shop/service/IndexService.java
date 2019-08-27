@@ -18,25 +18,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * WX首页
+ * @author liu
+ * @date 14:50 2019/8/27
+ * @param
+ * @return
+ **/
 @Service
 @EnableCaching
 public class IndexService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 商品表接口
+     */
     @Resource
     GoodsMapper goodsMapper;
-
-    @Resource
-    CategoryMapper categoryMapper;
-
+    /**
+     * 库存表接口
+     */
     @Resource
     StockMapper stockMapper;
-
+    /**
+     * 本地缓存接口
+     */
     @Resource
     CaffeineService caffeineService;
 
-    public Map<String, Object> index(Integer userId){
+    /**
+     * 首页显示
+     * @return
+     */
+    public Map<String, Object> index(){
 
         List<GoodsEntity> goodsEntityList = caffeineService.getBanner();
         List<CategoryEntity> categoryEntityList = caffeineService.getChannel();

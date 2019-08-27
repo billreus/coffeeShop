@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 订单状态按钮
- */
+* 订单状态按钮
+* @author liu
+* @date 15:42 2019/8/27
+**/
 public class OrderHandleEntity {
     /**
      * 取消

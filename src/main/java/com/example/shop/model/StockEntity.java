@@ -3,8 +3,10 @@ package com.example.shop.model;
 import java.io.Serializable;
 
 /**
- * 商品库存实体类
- */
+* 商品库存实体类
+* @author liu
+* @date 15:42 2019/8/27
+**/
 public class StockEntity implements Serializable {
     /**
      * id

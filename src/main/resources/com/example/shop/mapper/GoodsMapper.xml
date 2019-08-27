@@ -22,23 +22,11 @@
         WHERE id =#{id} AND deleted = 0
     </select>
 
-    <select id="selectByName" resultType="com.example.shop.model.GoodsEntity">
-            SELECT *
-            FROM shop_goods
-            WHERE name =#{name} AND deleted = 0 AND shop_goods.on_sale = 1;
-    </select>
-
     <select id="selectByGoodsId" resultType="com.example.shop.model.GoodsEntity">
             SELECT *
             FROM shop_goods
             WHERE goods_id =#{goodsId} AND deleted = 0 AND shop_goods.on_sale = 1;
     </select>
-
-    <select id="selectByNameAndGoodsId" resultType="com.example.shop.model.GoodsEntity">
-                SELECT *
-                FROM shop_goods
-                WHERE goods_id =#{goodsId} AND name =#{name} AND deleted = 0 AND shop_goods.on_sale = 1;
-        </select>
 
     <select id="findAllList" resultType="com.example.shop.model.GoodsEntity">
             SELECT *
@@ -76,7 +64,7 @@
     <update id="update">
         UPDATE shop_goods
         SET category_id=#{categoryId}, goods_Id=#{goodsId}, gallery=#{gallery}, name=#{name}, brief=#{brief},keywords=#{keywords},
-            pic_url=#{picUrl}, unit=#{unit}, original_price=#{originalPrice}, retail_price=#{retailPrice}, create_date=#{createDate},
+            pic_url=#{picUrl}, unit=#{unit}, original_price=#{originalPrice}, retail_price=#{retailPrice},
             update_by=#{updateBy}, update_date=#{updateDate}, detail=#{detail}, on_sale=#{onSale}, deleted=#{deleted}
         WHERE id=#{id}
     </update>

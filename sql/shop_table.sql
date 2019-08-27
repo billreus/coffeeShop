@@ -129,6 +129,7 @@ CREATE TABLE `shop_goods_order`(
                                    `goods_type` varchar(63) DEFAULT NULL COMMENT '商品类型',
                                    `actual_price` decimal(10,2) DEFAULT '0.00' COMMENT '实际付款金额',
                                    `goods_count` int(11) DEFAULT NULL COMMENT '购买数量',
+                                   `comment` int(11) DEFAULT '0' COMMENT '订单商品评论，如果是-1，则超期不能评价；如果是0，则可以评价；如果其他值，则是comment表里面的评论ID。',
                                    `add_time` datetime DEFAULT NULL COMMENT '创建时间',
                                    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
                                    `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',

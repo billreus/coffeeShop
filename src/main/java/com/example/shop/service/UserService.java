@@ -7,7 +7,9 @@ import com.example.shop.model.UserEntity;
 import com.example.shop.model.UserInfoEntity;
 import com.example.shop.util.LevelUtil;
 import com.example.shop.util.ShopUtil;
+import com.example.shop.util.TimeUtil;
 import com.example.shop.util.UserToken;
+import org.apache.commons.io.input.TaggedInputStream;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,13 +20,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 用户业务层
- */
+* 用户业务层
+* @author liu
+* @date 15:19 2019/8/27
+* @param
+* @return
+**/
 @Service
 public class UserService {
+    /**
+     * 用户表接口
+     */
     @Resource
     private UserMapper userMapper;
-
+    /**
+     * 积分表接口
+     */
     @Resource
     private IntegralMapper integralMapper;
 
@@ -55,23 +66,22 @@ public class UserService {
             return map;
         }
 
-        UserEntity userEntity = new UserEntity();
-        userEntity = userMapper.selectByOpenId(openId);
-        if(userEntity != null){
-            map.put("name", "用户已经注册");
-            return map;
-        }
+        //UserEntity userEntity = userMapper.selectByOpenId(openId);
+//        if(userEntity != null){
+//            map.put("name", "用户已经注册");
+//            return map;
+//        }
 
-        userEntity.setWechatOpenid(openId);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setWechatOpenid("");
+        userEntity.setSessionKey("");
         userEntity.setUsername(username);
         userEntity.setMobile(phone);
         userEntity.setPassword(ShopUtil.MD5(password));
         userEntity.setNickname(username);
         userEntity.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = formatter.format(date);
-        userEntity.setLoginTime(time);
+        userEntity.setLoginTime(TimeUtil.createTime());
+        userEntity.setAddTime(TimeUtil.createTime());
         userMapper.insert(userEntity);
 
         //token
@@ -82,6 +92,13 @@ public class UserService {
         return result;
     }
 
+    /**
+     * 微信授权登录
+     * @param sessionKey
+     * @param openId
+     * @param userInfo
+     * @return
+     */
     public Map<String, Object> loginByWeixin(String sessionKey, String openId, UserInfoEntity userInfo){
         UserEntity userEntity = userMapper.selectByOpenId(openId);
         if(userEntity == null){
@@ -94,10 +111,8 @@ public class UserService {
             userEntity.setNickname(userInfo.getNickName());
             userEntity.setGender(userInfo.getGender());
             userEntity.setAvatar(userInfo.getAvatarUrl());
-            Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String time = formatter.format(date);
-            userEntity.setLoginTime(time);
+            userEntity.setLoginTime(TimeUtil.createTime());
+            userEntity.setAddTime(TimeUtil.createTime());
             userMapper.insert(userEntity);
         }else {
             userEntity.setSessionKey(sessionKey);
@@ -136,14 +151,18 @@ public class UserService {
         }
 
         //更新登录状态
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = formatter.format(date);
-        user.setLoginTime(time);
+        user.setLoginTime(TimeUtil.createTime());
         userMapper.updateLastLoginTimeById(user);
 
         //用户等级换算
         IntegralEntity integralEntity = integralMapper.selectByUserId(user.getId());
+        if(integralEntity == null){
+            integralEntity = new IntegralEntity();
+            integralEntity.setUserId(user.getId());
+            integralEntity.setChangeIntegral(new BigDecimal(0));
+            integralEntity.setCurrentIntegral(new BigDecimal(0));
+            integralMapper.insert(integralEntity);
+        }
         BigDecimal integral = integralEntity.getCurrentIntegral();
         Integer level = integral.divide(LevelUtil.levelDivide).intValue();
         user.setUserLevel(level);
@@ -169,12 +188,15 @@ public class UserService {
         UserEntity userEntity = userMapper.selectById(userId);
         if(mobile != null){
             userEntity.setMobile(mobile);
+            userEntity.setUpdateTime(TimeUtil.createTime());
         }
         if(nickname != null){
             userEntity.setNickname(nickname);
+            userEntity.setUpdateTime(TimeUtil.createTime());
         }
         if(password != null){
             userEntity.setPassword(password);
+            userEntity.setUpdateTime(TimeUtil.createTime());
         }
         userMapper.update(userEntity);
     }

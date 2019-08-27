@@ -10,11 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户中心
- */
+* wx用户中心
+* @author liu
+* @date 15:18 2019/8/27
+* @param
+* @return
+**/
 @Service
 public class UserCenterService {
 
+    /**
+     * 订单表接口
+     */
     @Resource
     private OrderMapper orderMapper;
 

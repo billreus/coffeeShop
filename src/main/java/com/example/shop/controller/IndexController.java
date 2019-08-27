@@ -16,8 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 首页
- */
+* WX首页
+* @author liu
+* @date 14:50 2019/8/27
+* @param
+* @return
+**/
 @RestController
 @RequestMapping("/wx/home")
 public class IndexController {
@@ -32,7 +36,7 @@ public class IndexController {
      */
     @GetMapping("/index")
     public String index(@LoginUser Integer userId){
-        Map<String, Object> data =indexService.index(userId);
+        Map<String, Object> data =indexService.index();
         return ShopUtil.getJSONString(0, "成功", data);
     }
 }

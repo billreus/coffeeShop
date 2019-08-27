@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户实体类
- */
+* 用户实体类
+* @author liu
+* @date 15:42 2019/8/27
+**/
 public class UserEntity implements Serializable {
 
     /**

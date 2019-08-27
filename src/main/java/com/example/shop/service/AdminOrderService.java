@@ -14,26 +14,47 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 后台订单管理
- */
+* 后台订单管理
+* @author liu
+* @date 14:06 2019/8/27
+* @param
+* @return
+**/
 @Service
 public class AdminOrderService {
 
+    /**
+     * 订单表接口
+     */
     @Resource
     private OrderMapper orderMapper;
-
+    /**
+     * 商品表接口
+     */
     @Resource
     private GoodsOrderMapper goodsOrderMapper;
-
+    /**
+     * 用户表接口
+     */
     @Resource
     private UserMapper userMapper;
-
+    /**
+     * 积分表接口
+     */
     @Resource
     private IntegralMapper integralMapper;
 
-    @Resource
-    private CategoryMapper categoryMapper;
-
+    /**
+     * 订单列表
+     * @param userId
+     * @param orderSn
+     * @param orderStatusArray
+     * @param page
+     * @param limit
+     * @param sort
+     * @param order
+     * @return
+     */
     public Map<String, Object> list(String userId, String orderSn, List<Integer> orderStatusArray,
                                     Integer page, Integer limit, String sort, String order){
         List<OrderEntity> orderEntityList = new ArrayList<>();
@@ -57,6 +78,11 @@ public class AdminOrderService {
         return data;
     }
 
+    /**
+     * 订单详情
+     * @param id
+     * @return
+     */
     public Map<String, Object> detail(Integer id){
         OrderEntity orderEntity = orderMapper.selectById(id);
         List<GoodsOrderEntity> goodsOrderEntityList = goodsOrderMapper.selectByOrderId(orderEntity.getId());
@@ -68,10 +94,19 @@ public class AdminOrderService {
         return data;
     }
 
+    /**
+     * 发货
+     * @param orderId
+     */
     public void ship(Integer orderId){
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_SHOP);
     }
 
+    /**
+     * 退货
+     * @param orderId
+     * @param refundMoney
+     */
     @Transactional(rollbackFor = Exception.class)
     public void refund(Integer orderId, Integer refundMoney){
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);

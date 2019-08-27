@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 日志
- */
+* 日志
+* @author liu
+* @date 15:43 2019/8/27
+**/
 public class WebLog {
     /**
      * 操作描述

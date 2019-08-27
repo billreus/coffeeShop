@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 管理员实体类
- */
+* 管理员实体类
+* @author liu
+* @date 15:37 2019/8/27
+**/
 public class AdminEntity {
     /**
      * id

@@ -7,8 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 购物车
- */
+* 购物车表接口
+* @author liu
+* @date 15:28 2019/8/27
+**/
 @Mapper
 public interface CartMapper {
     /**
@@ -64,6 +66,13 @@ public interface CartMapper {
      */
     int updateCheckById(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId, @Param("checked") boolean checked);
 
+    /**
+     * 更新购物车数量
+     * @param number
+     * @param userId
+     * @param goodsId
+     * @return
+     */
     int updateNumber(@Param("number") Integer number, @Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
     /**
      * 增加购物车
@@ -80,5 +89,10 @@ public interface CartMapper {
      */
     int delete(@Param("userId") Integer userId,@Param("checked") boolean checked);
 
+    /**
+     * 通过商品id删除
+     * @param goodsId
+     * @return
+     */
     int deleteByGoodsId(Integer goodsId);
 }

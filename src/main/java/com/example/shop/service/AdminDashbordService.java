@@ -12,23 +12,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 后台主页面板
- */
+* 后台主页面板
+* @author liu
+* @date 11:27 2019/8/27
+**/
 @Service
 public class AdminDashbordService {
 
+    /**
+     * 用户表接口
+     */
     @Resource
     UserMapper userMapper;
 
+    /**
+     * 商品表接口
+     */
     @Resource
     GoodsMapper goodsMapper;
 
+    /**
+     * 库存表接口
+     */
     @Resource
     StockMapper stockMapper;
 
+    /**
+     * 订单表接口
+     */
     @Resource
     OrderMapper orderMapper;
 
+    /**
+     * 主页统计信息
+     * @return
+     */
     public Map<String, Object> info(){
         long userTotal = userMapper.findAllCount();
         long goodsTotal = goodsMapper.findSaleCount();

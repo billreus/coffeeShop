@@ -9,10 +9,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+* 后台商品管理
+* @author liu
+* @date 11:28 2019/8/27
+**/
 @RestController
 @RequestMapping("/admin/goods")
 public class AdminGoodsController {
 
+    /**
+     * 后台商品管理接口
+     */
     @Resource
     AdminGoodsService adminGoodsService;
 
@@ -79,6 +87,11 @@ public class AdminGoodsController {
         return ShopUtil.getJSONString(0, "成功");
     }
 
+    /**
+     * 新增商品
+     * @param goodsUpdateEntity
+     * @return
+     */
     @PostMapping("/create")
     public String create(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
         adminGoodsService.create(goodsUpdateEntity);

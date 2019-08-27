@@ -1,8 +1,10 @@
 package com.example.shop.model;
 
 /**
- * 微信用户信息
- */
+* 微信用户信息
+* @author liu
+* @date 15:42 2019/8/27
+**/
 public class UserInfoEntity {
 
     /**

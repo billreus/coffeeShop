@@ -13,13 +13,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 会员管理
- */
+ * 后台会员管理
+ * @author liu
+ * @date 14:18 2019/8/27
+ * @param
+ * @return
+ **/
 @Service
 public class AdminUserService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 用户表接口
+     */
     @Resource
     UserMapper userMapper;
 
@@ -48,6 +55,10 @@ public class AdminUserService {
         return data;
     }
 
+    /**
+     * 会员启用禁用
+     * @param id
+     */
     public void state(Integer id){
         UserEntity userEntity = userMapper.selectById(id);
         if(userEntity.getStatus() == 0){

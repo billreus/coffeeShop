@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 分类业务层
- */
+ * 分类
+ * @author liu
+ * @date 14:41 2019/8/27
+ **/
 @Service
 public class CategoryService {
 
@@ -47,6 +49,11 @@ public class CategoryService {
         return  data;
     }
 
+    /**
+     * 二级类详情
+     * @param id
+     * @return
+     */
     public Map<String, Object> current(@NotNull Integer id){
 
         CategoryEntity currentCategory = categoryMapper.selectById(id);

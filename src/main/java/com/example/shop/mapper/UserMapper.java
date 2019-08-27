@@ -6,8 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
- * 用户mapper层
- */
+* 用户表接口
+* @author liu
+* @date 15:35 2019/8/27
+**/
 @Mapper
 public interface UserMapper {
 
@@ -39,8 +41,19 @@ public interface UserMapper {
      */
      int updateLastLoginTimeById(UserEntity userEntity);
 
+    /**
+     * 更新用户状态
+     * @param status
+     * @param id
+     * @return
+     */
      int updateState(Integer status, Integer id);
 
+    /**
+     * 通过id更新等级
+     * @param userEntity
+     * @return
+     */
      int updateLevelById(UserEntity userEntity);
 
      /**
@@ -50,6 +63,11 @@ public interface UserMapper {
      */
      UserEntity selectById(Integer id);
 
+    /**
+     * 查询openid
+     * @param OpenId
+     * @return
+     */
      UserEntity selectByOpenId(String OpenId);
 
     /**
@@ -59,8 +77,19 @@ public interface UserMapper {
      */
      UserEntity selectByUserName(String username);
 
+    /**
+     * 通过手机号查询
+     * @param mobile
+     * @return
+     */
      UserEntity selectByMobile(String mobile);
 
+    /**
+     * 通过用户名和手机查询
+     * @param username
+     * @param mobile
+     * @return
+     */
      List<UserEntity> selectByUserNameAndMobile(String username, String mobile);
     /**
      *查询所有用户

@@ -5,6 +5,7 @@ import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.mapper.GoodsMapper;
 import com.example.shop.mapper.StockMapper;
 import com.example.shop.model.*;
+import com.example.shop.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,26 +20,41 @@ import java.util.Map;
 
 /**
  * 后台商品管理
- */
+ * @author liu
+ * @date 11:28 2019/8/27
+ **/
 @Service
 public class AdminGoodsService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final String key = "goods";
-
+    /**
+     * redis中商品缓存key
+     */
+    private final String key = "stock";
+    /**
+     * redis接口
+     */
     @Resource
     private RedisTemplate redisTemplate;
-
+    /**
+     * 商品表接口
+     */
     @Resource
     private GoodsMapper goodsMapper;
-
+    /**
+     * 商品参数表接口
+     */
     @Resource
     private AttributeMapper attributeMapper;
-
+    /**
+     * 商品类别表接口
+     */
     @Resource
     private CategoryMapper categoryMapper;
-
+    /**
+     * 库存表接口
+     */
     @Resource
     private StockMapper stockMapper;
 
@@ -67,11 +83,20 @@ public class AdminGoodsService {
         return data;
     }
 
+    /**
+     * 商品删除
+     * @param goodsEntity
+     */
     public void delete(GoodsEntity goodsEntity){
         Integer goodsId = goodsEntity.getId();
         goodsMapper.deleted(goodsId);
     }
 
+    /**
+     * 商品详情
+     * @param id
+     * @return
+     */
     public Map<String, Object> detail(Integer id){
         GoodsEntity goodsEntity = goodsMapper.selectById(id);
         List<AttributeEntity> attributeEntityList = attributeMapper.selectByGoodsId(id);
@@ -120,50 +145,59 @@ public class AdminGoodsService {
         return data;
     }
 
+    /**
+     * 商品更新
+     * @param goodsUpdateEntity
+     */
     @Transactional(rollbackFor = Exception.class)
     public void update(GoodsUpdateEntity goodsUpdateEntity){
         GoodsEntity goods = goodsUpdateEntity.getGoods();
         AttributeEntity[] attributes = goodsUpdateEntity.getAttributes();
         StockEntity[] stock = goodsUpdateEntity.getProducts();
-
+        //更新库存表
         Integer updateStock = stock[0].getStock();
         Integer goodsId = stock[0].getGoodsId();
         Integer saleCount = stock[0].getSaleCount();
         stockMapper.updateByGoodsId(updateStock, saleCount,goodsId);
-
-        //redis
+        //更新redis中的库存
         stock[0].setStock(updateStock);
         stock[0].setSaleCount(saleCount);
         redisTemplate.boundHashOps(key).put(stock[0].getGoodsId(), stock[0]);
-
+        //更新商品表
+        goods.setUpdateDate(TimeUtil.createTime());
         goodsMapper.update(goods);
-
+        //更新商品参数
         for(AttributeEntity attributeEntity : attributes){
             Integer id = attributeEntity.getId();
-            if(id != null){
+            if(id != 0){
                 attributeMapper.update(attributeEntity);
             }else{
                 attributeEntity.setGoodsId(goods.getId());
                 attributeMapper.insert(attributeEntity);
             }
         }
-
     }
 
+    /**
+     * 新商品上架
+     * @param goodsUpdateEntity
+     */
     @Transactional(rollbackFor = Exception.class)
     public void create(GoodsUpdateEntity goodsUpdateEntity){
         GoodsEntity goods = goodsUpdateEntity.getGoods();
         AttributeEntity[] attributes = goodsUpdateEntity.getAttributes();
         StockEntity[] stock = goodsUpdateEntity.getProducts();
-
+        goods.setCreateDate(TimeUtil.createTime());
         goodsMapper.insert(goods);
+
+        //添加库存，刷新缓存
         Integer goodsId = goods.getId();
         StockEntity stockEntity  = stock[0];
         stockEntity.setGoodsId(goodsId);
         stockMapper.insert(stockEntity);
-//TODO WENTI
         redisTemplate.boundHashOps(key).put(goodsId, stockEntity);
 
+        //添加商品参数
         for(AttributeEntity attributeEntity : attributes){
             attributeEntity.setGoodsId(goodsId);
             attributeMapper.insert(attributeEntity);

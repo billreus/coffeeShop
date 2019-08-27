@@ -12,8 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 延时队列生产者
- */
+* 延时队列生产者
+* @author liu
+* @date 15:44 2019/8/27
+**/
 @Component
 public class DelayedSender {
 

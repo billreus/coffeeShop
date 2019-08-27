@@ -8,10 +8,16 @@ import java.security.MessageDigest;
 import java.util.Map;
 
 /**
- * 常用工具类
- */
+* 常用工具类
+* @author liu
+* @date 15:47 2019/8/27
+**/
 public class ShopUtil {
-
+    /**
+     * 生成MD5
+     * @param key
+     * @return
+     */
     public static String MD5(String key) {
         char hexDigits[] = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -40,12 +46,23 @@ public class ShopUtil {
         }
     }
 
+    /**
+     * 字符串转json
+     * @param errno
+     * @return
+     */
     public static String getJSONString(int errno) {
         JSONObject json = new JSONObject();
         json.put("errno", errno);
         return json.toJSONString();
     }
 
+    /**
+     * 字符串转json
+     * @param errno
+     * @param errmsg
+     * @return
+     */
     public static String getJSONString(int errno, String errmsg) {
         JSONObject json = new JSONObject();
         json.put("errno", errno);
@@ -53,6 +70,13 @@ public class ShopUtil {
         return json.toJSONString();
     }
 
+    /**
+     * 字符串转json
+     * @param errno
+     * @param errmsg
+     * @param data
+     * @return
+     */
     public static String getJSONString(int errno, String errmsg, Object data) {
         JSONObject json = new JSONObject();
         json.put("errno", errno);
@@ -62,6 +86,12 @@ public class ShopUtil {
         return JSON.toJSONString(json, SerializerFeature.DisableCircularReferenceDetect);
     }
 
+    /**
+     * 字符串转json
+     * @param errno
+     * @param map
+     * @return
+     */
     public static String getJSONString(int errno, Map<String, Object> map) {
         JSONObject json = new JSONObject();
         json.put("errno", errno);

@@ -14,33 +14,53 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 商品
- */
+* 商品
+* @author liu
+* @date 14:48 2019/8/27
+* @param
+* @return
+**/
 @Service
 public class GoodsService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    /**
+     * redis缓存key
+     */
     private final String key = "stock";
-
+    /**
+     * 商品表接口
+     */
     @Resource
     private GoodsMapper goodsMapper;
-
+    /**
+     * 种类表接口
+     */
     @Resource
     private CategoryMapper categoryMapper;
-
+    /**
+     * 参数表接口
+     */
     @Resource
     private AttributeMapper attributeMapper;
-
+    /**
+     * 库存表接口
+     */
     @Resource
     private StockMapper stockMapper;
-
+    /**
+     * 评论表接口
+     */
     @Resource
     private CommentMapper commentMapper;
-
+    /**
+     * 用户表接口
+     */
     @Resource
     private UserMapper userMapper;
-
+    /**
+     * 缓存接口
+     */
     @Resource
     private RedisTemplate redisTemplate;
     /**
@@ -100,8 +120,6 @@ public class GoodsService {
         GoodsEntity goods = goodsMapper.selectById(id);
         List<AttributeEntity> attribute = attributeMapper.selectByGoodsId(id);
 
-        //StockEntity stock = stockMapper.selectByGoodsId(goods.getId());
-        //Integer stockNumber = stock.getStock();
         // 缓存读取库存
         StockEntity stock = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
         if(stock == null){
@@ -123,7 +141,6 @@ public class GoodsService {
             UserEntity user = userMapper.selectById(comment.getUserId());
             map.put("nickname", user == null ? "" : user.getNickname());
             map.put("avatar", user == null ? "" : user.getAvatar());
-            map.put("picList", comment.getPicUrls());
             commentsVo.add(map);
         }
         Map<String, Object> commentList = new HashMap<>();

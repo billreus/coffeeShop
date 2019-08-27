@@ -3,8 +3,10 @@ package com.example.shop.model;
 import java.math.BigDecimal;
 
 /**
- * 商品订单实体类
- */
+* 商品订单实体类
+* @author liu
+* @date 15:41 2019/8/27
+**/
 public class GoodsOrderEntity {
     /**
      * id

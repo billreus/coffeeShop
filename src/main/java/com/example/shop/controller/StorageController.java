@@ -12,10 +12,17 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.IOException;
 
+/**
+ * 图片存储
+ * @author liu
+ * @date 15:15 2019/8/27
+ **/
 @RestController
 @RequestMapping("admin/storage")
 public class StorageController {
-
+    /**
+     * 图片存储表接口
+     */
     @Resource
     StorageService storageService;
 

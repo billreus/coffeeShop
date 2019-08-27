@@ -17,12 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 购物车
- */
+* 购物车
+* @author liu
+* @date 14:26 2019/8/27
+**/
 @RestController
 @RequestMapping("/wx/cart")
 public class CartController {
 
+    /**
+     * 购物车操作
+     */
     @Resource
     CartService cartService;
 

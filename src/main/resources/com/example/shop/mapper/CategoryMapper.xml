@@ -33,8 +33,8 @@
 
     <insert id="insert">
         INSERT INTO
-        shop.shop_category(name, keywords, pid, icon_url, pic_url, level)
-        VALUES (#{name}, #{keywords}, #{pid}, #{iconUrl}, #{picUrl}, #{level})
+        shop.shop_category(name, keywords, pid, icon_url, pic_url, level, add_time)
+        VALUES (#{name}, #{keywords}, #{pid}, #{iconUrl}, #{picUrl}, #{level}, #{addTime} )
     </insert>
 
     <update id="deletedById">
@@ -45,7 +45,8 @@
 
     <update id="updateById">
         UPDATE shop.shop_category
-        SET name=#{name}, keywords=#{keywords}, pid=#{pid},icon_url=#{iconUrl},pic_url=#{picUrl},level=#{level}
+        SET name=#{name}, keywords=#{keywords}, pid=#{pid},icon_url=#{iconUrl},
+            pic_url=#{picUrl},level=#{level},update_time=#{updateTime}
         WHERE id=#{id}
     </update>
 </mapper>

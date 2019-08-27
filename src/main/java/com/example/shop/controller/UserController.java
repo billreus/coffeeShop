@@ -18,15 +18,24 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * 用户注册登录
- */
+* 用户注册登录
+* @author liu
+* @date 15:19 2019/8/27
+* @param
+* @return
+**/
 @RestController
 @RequestMapping("/wx/auth")
 public class UserController {
 
+    /**
+     * 用户操作接口
+     */
     @Resource
     private UserService userService;
-
+    /**
+     * 微信操作接口
+     */
     @Autowired
     private WxMaService wxService;
 
@@ -62,6 +71,11 @@ public class UserController {
 
     }
 
+    /**
+     * 微信授权登录
+     * @param userWxEntity
+     * @return
+     */
     @PostMapping("login_by_weixin")
     public String loginByWeixin(@RequestBody UserWxEntity userWxEntity){
         String code = userWxEntity.getCode();
@@ -125,7 +139,7 @@ public class UserController {
 
     /**
      * 更新用户信息
-     * @param request
+     * @param userId
      * @param body
      * @return
      */

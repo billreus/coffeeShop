@@ -1,4 +1,4 @@
-package com.example.shop.mapper;
+/*package com.example.shop.mapper;
 
 import com.example.shop.model.RoleEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -7,4 +7,4 @@ import org.apache.ibatis.annotations.Mapper;
 public interface RoleMapper {
 
     RoleEntity selectById(Integer id);
-}
+}*/

@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 延时队列配置
- */
+* 延时队列配置
+* @author liu
+* @date 15:43 2019/8/27
+**/
 @Configuration
 public class DelayedConfig {
     final static String QUEUE_NAME = "delayed.goods.order";

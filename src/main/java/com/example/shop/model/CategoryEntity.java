@@ -1,7 +1,11 @@
 package com.example.shop.model;
 
 import java.io.Serializable;
-
+/**
+* 分类实体类
+* @author liu
+* @date 15:39 2019/8/27
+**/
 public class CategoryEntity implements Serializable {
 
     /**

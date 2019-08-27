@@ -46,7 +46,17 @@ public interface CategoryMapper {
      */
     int insert(CategoryEntity categoryEntity);
 
+    /**
+     * 通过id删除类目
+     * @param id
+     * @return
+     */
     int deletedById(Integer id);
 
+    /**
+     * 通过id更新类目
+     * @param categoryEntity
+     * @return
+     */
     int updateById(CategoryEntity categoryEntity);
 }

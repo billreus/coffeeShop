@@ -11,14 +11,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 后台地址管理
- */
+* 后台地址管理
+* @author liu
+* @date 11:26 2019/8/27
+**/
 @Service
 public class AdminAddressService {
 
+    /**
+     * 地址数据库操作接口
+     */
     @Resource
     AddressMapper addressMapper;
 
+    /**
+     * 所有地址信息列表
+     * @param name
+     * @param userId
+     * @param page
+     * @param limit
+     * @param sort
+     * @param order
+     * @return
+     */
     public Map<String, Object> list(String name, String userId, Integer page, Integer limit,
                                     String sort, String order){
         Integer start = (page-1)*limit;
