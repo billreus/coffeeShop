@@ -6,6 +6,7 @@ import com.example.shop.mapper.StockMapper;
 import com.example.shop.model.CategoryEntity;
 import com.example.shop.model.GoodsEntity;
 import com.example.shop.model.StockEntity;
+import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -51,7 +52,7 @@ public class IndexService {
      * 首页显示
      * @return
      */
-    public Map<String, Object> index(){
+    public Map index(){
 
         List<GoodsEntity> goodsEntityList = caffeineService.getBanner();
         List<CategoryEntity> categoryEntityList = caffeineService.getChannel();
@@ -71,7 +72,7 @@ public class IndexService {
         data.put("channel", categoryEntityList);
         data.put("hotGoodsList", hotGoodsList);
         data.put("newGoodsList", newGoodsList);
-        return data;
+        return ShopUtil.ok(data);
     }
 
 

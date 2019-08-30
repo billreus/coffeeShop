@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.model.CategoryEntity;
+import com.example.shop.util.ShopUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,7 +27,7 @@ public class CategoryService {
      * @param id
      * @return
      */
-    public Map<String, Object> index(Integer id){
+    public Map index(Integer id){
         List<CategoryEntity> categoryList = categoryMapper.selectByLevel("L1");
 
         CategoryEntity currentCategory = null;
@@ -45,8 +46,7 @@ public class CategoryService {
         data.put("categoryList", categoryList);
         data.put("currentCategory", currentCategory);
         data.put("currentSubCategory", currentSubList);
-
-        return  data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -54,7 +54,7 @@ public class CategoryService {
      * @param id
      * @return
      */
-    public Map<String, Object> current(@NotNull Integer id){
+    public Map current(@NotNull Integer id){
 
         CategoryEntity currentCategory = categoryMapper.selectById(id);
         if(currentCategory == null){
@@ -65,8 +65,7 @@ public class CategoryService {
         Map<String, Object> data = new HashMap<>();
         data.put("currentCategory", currentCategory);
         data.put("currentSubCategory", currentSubList);
-
-        return data;
+        return ShopUtil.ok(data);
     }
 
 }

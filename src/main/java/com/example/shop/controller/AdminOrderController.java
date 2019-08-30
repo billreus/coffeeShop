@@ -38,14 +38,13 @@ public class AdminOrderController {
      * @return
      */
     @GetMapping("/list")
-    public String list(String userId, String orderSn,
+    public Map list(String userId, String orderSn,
                        @RequestParam(required = false) List<Integer> orderStatusArray,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10")Integer limit,
                        @RequestParam(defaultValue = "add_time") String sort,
                        @RequestParam(defaultValue = "desc") String order){
-        Map<String, Object> data = adminOrderService.list(userId, orderSn, orderStatusArray, page, limit, sort, order);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return adminOrderService.list(userId, orderSn, orderStatusArray, page, limit, sort, order);
     }
 
     /**
@@ -54,9 +53,8 @@ public class AdminOrderController {
      * @return
      */
     @GetMapping("/detail")
-    public String detail(Integer id){
-        Map<String, Object> data = adminOrderService.detail(id);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map detail(Integer id){
+        return adminOrderService.detail(id);
     }
 
     /**
@@ -65,10 +63,9 @@ public class AdminOrderController {
      * @return
      */
     @PostMapping("/ship")
-    public String ship(@RequestBody String body){
+    public Map ship(@RequestBody String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
-        adminOrderService.ship(orderId);
-        return ShopUtil.getJSONString(0, "成功");
+        return adminOrderService.ship(orderId);
     }
 
     /**
@@ -77,10 +74,9 @@ public class AdminOrderController {
      * @return
      */
     @PostMapping("/refund")
-    public String refund(@RequestBody String body){
+    public Map refund(@RequestBody String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         Integer refundMoney = JacksonUtil.parseInteger(body, "refundMoney");
-        adminOrderService.refund(orderId, refundMoney);
-        return ShopUtil.getJSONString(0, "成功");
+        return adminOrderService.refund(orderId, refundMoney);
     }
 }

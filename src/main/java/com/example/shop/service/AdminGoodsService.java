@@ -5,6 +5,7 @@ import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.mapper.GoodsMapper;
 import com.example.shop.mapper.StockMapper;
 import com.example.shop.model.*;
+import com.example.shop.util.ShopUtil;
 import com.example.shop.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class AdminGoodsService {
      * @param order
      * @return
      */
-    public Map<String, Object> list(String goodsId, String name, Integer page, Integer limit,
+    public Map list(String goodsId, String name, Integer page, Integer limit,
                                     String sort, String order){
         long count = goodsMapper.findSaleCount();
         Integer start = (page-1)*limit;
@@ -80,16 +81,17 @@ public class AdminGoodsService {
         data.put("page", page);
         data.put("limit", limit);
         data.put("pages", count/limit);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
      * 商品删除
      * @param goodsEntity
      */
-    public void delete(GoodsEntity goodsEntity){
+    public Map delete(GoodsEntity goodsEntity){
         Integer goodsId = goodsEntity.getId();
         goodsMapper.deleted(goodsId);
+        return ShopUtil.ok();
     }
 
     /**
@@ -97,7 +99,7 @@ public class AdminGoodsService {
      * @param id
      * @return
      */
-    public Map<String, Object> detail(Integer id){
+    public Map detail(Integer id){
         GoodsEntity goodsEntity = goodsMapper.selectById(id);
         List<AttributeEntity> attributeEntityList = attributeMapper.selectByGoodsId(id);
         StockEntity stockEntity = stockMapper.selectByGoodsId(id);
@@ -117,10 +119,10 @@ public class AdminGoodsService {
         data.put("products",stockEntityList);
         data.put("attributes", attributeEntityList);
         data.put("categoryIds", categoryIds);
-        return data;
+        return ShopUtil.ok(data);
     }
 
-    public Map<String, Object> list2(){
+    public Map list2(){
         List<CategoryEntity> l1List = categoryMapper.selectByLevel("L1");
         List<CateVoEntity> cateVoEntityList = new ArrayList<>(l1List.size());
 
@@ -142,7 +144,7 @@ public class AdminGoodsService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("categoryList", cateVoEntityList);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -150,7 +152,7 @@ public class AdminGoodsService {
      * @param goodsUpdateEntity
      */
     @Transactional(rollbackFor = Exception.class)
-    public void update(GoodsUpdateEntity goodsUpdateEntity){
+    public Map update(GoodsUpdateEntity goodsUpdateEntity){
         GoodsEntity goods = goodsUpdateEntity.getGoods();
         AttributeEntity[] attributes = goodsUpdateEntity.getAttributes();
         StockEntity[] stock = goodsUpdateEntity.getProducts();
@@ -176,6 +178,7 @@ public class AdminGoodsService {
                 attributeMapper.insert(attributeEntity);
             }
         }
+        return ShopUtil.ok();
     }
 
     /**
@@ -183,7 +186,7 @@ public class AdminGoodsService {
      * @param goodsUpdateEntity
      */
     @Transactional(rollbackFor = Exception.class)
-    public void create(GoodsUpdateEntity goodsUpdateEntity){
+    public Map create(GoodsUpdateEntity goodsUpdateEntity){
         GoodsEntity goods = goodsUpdateEntity.getGoods();
         AttributeEntity[] attributes = goodsUpdateEntity.getAttributes();
         StockEntity[] stock = goodsUpdateEntity.getProducts();
@@ -202,5 +205,6 @@ public class AdminGoodsService {
             attributeEntity.setGoodsId(goodsId);
             attributeMapper.insert(attributeEntity);
         }
+        return ShopUtil.ok();
     }
 }

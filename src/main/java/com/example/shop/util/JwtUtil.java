@@ -8,7 +8,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import java.rmi.MarshalledObject;
 import java.util.*;
 
 /**
@@ -87,9 +86,8 @@ public class JwtUtil {
             Claim claim = claims.get("userId");
             return claim.asInt();
         } catch (JWTVerificationException exception){
-
+            exception.printStackTrace();
         }
-
         return 0;
     }
 
@@ -108,9 +106,7 @@ public class JwtUtil {
         if(date == null){
             date = new Date();
         }
-
         Calendar cal = new GregorianCalendar();
-
         cal.setTime(date);
         if(year != 0){
             cal.add(Calendar.YEAR, year);

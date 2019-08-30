@@ -35,13 +35,12 @@ public class AdminGoodsController {
      * @return
      */
     @GetMapping("/list")
-    public String list(String goodsSn, String name,
+    public Map list(String goodsSn, String name,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10")Integer limit,
                        @RequestParam(defaultValue = "add_time") String sort,
                        @RequestParam(defaultValue = "desc") String order){
-        Map<String, Object> data = adminGoodsService.list(goodsSn, name, page, limit, sort, order);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return adminGoodsService.list(goodsSn, name, page, limit, sort, order);
     }
 
     /**
@@ -50,9 +49,8 @@ public class AdminGoodsController {
      * @return
      */
     @PostMapping("/delete")
-    public String delete(@RequestBody GoodsEntity goodsEntity){
-        adminGoodsService.delete(goodsEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map delete(@RequestBody GoodsEntity goodsEntity){
+        return adminGoodsService.delete(goodsEntity);
     }
 
     /**
@@ -61,9 +59,8 @@ public class AdminGoodsController {
      * @return
      */
     @GetMapping("/detail")
-    public String detail(Integer id){
-        Map<String, Object> data = adminGoodsService.detail(id);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map detail(Integer id){
+        return adminGoodsService.detail(id);
     }
 
     /**
@@ -71,9 +68,8 @@ public class AdminGoodsController {
      * @return
      */
     @GetMapping("/catAndBrand")
-    public String list2(){
-        Map<String, Object> data = adminGoodsService.list2();
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map list2(){
+        return adminGoodsService.list2();
     }
 
     /**
@@ -82,9 +78,8 @@ public class AdminGoodsController {
      * @return
      */
     @PostMapping("/update")
-    public String update(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
-        adminGoodsService.update(goodsUpdateEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map update(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
+        return adminGoodsService.update(goodsUpdateEntity);
     }
 
     /**
@@ -93,8 +88,7 @@ public class AdminGoodsController {
      * @return
      */
     @PostMapping("/create")
-    public String create(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
-        adminGoodsService.create(goodsUpdateEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map create(@RequestBody GoodsUpdateEntity goodsUpdateEntity){
+        return adminGoodsService.create(goodsUpdateEntity);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import cn.hutool.crypto.SecureUtil;
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
 import com.example.shop.mq.DelayedSender;
@@ -16,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 订单
@@ -104,7 +102,7 @@ public class OrderService {
      * @param showType
      * @return
      */
-    public Object list(Integer userId, Integer showType, Integer page, Integer limit){
+    public Map list(Integer userId, Integer showType, Integer page, Integer limit){
         List<OrderEntity> orderList = null;
         if(showType.equals(0)){
             orderList = orderMapper.selectByUserId(userId);
@@ -132,7 +130,7 @@ public class OrderService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("list", orderMapList);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -141,7 +139,7 @@ public class OrderService {
      * @param orderId
      * @return
      */
-    public Map<String, Object> detail(Integer userId, Integer orderId){
+    public Map detail(Integer userId, Integer orderId){
         OrderEntity order = orderMapper.selectById(orderId);
         Integer status = order.getOrderStatus();
         Map<String, Object> orderDetail = new HashMap<>();
@@ -164,7 +162,7 @@ public class OrderService {
         Map<String, Object> res = new HashMap<>();
         res.put("orderInfo", orderDetail);
         res.put("orderGoods", orderGoodsList);
-        return res;
+        return ShopUtil.ok(res);
     }
 
     /**
@@ -174,7 +172,7 @@ public class OrderService {
      * @return
      */
     @Transactional
-    public Map<String, Object> submit(Integer userId, String body){
+    public Map submit(Integer userId, String body){
         Integer cartId = JacksonUtil.parseInteger(body, "cartId");
         Integer addressId = JacksonUtil.parseInteger(body, "addressId");
         String message = JacksonUtil.parseString(body, "message");
@@ -241,7 +239,7 @@ public class OrderService {
         //订单
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUserId(userId);
-        orderEntity.setOrderSn(CharUtil.getRandomNum(8));
+        orderEntity.setOrderSn(String.valueOf(UUID.randomUUID()));
         orderEntity.setOrderStatus(OrderUtil.STATUS_CREATE);
         orderEntity.setAddTime(TimeUtil.createTime());
         orderEntity.setConsignee(address.getName());
@@ -274,7 +272,7 @@ public class OrderService {
         //未付款订单延时队列
         sender.send(orderId);
         data.put("orderId", orderId);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -283,7 +281,7 @@ public class OrderService {
      * @param body
      */
     @Transactional(rollbackFor = Exception.class)
-    public void cancel(Integer userId, String body){
+    public Map cancel(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_CANCEL);
         List<GoodsOrderEntity> goodsOrderEntity = goodsOrderMapper.selectByOrderId(orderId);
@@ -298,6 +296,7 @@ public class OrderService {
             stockEntity.setSaleCount(backSaleCount);
             redisTemplate.boundHashOps(key).put(stockEntity.getGoodsId(), stockEntity);
         }
+        return ShopUtil.ok();
     }
 
     /**
@@ -305,12 +304,14 @@ public class OrderService {
      * @param userId
      * @param body
      */
-    public void delete(Integer userId, String body){
+    public Map delete(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.delete(orderId);
+        return ShopUtil.ok();
     }
 
-    public void refund(Integer userId, String body){
+    @Transactional
+    public Map refund(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);
         List<GoodsOrderEntity> goodsOrderEntity = goodsOrderMapper.selectByOrderId(orderId);
@@ -325,6 +326,7 @@ public class OrderService {
             stockEntity.setSaleCount(backSaleCount);
             redisTemplate.boundHashOps(key).put(stockEntity.getGoodsId(), stockEntity);
         }
+        return ShopUtil.ok();
     }
 
     /**
@@ -332,10 +334,10 @@ public class OrderService {
      * @param userId
      * @param body
      */
-    public void prepay(Integer userId, String body){
+    public Map prepay(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_WAIT);
-
+        return ShopUtil.ok();
     }
 
     /**
@@ -343,7 +345,7 @@ public class OrderService {
      * @param userId
      * @param body
      */
-    public void confirm(Integer userId, String body){
+    public Map confirm(Integer userId, String body){
         Integer orderId = JacksonUtil.parseInteger(body, "orderId");
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_COMMENT);
         BigDecimal actualPrice = orderMapper.selectById(orderId).getActualPrice();
@@ -361,6 +363,7 @@ public class OrderService {
             BigDecimal setIntegral = currentIntegral.add(actualPrice);
             integralMapper.updateByUserId(userId, actualPrice, setIntegral);
         }
+        return ShopUtil.ok();
     }
 
     /**
@@ -385,22 +388,22 @@ public class OrderService {
     public Object comment(Integer userId, String body){
         Integer orderGoodsId = JacksonUtil.parseInteger(body, "orderGoodsId");
         if(orderGoodsId == null){
-            return ShopUtil.getJSONString(401, "no orderGoodsId");
+            return ShopUtil.fail(401, "no orderGoodsId");
         }
         GoodsOrderEntity goodsOrderEntity = goodsOrderMapper.selectById(orderGoodsId);
         Integer orderId = goodsOrderEntity.getOrderId();
         OrderEntity order = orderMapper.selectById(orderId);
         Integer commentId = goodsOrderEntity.getComment();
         if(commentId == -1){
-            return ShopUtil.getJSONString(401, "评论过期");
+            return ShopUtil.fail(401, "评论过期");
         }
         if (commentId != 0) {
-            return ShopUtil.getJSONString(401, "已论过");
+            return ShopUtil.fail(401, "已论过");
         }
         String content = JacksonUtil.parseString(body, "content");
         Integer star = JacksonUtil.parseInteger(body, "star");
         if (star == null || star < 0 || star > 5) {
-            return ShopUtil.getJSONString(401, "参数错误");
+            return ShopUtil.fail(401, "参数错误");
         }
         Boolean hasPicture = JacksonUtil.parseBoolean(body, "hasPicture");
         // 1. 创建评价
@@ -415,6 +418,6 @@ public class OrderService {
         goodsOrderEntity.setComment(comment.getId());
         goodsOrderMapper.updateComment(goodsOrderEntity);
 
-        return ShopUtil.getJSONString(0, "成功");
+        return ShopUtil.ok();
     }
 }

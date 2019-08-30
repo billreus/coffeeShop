@@ -359,6 +359,7 @@ export default {
                 title: '成功',
                 message: '创建优惠券成功'
               })
+              this.getList()
             })
             .catch(response => {
               this.$notify.error({
@@ -398,8 +399,9 @@ export default {
               this.dialogFormVisible = false
               this.$notify.success({
                 title: '成功',
-                message: '更新优惠券成功'
+                message: '更新积分规则成功'
               })
+              this.getList()
             })
             .catch(response => {
               this.$notify.error({

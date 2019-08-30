@@ -29,7 +29,7 @@
 
       <el-table-column align="center" label="支付金额" prop="actualPrice"/>
 
-      <el-table-column align="center" label="支付时间" prop="payTime"/>
+      <el-table-column align="center" label="创建时间" prop="addTime"/>
 
       <!--<el-table-column align="center" label="物流单号" prop="shipSn"/>
 
@@ -143,9 +143,10 @@ const statusMap = {
   1: '未付款',
   2: '待发货',
   3: '待收货',
-  4: '已完成',
+  4: '待评论',
   5: '已取消',
-  6: '已退款'
+  6: '已退款',
+  7: '已完成'
 }
 
 export default {

@@ -37,9 +37,8 @@ public class CartController {
      * @return
      */
     @GetMapping("goodscount")
-    public String goodCount(@LoginUser Integer userId){
-        int goodCount = cartService.count(userId);
-        return ShopUtil.getJSONString(0, "成功读取商品数", goodCount);
+    public Map goodCount(@LoginUser Integer userId){
+        return cartService.count(userId);
     }
 
     /**
@@ -48,9 +47,8 @@ public class CartController {
      * @return
      */
     @GetMapping("index")
-    public String index(@LoginUser Integer userId){
-        Map<String, Object> data = cartService.index(userId);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map index(@LoginUser Integer userId){
+        return cartService.index(userId);
     }
 
     /**
@@ -60,16 +58,11 @@ public class CartController {
      * @return
      */
     @PostMapping("update")
-    public String update(@LoginUser Integer userId, @RequestBody CartEntity cart){
+    public Map update(@LoginUser Integer userId, @RequestBody CartEntity cart){
         if(cart == null){
-            return ShopUtil.getJSONString(401, "参数不对");
+            return ShopUtil.fail(401, "number参数不对");
         }
-        Map<String, Object> res = cartService.update(cart);
-        if(res.containsKey("成功")){
-            return ShopUtil.getJSONString(0, "成功");
-        }else {
-            return ShopUtil.getJSONString(505, "错误");
-        }
+        return cartService.update(cart);
     }
 
     /**
@@ -79,21 +72,20 @@ public class CartController {
      * @return
      */
     @PostMapping("checked")
-    public String checked(@LoginUser Integer userId, @RequestBody String body){
+    public Map checked(@LoginUser Integer userId, @RequestBody String body){
         if(body == null){
-            return ShopUtil.getJSONString(401, "参数不对");
+            return ShopUtil.fail(401, "参数不对");
         }
         List<Integer> checkedList = JacksonUtil.parseIntegerList(body, "goodsId");
         if(checkedList == null){
-            return ShopUtil.getJSONString(401, "错误");
+            return ShopUtil.fail(401, "参数不对");
         }
         Integer checkValue = JacksonUtil.parseInteger(body, "isChecked");
         if(checkValue == null){
-            return ShopUtil.getJSONString(401, "错误");
+            return ShopUtil.fail(401, "参数不对");
         }
         Boolean isChecked = (checkValue == 1);
-        cartService.checked(checkedList, userId, isChecked);
-        return index(userId);
+        return cartService.checked(checkedList, userId, isChecked);
     }
 
     /**
@@ -103,17 +95,16 @@ public class CartController {
      * @return
      */
     @PostMapping("delete")
-    public String delete(@LoginUser Integer userId, @RequestBody String body){
+    public Map delete(@LoginUser Integer userId, @RequestBody String body){
         if(body == null){
-            return ShopUtil.getJSONString(401, "参数不对");
+            return ShopUtil.fail(401, "参数不对");
         }
 
         List<Integer> deleteList = JacksonUtil.parseIntegerList(body, "goodsId");
         if(deleteList == null){
-            return ShopUtil.getJSONString(401, "错误");
+            return ShopUtil.fail(401, "参数不对");
         }
-        cartService.delete(deleteList, userId);
-        return index(userId);
+        return cartService.delete(deleteList, userId);
     }
 
     /**
@@ -122,16 +113,11 @@ public class CartController {
      * @return
      */
     @PostMapping("add")
-    public Object add(@LoginUser Integer userId, @RequestBody CartEntity cart){
+    public Map add(@LoginUser Integer userId, @RequestBody CartEntity cart){
         if(cart == null || userId == null){
-            return ShopUtil.getJSONString(401, "参数不对");
+            return ShopUtil.fail(401, "参数不对");
         }
-        String res = cartService.add(userId, cart);
-        if( "success".equals(res)){
-            return goodCount(userId);
-        }else {
-            return ShopUtil.getJSONString(402, "库存和商品错误");
-        }
+        return cartService.add(userId, cart);
     }
 
     /**
@@ -142,14 +128,8 @@ public class CartController {
      * @return
      */
     @GetMapping("checkout")
-    public String checkout(@LoginUser Integer userId, Integer cartId, Integer addressId, Integer couponId){
-        Map<String, Object> data = new HashMap<>();
-        data = cartService.checkout(userId, cartId, addressId, couponId);
-        if(data == null){
-            return ShopUtil.getJSONString(401, "参数错误");
-        }else {
-            return ShopUtil.getJSONString(0, "成功", data);
-        }
+    public Map checkout(@LoginUser Integer userId, Integer cartId, Integer addressId, Integer couponId){
+        return cartService.checkout(userId, cartId, addressId, couponId);
     }
 
     /**
@@ -160,15 +140,15 @@ public class CartController {
      * @return
      */
     @PostMapping("fastadd")
-    public String fastAdd(@LoginUser Integer userId, @RequestBody CartEntity cartEntity){
+    public Map fastAdd(@LoginUser Integer userId, @RequestBody CartEntity cartEntity){
         if(userId == null || cartEntity == null){
-            return ShopUtil.getJSONString(401, "参数错误");
+            return ShopUtil.fail(401, "参数错误");
         }
         Integer data = cartService.fastAdd(userId, cartEntity);
         if(data == 0){
-            return ShopUtil.getJSONString(402, "参数错误");
+            return ShopUtil.fail(402, "参数错误");
         }else {
-            return ShopUtil.getJSONString(0, "成功", data);
+            return ShopUtil.ok(data);
         }
     }
 }

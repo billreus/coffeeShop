@@ -3,6 +3,7 @@ package com.example.shop.service;
 import com.example.shop.mapper.CategoryMapper;
 import com.example.shop.model.AdminCategoryEntity;
 import com.example.shop.model.CategoryEntity;
+import com.example.shop.util.ShopUtil;
 import com.example.shop.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class AdminCategoryService {
      * 类目显示
      * @return
      */
-    public Map<String, Object> list() {
+    public Map list() {
         List<AdminCategoryEntity> adminCategoryList = new ArrayList<>();
 
         List<CategoryEntity> categoryEntityList = categoryMapper.selectByPid(0);
@@ -62,14 +63,14 @@ public class AdminCategoryService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("list", adminCategoryList);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
      * 二级选择器信息
      * @return
      */
-    public Map<String, Object> categoryL1(){
+    public Map categoryL1(){
         List<CategoryEntity> categoryEntityL1 = categoryMapper.selectByLevel("L1");
         List<Map<String, Object>> list = new ArrayList<>(categoryEntityL1.size());
         for(CategoryEntity categoryEntity : categoryEntityL1){
@@ -80,33 +81,36 @@ public class AdminCategoryService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("list", list);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
      * 添加类目
      * @param categoryEntity
      */
-    public void create(CategoryEntity categoryEntity){
+    public Map create(CategoryEntity categoryEntity){
         categoryEntity.setAddTime(TimeUtil.createTime());
         categoryMapper.insert(categoryEntity);
+        return ShopUtil.ok(categoryEntity);
     }
 
     /**
      * 删除类目
      * @param categoryEntity
      */
-    public void delete(CategoryEntity categoryEntity){
+    public Map delete(CategoryEntity categoryEntity){
         Integer id = categoryEntity.getId();
         categoryMapper.deletedById(id);
+        return ShopUtil.ok();
     }
 
     /**
      * 更新类目
      * @param categoryEntity
      */
-    public void update(CategoryEntity categoryEntity){
+    public Map update(CategoryEntity categoryEntity){
         categoryEntity.setUpdateTime(TimeUtil.createTime());
         categoryMapper.updateById(categoryEntity);
+        return ShopUtil.ok();
     }
 }

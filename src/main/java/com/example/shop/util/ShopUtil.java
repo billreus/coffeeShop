@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,91 +15,52 @@ import java.util.Map;
 * @date 15:47 2019/8/27
 **/
 public class ShopUtil {
+
     /**
-     * 生成MD5
-     * @param key
+     * 成功
      * @return
      */
-    public static String MD5(String key) {
-        char hexDigits[] = {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-        };
-        try {
-            byte[] btInput = key.getBytes();
-            // 获得MD5摘要算法的 MessageDigest 对象
-            MessageDigest mdInst = MessageDigest.getInstance("MD5");
-            // 使用指定的字节更新摘要
-            mdInst.update(btInput);
-            // 获得密文
-            byte[] md = mdInst.digest();
-            // 把密文转换成十六进制的字符串形式
-            int j = md.length;
-            char str[] = new char[j * 2];
-            int k = 0;
-            for (int i = 0; i < j; i++) {
-                byte byte0 = md[i];
-                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-                str[k++] = hexDigits[byte0 & 0xf];
-            }
-            return new String(str);
-        } catch (Exception e) {
-            // logger.error("生成MD5失败", e);
-            return null;
-        }
+    public static Map ok(){
+        Map<String, Object> res = new HashMap<>();
+        res.put("errno", 0);
+        res.put("errmsg", "成功");
+        return res;
+    }
+    /**
+     * 失败
+     * @return
+     */
+    public static Map fail(){
+        Map<String, Object> res = new HashMap<>();
+        res.put("errno", -1);
+        res.put("errmsg", "错误");
+        return res;
     }
 
     /**
-     * 字符串转json
-     * @param errno
-     * @return
-     */
-    public static String getJSONString(int errno) {
-        JSONObject json = new JSONObject();
-        json.put("errno", errno);
-        return json.toJSONString();
-    }
-
-    /**
-     * 字符串转json
-     * @param errno
-     * @param errmsg
-     * @return
-     */
-    public static String getJSONString(int errno, String errmsg) {
-        JSONObject json = new JSONObject();
-        json.put("errno", errno);
-        json.put("errmsg", errmsg);
-        return json.toJSONString();
-    }
-
-    /**
-     * 字符串转json
-     * @param errno
-     * @param errmsg
+     * 成功返回数据
      * @param data
      * @return
      */
-    public static String getJSONString(int errno, String errmsg, Object data) {
-        JSONObject json = new JSONObject();
-        json.put("errno", errno);
-        json.put("errmsg", errmsg);
-        json.put("data", data);
-        //分类列表有循环引用，不关闭会传输JSON会出现$ref
-        return JSON.toJSONString(json, SerializerFeature.DisableCircularReferenceDetect);
+    public static Map ok(Object data){
+        Map<String, Object> res = new HashMap<>();
+        res.put("errno", 0);
+        res.put("errmsg", "成功");
+        res.put("data", data);
+        return res;
     }
 
     /**
-     * 字符串转json
+     * 自定义失败码
      * @param errno
-     * @param map
+     * @param errmsg
      * @return
      */
-    public static String getJSONString(int errno, Map<String, Object> map) {
-        JSONObject json = new JSONObject();
-        json.put("errno", errno);
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            json.put(entry.getKey(), entry.getValue());
-        }
-        return json.toJSONString();
+    public static Map fail(int errno, String errmsg){
+        Map<String, Object> res = new HashMap<>();
+        res.put("errno", errno);
+        res.put("errmsg", errmsg);
+        return res;
     }
+
 }

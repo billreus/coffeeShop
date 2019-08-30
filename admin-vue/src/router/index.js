@@ -286,7 +286,7 @@ export const asyncRouterMap = [
     alwaysShow: true,
     name: 'promotionManage',
     meta: {
-      title: '推广管理',
+      title: '积分管理',
       icon: 'chart'
     },
     children: [
@@ -306,7 +306,7 @@ export const asyncRouterMap = [
         name: 'coupon',
         meta: {
           perms: ['GET /admin/coupon/list', 'POST /admin/coupon/create', 'POST /admin/coupon/update', 'POST /admin/coupon/delete'],
-          title: '优惠券管理',
+          title: '积分规则',
           noCache: true
         }
       }
@@ -376,113 +376,113 @@ export const asyncRouterMap = [
     ]
   },
 
-  {
-    path: '/sys',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'sysManage',
-    meta: {
-      title: '系统管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'admin',
-        component: () => import('@/views/sys/admin'),
-        name: 'admin',
-        meta: {
-          perms: ['GET /admin/admin/list', 'POST /admin/admin/create', 'POST /admin/admin/update', 'POST /admin/admin/delete'],
-          title: '管理员',
-          noCache: true
-        }
-      },
-      {
-        path: 'log',
-        component: () => import('@/views/sys/log'),
-        name: 'log',
-        meta: {
-          perms: ['GET /admin/log/list'],
-          title: '操作日志',
-          noCache: true
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/sys/role'),
-        name: 'role',
-        meta: {
-          perms: ['GET /admin/role/list', 'POST /admin/role/create', 'POST /admin/role/update', 'POST /admin/role/delete', 'GET /admin/role/permissions', 'POST /admin/role/permissions'],
-          title: '角色管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'os',
-        component: () => import('@/views/sys/os'),
-        name: 'os',
-        meta: {
-          perms: ['GET /admin/storage/list', 'POST /admin/storage/create', 'POST /admin/storage/update', 'POST /admin/storage/delete'],
-          title: '对象存储',
-          noCache: true
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/sys',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   alwaysShow: true,
+  //   name: 'sysManage',
+  //   meta: {
+  //     title: '系统管理',
+  //     icon: 'chart'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'admin',
+  //       component: () => import('@/views/sys/admin'),
+  //       name: 'admin',
+  //       meta: {
+  //         perms: ['GET /admin/admin/list', 'POST /admin/admin/create', 'POST /admin/admin/update', 'POST /admin/admin/delete'],
+  //         title: '管理员',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'log',
+  //       component: () => import('@/views/sys/log'),
+  //       name: 'log',
+  //       meta: {
+  //         perms: ['GET /admin/log/list'],
+  //         title: '操作日志',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'role',
+  //       component: () => import('@/views/sys/role'),
+  //       name: 'role',
+  //       meta: {
+  //         perms: ['GET /admin/role/list', 'POST /admin/role/create', 'POST /admin/role/update', 'POST /admin/role/delete', 'GET /admin/role/permissions', 'POST /admin/role/permissions'],
+  //         title: '角色管理',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'os',
+  //       component: () => import('@/views/sys/os'),
+  //       name: 'os',
+  //       meta: {
+  //         perms: ['GET /admin/storage/list', 'POST /admin/storage/create', 'POST /admin/storage/update', 'POST /admin/storage/delete'],
+  //         title: '对象存储',
+  //         noCache: true
+  //       }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/config',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'configManage',
-    meta: {
-      title: '配置管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'mall',
-        component: () => import('@/views/config/mall'),
-        name: 'configMall',
-        meta: {
-          perms: ['GET /admin/config/mall', 'POST /admin/config/mall'],
-          title: '商场配置',
-          noCache: true
-        }
-      },
-      {
-        path: 'express',
-        component: () => import('@/views/config/express'),
-        name: 'configExpress',
-        meta: {
-          perms: ['GET /admin/config/express', 'POST /admin/config/express'],
-          title: '运费配置',
-          noCache: true
-        }
-      },
-      {
-        path: 'order',
-        component: () => import('@/views/config/order'),
-        name: 'configOrder',
-        meta: {
-          perms: ['GET /admin/config/order', 'POST /admin/config/order'],
-          title: '订单配置',
-          noCache: true
-        }
-      },
-      {
-        path: 'wx',
-        component: () => import('@/views/config/wx'),
-        name: 'configWx',
-        meta: {
-          perms: ['GET /admin/config/wx', 'POST /admin/config/wx'],
-          title: '小程序配置',
-          noCache: true
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/config',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   alwaysShow: true,
+  //   name: 'configManage',
+  //   meta: {
+  //     title: '配置管理',
+  //     icon: 'chart'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'mall',
+  //       component: () => import('@/views/config/mall'),
+  //       name: 'configMall',
+  //       meta: {
+  //         perms: ['GET /admin/config/mall', 'POST /admin/config/mall'],
+  //         title: '商场配置',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'express',
+  //       component: () => import('@/views/config/express'),
+  //       name: 'configExpress',
+  //       meta: {
+  //         perms: ['GET /admin/config/express', 'POST /admin/config/express'],
+  //         title: '运费配置',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'order',
+  //       component: () => import('@/views/config/order'),
+  //       name: 'configOrder',
+  //       meta: {
+  //         perms: ['GET /admin/config/order', 'POST /admin/config/order'],
+  //         title: '订单配置',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'wx',
+  //       component: () => import('@/views/config/wx'),
+  //       name: 'configWx',
+  //       meta: {
+  //         perms: ['GET /admin/config/wx', 'POST /admin/config/wx'],
+  //         title: '小程序配置',
+  //         noCache: true
+  //       }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/stat',

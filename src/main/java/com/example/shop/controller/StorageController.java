@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 图片存储
@@ -33,10 +34,10 @@ public class StorageController {
      * @throws IOException
      */
     @PostMapping("/create")
-    public String create(@RequestParam("file")MultipartFile file)throws IOException{
+    public Map create(@RequestParam("file")MultipartFile file)throws IOException{
         String originalFilename = file.getOriginalFilename();
         StorageEntity storageEntity = storageService.create(file.getInputStream(), file.getSize(),
                 file.getContentType(), originalFilename);
-        return ShopUtil.getJSONString(0, "成功", storageEntity);
+        return ShopUtil.ok(storageEntity);
     }
 }

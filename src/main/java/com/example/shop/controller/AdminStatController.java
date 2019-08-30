@@ -31,13 +31,13 @@ public class AdminStatController {
      * @return
      */
     @GetMapping("/user")
-    public String statUser(){
+    public Map statUser(){
         List<Map> rows = adminStatService.statUser();
         String[] columns = new String[]{"day", "users"};
         AdminStatEntity stat = new AdminStatEntity();
         stat.setColumns(columns);
         stat.setRows(rows);
-        return ShopUtil.getJSONString(0, "成功", stat);
+        return ShopUtil.ok(stat);
     }
 
     /**
@@ -45,14 +45,13 @@ public class AdminStatController {
      * @return
      */
     @GetMapping("/order")
-    public String statOrder() {
+    public Map statOrder() {
         List<Map> rows = adminStatService.statOrder();
         String[] columns = new String[]{"day", "orders", "customers", "amount", "pcr"};
         AdminStatEntity stat = new AdminStatEntity();
         stat.setColumns(columns);
         stat.setRows(rows);
-
-        return ShopUtil.getJSONString(0, "成功", stat);
+        return ShopUtil.ok(stat);
     }
 
     /**
@@ -60,12 +59,12 @@ public class AdminStatController {
      * @return
      */
     @GetMapping("/goods")
-    public Object statGoods() {
+    public Map statGoods() {
         List<Map> rows = adminStatService.statGoods();
         String[] columns = new String[]{"day", "orders", "products", "amount"};
         AdminStatEntity stat = new AdminStatEntity();
         stat.setColumns(columns);
         stat.setRows(rows);
-        return ShopUtil.getJSONString(0, "成功", stat);
+        return ShopUtil.ok(stat);
     }
 }

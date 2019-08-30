@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import cn.hutool.crypto.SecureUtil;
 import com.example.shop.mapper.AdminLoginMapper;
 import com.example.shop.model.AdminEntity;
 import com.example.shop.util.ShopUtil;
@@ -31,25 +32,20 @@ public class AdminLoginService {
      * @param password
      * @return
      */
-    public Map<String, Object> login(String username, String password){
+    public Map login(String username, String password){
         Map<String, Object> data = new HashMap<>();
-
         if(username == null || username.length() == 0){
-            data.put("name", "用户名不能为空");
-            return data;
+            return ShopUtil.fail(402, "用户名不能为空");
         }
         if(password == null || password.length() == 0){
-            data.put("password", "密码不能为空");
-            return data;
+            return ShopUtil.fail(402, "密码不能为空");
         }
         AdminEntity adminEntity = adminLoginMapper.selectByUserName(username);
         if(adminEntity == null){
-            data.put("name", "用户不存在");
-            return data;
+            return ShopUtil.fail(402, "用户不存在");
         }
-        if(!ShopUtil.MD5(password).equals(adminEntity.getPassword())){
-            data.put("msgpwd", "密码不正确");
-            return data;
+        if(!SecureUtil.md5(password).equals(adminEntity.getPassword())){
+            return ShopUtil.fail(402, "密码不正确");
         }
 
         Map<String, Object> adminInfo = new HashMap<String, Object>();
@@ -58,7 +54,7 @@ public class AdminLoginService {
         String token = UserToken.generateToken(adminEntity.getId());
         data.put("adminInfo", adminInfo);
         data.put("token", token);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -66,7 +62,7 @@ public class AdminLoginService {
      * @param userId
      * @return
      */
-    public Map<String, Object> info(Integer userId){
+    public Map info(Integer userId){
         Map<String, Object> data = new HashMap<>();
         AdminEntity adminEntity = adminLoginMapper.selectById(userId);
         data.put("name", adminEntity.getUsername());
@@ -75,6 +71,6 @@ public class AdminLoginService {
         perms.add("*");
         data.put("roles", 1);
         data.put("perms",perms);
-        return data;
+        return ShopUtil.ok(data);
     }
 }

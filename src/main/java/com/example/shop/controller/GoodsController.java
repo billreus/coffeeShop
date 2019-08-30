@@ -30,9 +30,9 @@ public class GoodsController {
      * @return
      */
     @GetMapping("count")
-    public String count(){
+    public Map count(){
         long saleCount = goodsService.count();
-        return ShopUtil.getJSONString(0, "成功", saleCount);
+        return ShopUtil.ok(saleCount);
     }
 
     /**
@@ -41,9 +41,8 @@ public class GoodsController {
      * @return
      */
     @GetMapping("category")
-    public String category(Integer id){
-        Map<String, Object> data = goodsService.category(id);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map category(Integer id){
+        return goodsService.category(id);
     }
 
     /**
@@ -54,10 +53,8 @@ public class GoodsController {
      * @return
      */
     @GetMapping("list")
-    public String list(Integer categoryId, Integer page, Integer limit){
-        //TODO 分页
-        Map<String, Object> data = goodsService.list(categoryId, page,limit);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map list(Integer categoryId, Integer page, Integer limit){
+        return goodsService.list(categoryId, page,limit);
     }
 
     /**
@@ -66,8 +63,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("detail")
-    public Object detail(Integer id){
-        Object data = goodsService.detail(id);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map detail(Integer id){
+        return goodsService.detail(id);
     }
 }

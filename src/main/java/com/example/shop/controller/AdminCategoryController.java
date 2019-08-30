@@ -30,9 +30,8 @@ public class AdminCategoryController {
      * @return
      */
     @GetMapping("/list")
-    public String list(){
-        Map<String, Object> data = adminCategoryService.list();
-        return ShopUtil.getJSONString(0, "成功",data);
+    public Map list(){
+        return adminCategoryService.list();
     }
 
     /**
@@ -40,35 +39,31 @@ public class AdminCategoryController {
      * @return
      */
     @GetMapping("/l1")
-    public String categoryL1(){
-        Map<String, Object> data = adminCategoryService.categoryL1();
-        return ShopUtil.getJSONString(0, "成功",data);
+    public Map categoryL1(){
+        return adminCategoryService.categoryL1();
     }
     /**
      * 添加类目
      * @param categoryEntity
      */
     @PostMapping("/create")
-    public String create(@RequestBody CategoryEntity categoryEntity){
-        adminCategoryService.create(categoryEntity);
-        return ShopUtil.getJSONString(0, "成功", categoryEntity);
+    public Map create(@RequestBody CategoryEntity categoryEntity){
+        return adminCategoryService.create(categoryEntity);
     }
     /**
      * 删除类目
      * @param categoryEntity
      */
     @PostMapping("/delete")
-    public String delete(@RequestBody CategoryEntity categoryEntity){
-        adminCategoryService.delete(categoryEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map delete(@RequestBody CategoryEntity categoryEntity){
+        return adminCategoryService.delete(categoryEntity);
     }
     /**
      * 更新类目
      * @param categoryEntity
      */
     @PostMapping("/update")
-    public String update(@RequestBody CategoryEntity categoryEntity){
-        adminCategoryService.update(categoryEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map update(@RequestBody CategoryEntity categoryEntity){
+        return adminCategoryService.update(categoryEntity);
     }
 }

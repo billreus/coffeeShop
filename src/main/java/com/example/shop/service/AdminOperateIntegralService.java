@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.OperateIntegralMapper;
 import com.example.shop.model.OperateIntegralEntity;
+import com.example.shop.util.ShopUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,7 +35,7 @@ public class AdminOperateIntegralService {
      * @param order
      * @return
      */
-    public Map<String, Object> list(Integer page, Integer limit, String sort, String order){
+    public Map list(Integer page, Integer limit, String sort, String order){
         List<OperateIntegralEntity> integralList = new ArrayList<>();
         long count = operateIntegralMapper.count();
         Integer start = (page-1)*limit;
@@ -46,7 +47,7 @@ public class AdminOperateIntegralService {
         data.put("page", page);
         data.put("limit", limit);
         data.put("pages", count/limit);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -54,8 +55,9 @@ public class AdminOperateIntegralService {
      * @param operateIntegralEntity
      * @return
      */
-    public void delete(OperateIntegralEntity operateIntegralEntity){
+    public Map delete(OperateIntegralEntity operateIntegralEntity){
         operateIntegralMapper.delete(operateIntegralEntity);
+        return ShopUtil.ok();
     }
 
     /**
@@ -63,8 +65,9 @@ public class AdminOperateIntegralService {
      * @param operateIntegralEntity
      * @return
      */
-    public void update(OperateIntegralEntity operateIntegralEntity){
+    public Map update(OperateIntegralEntity operateIntegralEntity){
         operateIntegralMapper.update(operateIntegralEntity);
+        return ShopUtil.ok();
     }
 
     /**
@@ -72,7 +75,8 @@ public class AdminOperateIntegralService {
      * @param operateIntegralEntity
      * @return
      */
-    public void create(OperateIntegralEntity operateIntegralEntity){
+    public Map create(OperateIntegralEntity operateIntegralEntity){
         operateIntegralMapper.insert(operateIntegralEntity);
+        return ShopUtil.ok();
     }
 }

@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.AddressMapper;
 import com.example.shop.model.AddressEntity;
+import com.example.shop.util.ShopUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,7 +35,7 @@ public class AdminAddressService {
      * @param order
      * @return
      */
-    public Map<String, Object> list(String name, String userId, Integer page, Integer limit,
+    public Map list(String name, String userId, Integer page, Integer limit,
                                     String sort, String order){
         Integer start = (page-1)*limit;
         long count = addressMapper.findAllCount();
@@ -46,7 +47,7 @@ public class AdminAddressService {
         data.put("page", page);
         data.put("limit", limit);
         data.put("pages", count/limit);
-        return data;
+        return ShopUtil.ok(data);
     }
 
 

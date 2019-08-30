@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.UserMapper;
 import com.example.shop.model.UserEntity;
+import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class AdminUserService {
      * @param order
      * @return
      */
-    public Map<String, Object> list(String username, String mobile, Integer page, Integer limit, String sort, String order){
+    public Map list(String username, String mobile, Integer page, Integer limit, String sort, String order){
 
         long count = userMapper.findAllCount();
         Integer start = (page-1)*limit;
@@ -52,14 +53,14 @@ public class AdminUserService {
         data.put("page", page);
         data.put("limit", limit);
         data.put("pages", count/limit);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
      * 会员启用禁用
      * @param id
      */
-    public void state(Integer id){
+    public Map state(Integer id){
         UserEntity userEntity = userMapper.selectById(id);
         if(userEntity.getStatus() == 0){
             userMapper.updateState(1, id);
@@ -67,6 +68,6 @@ public class AdminUserService {
         if(userEntity.getStatus() == 1){
             userMapper.updateState(0, id);
         }
-
+        return ShopUtil.ok();
     }
 }

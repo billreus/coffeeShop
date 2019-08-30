@@ -36,12 +36,11 @@ public class OrderController {
      * @return
      */
     @GetMapping("list")
-    public String list(@LoginUser Integer userId,
+    public Map list(@LoginUser Integer userId,
                        @RequestParam(defaultValue = "0") Integer showType,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit){
-        Object data = orderService.list(userId, showType, page, limit);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return orderService.list(userId, showType, page, limit);
     }
 
     /**
@@ -50,10 +49,8 @@ public class OrderController {
      * @return
      */
     @GetMapping("detail")
-    public String detail(@LoginUser Integer userId, Integer orderId){
-        Map<String, Object> data = new HashMap<>();
-        data = orderService.detail(userId, orderId);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map detail(@LoginUser Integer userId, Integer orderId){
+        return orderService.detail(userId, orderId);
     }
 
     /**
@@ -63,14 +60,8 @@ public class OrderController {
      * @return
      */
     @PostMapping("submit")
-    public String submit(@LoginUser Integer userId, @RequestBody String body){
-        Map<String, Object> data = new HashMap<>();
-        data = orderService.submit(userId, body);
-        if(data == null){
-            return ShopUtil.getJSONString(401, "参数失败");
-        }else{
-            return ShopUtil.getJSONString(0, "成功", data);
-        }
+    public Map submit(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.submit(userId, body);
     }
 
     /**
@@ -79,9 +70,8 @@ public class OrderController {
      * @return
      */
     @PostMapping("cancel")
-    public String cancel(@LoginUser Integer userId, @RequestBody String body){
-        orderService.cancel(userId, body);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map cancel(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.cancel(userId, body);
     }
 
     /**
@@ -90,9 +80,8 @@ public class OrderController {
      * @return
      */
     @PostMapping("delete")
-    public String delete(@LoginUser Integer userId, @RequestBody String body){
-        orderService.delete(userId, body);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map delete(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.delete(userId, body);
     }
 
     /**
@@ -101,9 +90,8 @@ public class OrderController {
      * @return
      */
     @PostMapping("refund")
-    public String refund(@LoginUser Integer userId, @RequestBody String body){
-        orderService.refund(userId, body);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map refund(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.refund(userId, body);
     }
 
     /**
@@ -112,9 +100,8 @@ public class OrderController {
      * @return
      */
     @PostMapping("prepay")
-    public String prepay(@LoginUser Integer userId, @RequestBody String body){
-        orderService.prepay(userId, body);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map prepay(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.prepay(userId, body);
     }
 
     /**
@@ -123,9 +110,8 @@ public class OrderController {
      * @return
      */
     @PostMapping("confirm")
-    public String confirm(@LoginUser Integer userId, @RequestBody String body){
-        orderService.confirm(userId, body);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map confirm(@LoginUser Integer userId, @RequestBody String body){
+        return orderService.confirm(userId, body);
     }
 
     /**
@@ -136,10 +122,10 @@ public class OrderController {
      * @return
      */
     @GetMapping("goods")
-    public String goods(@LoginUser Integer userId, Integer orderId, Integer goodsId){
+    public Map goods(@LoginUser Integer userId, Integer orderId, Integer goodsId){
 
         GoodsOrderEntity goodsOrderEntity = orderService.goods(userId, orderId, goodsId);
-        return ShopUtil.getJSONString(0, "成功", goodsOrderEntity);
+        return ShopUtil.ok(goodsOrderEntity);
     }
 
     /**

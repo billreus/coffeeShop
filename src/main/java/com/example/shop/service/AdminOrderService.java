@@ -3,6 +3,7 @@ package com.example.shop.service;
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
 import com.example.shop.util.OrderUtil;
+import com.example.shop.util.ShopUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +56,7 @@ public class AdminOrderService {
      * @param order
      * @return
      */
-    public Map<String, Object> list(String userId, String orderSn, List<Integer> orderStatusArray,
+    public Map list(String userId, String orderSn, List<Integer> orderStatusArray,
                                     Integer page, Integer limit, String sort, String order){
         List<OrderEntity> orderEntityList = new ArrayList<>();
         long count = orderMapper.count();
@@ -75,7 +76,7 @@ public class AdminOrderService {
         data.put("page", page);
         data.put("limit", limit);
         data.put("pages", count/limit);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -83,7 +84,7 @@ public class AdminOrderService {
      * @param id
      * @return
      */
-    public Map<String, Object> detail(Integer id){
+    public Map detail(Integer id){
         OrderEntity orderEntity = orderMapper.selectById(id);
         List<GoodsOrderEntity> goodsOrderEntityList = goodsOrderMapper.selectByOrderId(orderEntity.getId());
         UserEntity userEntity = userMapper.selectById(orderEntity.getUserId());
@@ -91,15 +92,16 @@ public class AdminOrderService {
         data.put("order", orderEntity);
         data.put("orderGoods", goodsOrderEntityList);
         data.put("user", userEntity);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
      * 发货
      * @param orderId
      */
-    public void ship(Integer orderId){
+    public Map ship(Integer orderId){
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_SHOP);
+        return ShopUtil.ok();
     }
 
     /**
@@ -108,7 +110,7 @@ public class AdminOrderService {
      * @param refundMoney
      */
     @Transactional(rollbackFor = Exception.class)
-    public void refund(Integer orderId, Integer refundMoney){
+    public Map refund(Integer orderId, Integer refundMoney){
         orderMapper.updateStatus(orderId, OrderUtil.STATUS_REFUND);
         OrderEntity orderEntity = orderMapper.selectById(orderId);
         Integer userId = orderEntity.getUserId();
@@ -118,6 +120,7 @@ public class AdminOrderService {
         BigDecimal currentIntegral = integralEntity.getCurrentIntegral();
         currentIntegral = currentIntegral.add(changeIntegral);
         integralMapper.updateByUserId(userId, changeIntegral, currentIntegral);
+        return ShopUtil.ok();
     }
 
 

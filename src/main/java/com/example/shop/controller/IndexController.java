@@ -35,8 +35,7 @@ public class IndexController {
      * @return
      */
     @GetMapping("/index")
-    public String index(@LoginUser Integer userId){
-        Map<String, Object> data =indexService.index();
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map index(@LoginUser Integer userId){
+        return indexService.index();
     }
 }

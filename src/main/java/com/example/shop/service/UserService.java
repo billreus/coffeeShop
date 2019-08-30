@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import cn.hutool.crypto.SecureUtil;
 import com.example.shop.mapper.IntegralMapper;
 import com.example.shop.mapper.UserMapper;
 import com.example.shop.model.IntegralEntity;
@@ -9,13 +10,10 @@ import com.example.shop.util.LevelUtil;
 import com.example.shop.util.ShopUtil;
 import com.example.shop.util.TimeUtil;
 import com.example.shop.util.UserToken;
-import org.apache.commons.io.input.TaggedInputStream;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +21,6 @@ import java.util.Map;
 * 用户业务层
 * @author liu
 * @date 15:19 2019/8/27
-* @param
-* @return
 **/
 @Service
 public class UserService {
@@ -46,24 +42,20 @@ public class UserService {
      * @param phone 手机号
      * @return
      */
-    public Map<String, Object> register(String username, String password, String phone, String openId){
+    public Map register(String username, String password, String phone, String openId){
         Map<String, Object> map = new HashMap<>();
         if(username == null || username.length() == 0){
-            map.put("name", "用户名不能为空");
-            return map;
+            return ShopUtil.fail(401,"用户名不能为空");
         }
         if(password == null || password.length() == 0){
-            map.put("password", "密码不能为空");
-            return map;
+            return ShopUtil.fail(401,"密码不能为空");
         }
         if(phone == null || phone.length() == 0){
-            map.put("phone", "手机号不能为空");
-            return map;
+            return ShopUtil.fail(401,"手机号不能为空");
         }
         UserEntity user = userMapper.selectByUserName(username);
         if(user != null){
-            map.put("name", "用户名已经被注册");
-            return map;
+            return ShopUtil.fail(401,"用户名已经被注册");
         }
 
         //UserEntity userEntity = userMapper.selectByOpenId(openId);
@@ -71,13 +63,12 @@ public class UserService {
 //            map.put("name", "用户已经注册");
 //            return map;
 //        }
-
         UserEntity userEntity = new UserEntity();
         userEntity.setWechatOpenid("");
         userEntity.setSessionKey("");
         userEntity.setUsername(username);
         userEntity.setMobile(phone);
-        userEntity.setPassword(ShopUtil.MD5(password));
+        userEntity.setPassword(SecureUtil.md5(password));
         userEntity.setNickname(username);
         userEntity.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
         userEntity.setLoginTime(TimeUtil.createTime());
@@ -89,7 +80,7 @@ public class UserService {
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("userInfo", userEntity);
-        return result;
+        return ShopUtil.ok(result);
     }
 
     /**
@@ -99,12 +90,12 @@ public class UserService {
      * @param userInfo
      * @return
      */
-    public Map<String, Object> loginByWeixin(String sessionKey, String openId, UserInfoEntity userInfo){
+    public Map loginByWeixin(String sessionKey, String openId, UserInfoEntity userInfo){
         UserEntity userEntity = userMapper.selectByOpenId(openId);
         if(userEntity == null){
             userEntity = new UserEntity();
             userEntity.setUsername(openId);
-            userEntity.setPassword(ShopUtil.MD5(openId));
+            userEntity.setPassword(SecureUtil.md5(openId));
             userEntity.setWechatOpenid(openId);
             userEntity.setMobile("");
             userEntity.setSessionKey(sessionKey);
@@ -121,7 +112,7 @@ public class UserService {
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("userInfo", userEntity);
-        return result;
+        return ShopUtil.ok(result);
     }
 
     /**
@@ -130,24 +121,20 @@ public class UserService {
      * @param password 密码
      * @return
      */
-    public Map<String, Object> login(String username, String password){
+    public Map login(String username, String password){
         Map<String, Object> map = new HashMap<>();
         if(username == null || username.length() == 0){
-            map.put("name", "用户名不能为空");
-            return map;
+            return ShopUtil.fail(401,"用户名不能为空");
         }
         if(password == null || password.length() == 0){
-            map.put("password", "密码不能为空");
-            return map;
+            return ShopUtil.fail(401,"用户名不能为空");
         }
         UserEntity user = userMapper.selectByUserName(username);
         if(user == null){
-            map.put("name", "用户不存在");
-            return map;
+            return ShopUtil.fail(401,"用户不存在");
         }
-        if(!ShopUtil.MD5(password).equals(user.getPassword())){
-            map.put("msgpwd", "密码不正确");
-            return map;
+        if(!SecureUtil.md5(password).equals(user.getPassword())){
+            return ShopUtil.fail(401,"密码不正确");
         }
 
         //更新登录状态
@@ -173,8 +160,7 @@ public class UserService {
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("userInfo", user);
-
-        return result;
+        return ShopUtil.ok(result);
     }
 
     /**
@@ -184,7 +170,7 @@ public class UserService {
      * @param mobile
      * @param nickname
      */
-    public void reset(Integer userId, String password, String mobile, String nickname){
+    public Map reset(Integer userId, String password, String mobile, String nickname){
         UserEntity userEntity = userMapper.selectById(userId);
         if(mobile != null){
             userEntity.setMobile(mobile);
@@ -199,5 +185,6 @@ public class UserService {
             userEntity.setUpdateTime(TimeUtil.createTime());
         }
         userMapper.update(userEntity);
+        return ShopUtil.ok();
     }
 }

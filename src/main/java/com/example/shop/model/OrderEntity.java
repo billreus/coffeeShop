@@ -1,6 +1,7 @@
 package com.example.shop.model;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
 * 订单表实体类

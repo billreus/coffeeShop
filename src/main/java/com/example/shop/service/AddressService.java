@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.AddressMapper;
 import com.example.shop.model.AddressEntity;
+import com.example.shop.util.ShopUtil;
 import com.example.shop.util.TimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +32,11 @@ public class AddressService {
      * @param userId
      * @return
      */
-    public Map<String, Object> list(Integer userId){
+    public Map list(Integer userId){
         List<AddressEntity> addressList = addressMapper.selectByUserId(userId);
         Map<String, Object> data = new HashMap<>();
         data.put("list", addressList);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -44,7 +45,7 @@ public class AddressService {
      * @param addressEntity
      * @return
      */
-    public int save(Integer userId, AddressEntity addressEntity){
+    public Map save(Integer userId, AddressEntity addressEntity){
         //如果地址是默认地址把该用户地址默认值全部清零
         if(addressEntity.isIsDefault()){
             addressMapper.updateDefault0ByUserId(userId);
@@ -60,7 +61,7 @@ public class AddressService {
             addressEntity.setUpdateTime(TimeUtil.createTime());
             addressMapper.update(addressEntity);
         }
-        return addressEntity.getId();
+        return ShopUtil.ok(addressEntity.getId());
     }
 
     /**
@@ -69,9 +70,9 @@ public class AddressService {
      * @param id
      * @return
      */
-    public Object detail(Integer userId, Integer id){
+    public Map detail(Integer userId, Integer id){
         AddressEntity addressEntity = addressMapper.selectByUserIdAndId(userId, id);
-        return addressEntity;
+        return ShopUtil.ok(addressEntity);
     }
 
     /**
@@ -80,8 +81,9 @@ public class AddressService {
      * @param addressEntity
      * @return
      */
-    public void delete(Integer userId, AddressEntity addressEntity){
+    public Map delete(Integer userId, AddressEntity addressEntity){
         Integer id = addressEntity.getId();
         addressMapper.delete(id);
+        return ShopUtil.ok();
     }
 }

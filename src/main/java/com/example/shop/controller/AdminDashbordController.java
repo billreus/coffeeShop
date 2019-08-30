@@ -30,8 +30,7 @@ public class AdminDashbordController {
      * @return
      */
     @GetMapping("")
-    public String info(){
-        Map<String, Object> data = adminDashbordService.info();
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map info(){
+        return adminDashbordService.info();
     }
 }

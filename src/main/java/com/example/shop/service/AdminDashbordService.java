@@ -4,6 +4,7 @@ import com.example.shop.mapper.GoodsMapper;
 import com.example.shop.mapper.OrderMapper;
 import com.example.shop.mapper.StockMapper;
 import com.example.shop.mapper.UserMapper;
+import com.example.shop.util.ShopUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -47,7 +48,7 @@ public class AdminDashbordService {
      * 主页统计信息
      * @return
      */
-    public Map<String, Object> info(){
+    public Map info(){
         long userTotal = userMapper.findAllCount();
         long goodsTotal = goodsMapper.findSaleCount();
         long stockTotal = stockMapper.count();
@@ -57,6 +58,6 @@ public class AdminDashbordService {
         data.put("goodsTotal", goodsTotal);
         data.put("productTotal", stockTotal);
         data.put("orderTotal", orderTotal);
-        return data;
+        return ShopUtil.ok(data);
     }
 }

@@ -39,6 +39,6 @@ public class UserCenterController {
     public Object list(@LoginUser Integer userId){
         Map<String, Object> data = new HashMap<>();
         data.put("order", userCenterService.list(userId));
-        return ShopUtil.getJSONString(0, "成功", data);
+        return ShopUtil.ok(data);
     }
 }

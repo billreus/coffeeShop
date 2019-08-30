@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
+import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -70,13 +71,13 @@ public class CartService {
      * @param userId
      * @return
      */
-    public int count(Integer userId){
+    public Map count(Integer userId){
         List<CartEntity> cartList = cartMapper.selectByUserId(userId);
         int count = 0;
         for(CartEntity cartEntity : cartList){
             count += cartEntity.getNumber();
         }
-        return count;
+        return ShopUtil.ok(count);
     }
 
     /**
@@ -84,7 +85,7 @@ public class CartService {
      * @param userId
      * @return
      */
-    public Map<String, Object> index(Integer userId){
+    public Map index(Integer userId){
         List<CartEntity> cartList = cartMapper.selectByUserId(userId);
         List<CartStockEntity> cartStock = new ArrayList<>();
 
@@ -129,7 +130,7 @@ public class CartService {
         Map<String, Object> map = new HashMap<>();
         map.put("cartList", cartStock);
         map.put("cartTotal", cartTotal);
-        return map;
+        return ShopUtil.ok(map);
     }
 
     /**
@@ -137,14 +138,13 @@ public class CartService {
      * @param cart
      * @return
      */
-    public Map<String, Object> update(CartEntity cart){
+    public Map update(CartEntity cart){
         Integer id = cart.getId();
         Integer number = cart.getNumber();
         Integer goodsId = cart.getGoodsId();
         Map<String, Object> res = new HashMap<>();
         if(number <= 0){
-            res.put("失败", "number参数错误");
-            return res;
+            return ShopUtil.fail(401, "number参数不对");
         }
         //商品已下架
         GoodsEntity goods = goodsMapper.selectById(goodsId);
@@ -162,14 +162,13 @@ public class CartService {
         }
 
         if(number > stockEntity.getStock()){
-            res.put("失败","库存不足");
-            return res;
+            return ShopUtil.fail(401, "库存不足");
         }
         CartEntity exchangeCart = cartMapper.selectById(id);
         exchangeCart.setNumber(number);
         cartMapper.updateById(exchangeCart);
         res.put("成功", 0);
-        return res;
+        return ShopUtil.ok(res);
     }
 
     /**
@@ -178,13 +177,13 @@ public class CartService {
      * @param userId
      * @param checkValue
      */
-    public void checked(List<Integer> checkedList, Integer userId, Boolean checkValue){
+    public Map checked(List<Integer> checkedList, Integer userId, Boolean checkValue){
 
         for(int i=0; i<checkedList.size(); i++){
             Integer check = checkedList.get(i);
             cartMapper.updateCheckById(userId, check, checkValue);
         }
-
+        return index(userId);
     }
 
     /**
@@ -192,13 +191,13 @@ public class CartService {
      * @param deleteList
      * @param userId
      */
-    public void delete(List<Integer> deleteList, Integer userId){
+    public Map delete(List<Integer> deleteList, Integer userId){
 
         for(int i=0; i<deleteList.size(); i++){
             Integer delete = deleteList.get(i);
             cartMapper.deleteByUserIdAndGoodsId(userId, delete);
         }
-
+        return index(userId);
     }
 
     /**
@@ -208,16 +207,16 @@ public class CartService {
      * @return
      */
     @Transactional
-    public String add(Integer userId, CartEntity cart){
+    public Map add(Integer userId, CartEntity cart){
         Integer number = cart.getNumber();
         Integer goodsId = cart.getGoodsId();
         if(number<=0){
-            return "err 数量错误";
+            return ShopUtil.fail(401, "商品和库存错误");
         }
         GoodsEntity goods = goodsMapper.selectById(goodsId);
         //商品不在售卖
         if(goods == null || !goods.isOnSale()){
-            return "err 商品下架";
+            return ShopUtil.fail(401, "商品和库存错误");
         }
         //库存
         StockEntity stockEntity = (StockEntity)redisTemplate.boundHashOps(key).get(goods.getId());
@@ -230,7 +229,7 @@ public class CartService {
         }
 
         if(number > stockEntity.getStock()){
-            return "err 库存不足";
+            return ShopUtil.fail(401, "库存错误");
         }
         CartEntity existCart = cartMapper.selectByUserIdAndGoodsId(userId, goodsId);
         if(existCart == null){
@@ -245,11 +244,11 @@ public class CartService {
             Integer newNumber = existCart.getNumber() + number;
             //判断库存
             if(newNumber>stockEntity.getStock()){
-                return "err 库存不足";
+                return ShopUtil.fail(401, "库存错误");
             }
             cartMapper.updateNumber(newNumber, userId, goodsId);
         }
-        return "success";
+        return count(userId);
     }
 
     /**
@@ -261,7 +260,7 @@ public class CartService {
      * @return
      */
     @Transactional
-    public Map<String ,Object> checkout(Integer userId, Integer cartId, Integer addressId, Integer couponId){
+    public Map checkout(Integer userId, Integer cartId, Integer addressId, Integer couponId){
         List<CartEntity> checkGoodsList = null;
 
         //收货地址
@@ -310,7 +309,7 @@ public class CartService {
         data.put("actualPrice", actualPrice);
         data.put("addressId", addressId);
         data.put("checkedAddress", addressEntity);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**

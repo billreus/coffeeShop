@@ -32,12 +32,11 @@ public class AdminOperateIntegralController {
      * @return
      */
     @GetMapping("/list")
-    public String list(@RequestParam(defaultValue = "1") Integer page,
+    public Map list(@RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10")Integer limit,
                        @RequestParam(defaultValue = "add_time") String sort,
                        @RequestParam(defaultValue = "desc") String order){
-        Map<String, Object> data = adminOperateIntegralService.list(page, limit, sort, order);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return adminOperateIntegralService.list(page, limit, sort, order);
     }
 
     /**
@@ -46,9 +45,8 @@ public class AdminOperateIntegralController {
      * @return
      */
     @PostMapping("/delete")
-    public String delete(@RequestBody OperateIntegralEntity operateIntegralEntity){
-        adminOperateIntegralService.delete(operateIntegralEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map delete(@RequestBody OperateIntegralEntity operateIntegralEntity){
+        return adminOperateIntegralService.delete(operateIntegralEntity);
     }
 
     /**
@@ -57,9 +55,8 @@ public class AdminOperateIntegralController {
      * @return
      */
     @PostMapping("/update")
-    public String update(@RequestBody OperateIntegralEntity operateIntegralEntity){
-        adminOperateIntegralService.update(operateIntegralEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map update(@RequestBody OperateIntegralEntity operateIntegralEntity){
+        return adminOperateIntegralService.update(operateIntegralEntity);
     }
 
     /**
@@ -68,8 +65,7 @@ public class AdminOperateIntegralController {
      * @return
      */
     @PostMapping("/create")
-    public String create(@RequestBody OperateIntegralEntity operateIntegralEntity){
-        adminOperateIntegralService.create(operateIntegralEntity);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map create(@RequestBody OperateIntegralEntity operateIntegralEntity){
+        return adminOperateIntegralService.create(operateIntegralEntity);
     }
 }

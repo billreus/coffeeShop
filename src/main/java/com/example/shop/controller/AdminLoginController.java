@@ -43,16 +43,10 @@ public class AdminLoginController {
      * @return
      */
     @PostMapping("/login")
-    public String login(@RequestBody String body){
+    public Map login(@RequestBody String body){
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
-
-        Map<String, Object> data = adminLoginService.login(username, password);
-        if(data.containsKey(ERROR)){
-            return ShopUtil.getJSONString(401, "失败",data);
-        }else{
-            return ShopUtil.getJSONString(0, "成功",data);
-        }
+        return adminLoginService.login(username, password);
     }
 
     /**
@@ -61,12 +55,11 @@ public class AdminLoginController {
      * @return
      */
     @GetMapping("/info")
-    public String info(String token){
+    public Map info(String token){
         if(token == null || token.isEmpty()){
-            return ShopUtil.getJSONString(501, "请登录");
+            return ShopUtil.fail(501, "请登录");
         }
         int userId = UserToken.getUserId(token);
-        Map<String, Object> data = adminLoginService.info(userId);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return adminLoginService.info(userId);
     }
 }

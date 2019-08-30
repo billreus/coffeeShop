@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.mapper.*;
 import com.example.shop.model.*;
+import com.example.shop.util.ShopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -76,7 +77,7 @@ public class GoodsService {
      * @param id
      * @return
      */
-    public Map<String, Object> category(Integer id){
+    public Map category(Integer id){
         CategoryEntity currentCategory = categoryMapper.selectById(id);
         CategoryEntity parentCategory = null;
         List<CategoryEntity> childrenCategory = null;
@@ -94,7 +95,7 @@ public class GoodsService {
         data.put("currentCategory", currentCategory);
         data.put("parentCategory", parentCategory);
         data.put("brotherCategory", childrenCategory);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -104,11 +105,11 @@ public class GoodsService {
      * @param limit
      * @return
      */
-    public Map<String, Object> list(Integer categoryId, Integer page, Integer limit){
+    public Map list(Integer categoryId, Integer page, Integer limit){
         List<GoodsEntity> goodsList = goodsMapper.selectByCategoryId(categoryId);
         Map<String, Object> data = new HashMap<>();
         data.put("list", goodsList);
-        return data;
+        return ShopUtil.ok(data);
     }
 
     /**
@@ -116,7 +117,7 @@ public class GoodsService {
      * @param id 商品id
      * @return
      */
-    public Map<String, Object> detail(Integer id){
+    public Map detail(Integer id){
         GoodsEntity goods = goodsMapper.selectById(id);
         List<AttributeEntity> attribute = attributeMapper.selectByGoodsId(id);
 
@@ -152,7 +153,6 @@ public class GoodsService {
         data.put("comment", commentList);
         data.put("attribute", attribute);
         data.put("stock", stock.getStock());
-        return data;
+        return ShopUtil.ok(data);
     }
-
 }

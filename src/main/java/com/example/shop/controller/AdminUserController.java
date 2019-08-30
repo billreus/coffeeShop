@@ -39,13 +39,12 @@ public class AdminUserController {
      * @return
      */
     @GetMapping("/list")
-    public String list(String username, String mobile,
+    public Map list(String username, String mobile,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10")Integer limit,
                        @RequestParam(defaultValue = "add_time") String sort,
                        @RequestParam(defaultValue = "desc") String order){
-        Map<String, Object> data = adminUserService.list(username, mobile, page, limit, sort, order);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return adminUserService.list(username, mobile, page, limit, sort, order);
     }
 
     /**
@@ -54,8 +53,7 @@ public class AdminUserController {
      * @return
      */
     @GetMapping("/state")
-    public String state(Integer id){
-        adminUserService.state(id);
-        return ShopUtil.getJSONString(0, "成功");
+    public Map state(Integer id){
+        return adminUserService.state(id);
     }
 }

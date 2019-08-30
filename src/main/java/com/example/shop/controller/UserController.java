@@ -45,7 +45,7 @@ public class UserController {
      * @return
      */
     @PostMapping("register")
-    public String register(@RequestBody String body){
+    public Map register(@RequestBody String body){
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
         String mobile = JacksonUtil.parseString(body, "mobile");
@@ -59,15 +59,10 @@ public class UserController {
             e.printStackTrace();
         }
 
-        Map<String, Object> map = userService.register(username, password, mobile, openId);
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(mobile)){
-            return ShopUtil.getJSONString(1,"数据有误");
+            return ShopUtil.fail(401,"数据有误");
         }
-        if(map.containsKey("token")){
-            return ShopUtil.getJSONString(0, "成功", map);
-        }else{
-            return ShopUtil.getJSONString(1, "失败", map);
-        }
+        return userService.register(username, password, mobile, openId);
 
     }
 
@@ -77,11 +72,11 @@ public class UserController {
      * @return
      */
     @PostMapping("login_by_weixin")
-    public String loginByWeixin(@RequestBody UserWxEntity userWxEntity){
+    public Map loginByWeixin(@RequestBody UserWxEntity userWxEntity){
         String code = userWxEntity.getCode();
         UserInfoEntity userInfo = userWxEntity.getUserInfo();
         if(code == null || userInfo == null){
-            return ShopUtil.getJSONString(11, "失败");
+            return ShopUtil.fail(401, "失败");
         }
 
         String sessionKey = null;
@@ -95,10 +90,9 @@ public class UserController {
         }
 
         if(sessionKey == null || openId == null){
-            return ShopUtil.getJSONString(111, "失败");
+            return ShopUtil.fail(401, "失败");
         }
-        Map<String, Object> data = userService.loginByWeixin(sessionKey, openId, userInfo);
-        return ShopUtil.getJSONString(0, "成功", data);
+        return userService.loginByWeixin(sessionKey, openId, userInfo);
     }
 
     /**
@@ -110,17 +104,10 @@ public class UserController {
     public Object login(@RequestBody String body){
         String username = JacksonUtil.parseString(body, "username");
         String password = JacksonUtil.parseString(body, "password");
-
-        Map<String, Object> map = userService.login(username, password);
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
-            return ShopUtil.getJSONString(1,"数据有误");
+            return ShopUtil.fail(401,"数据有误");
         }
-
-        if(map.containsKey("token")){
-            return ShopUtil.getJSONString(0, "成功", map);
-        }else{
-            return ShopUtil.getJSONString(1, "失败", map);
-        }
+        return userService.login(username, password);
     }
 
     /**
@@ -131,9 +118,9 @@ public class UserController {
     @PostMapping("logout")
     public Object logout(@LoginUser Integer userId){
         if(userId == null){
-            return ShopUtil.getJSONString(501, "请登录");
+            return ShopUtil.fail(501, "请登录");
         }else {
-            return ShopUtil.getJSONString(0, "退出成功");
+            return ShopUtil.ok();
         }
     }
 
@@ -144,11 +131,10 @@ public class UserController {
      * @return
      */
     @PostMapping("reset")
-    public String reset(@LoginUser Integer userId, @RequestBody String body){
+    public Map reset(@LoginUser Integer userId, @RequestBody String body){
         String password = JacksonUtil.parseString(body, "password");
         String mobile = JacksonUtil.parseString(body, "mobile");
         String nickname = JacksonUtil.parseString(body, "nickname");
-        userService.reset(userId, password, mobile, nickname);
-        return ShopUtil.getJSONString(0, "修改成功");
+        return userService.reset(userId, password, mobile, nickname);
     }
 }

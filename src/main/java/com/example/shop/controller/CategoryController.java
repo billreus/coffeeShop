@@ -31,9 +31,8 @@ public class CategoryController {
      * @return
      */
     @GetMapping("index")
-    public String index(Integer id){
-        Map<String, Object> data = categoryService.index(id);
-        return ShopUtil.getJSONString(0, "成功", data);
+    public Map index(Integer id){
+        return categoryService.index(id);
     }
 
     /**
@@ -42,14 +41,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping("current")
-    public Object current(@NotNull Integer id){
-
-        Map<String, Object> data = categoryService.current(id);
-        if(data == null){
-            return ShopUtil.getJSONString(402, "参数错误");
-        }else{
-            return ShopUtil.getJSONString(0, "成功", data);
-
-        }
+    public Map current(@NotNull Integer id){
+        return categoryService.current(id);
     }
 }

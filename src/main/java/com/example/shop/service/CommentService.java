@@ -19,8 +19,6 @@ import java.util.Map;
  * 商品评论
  * @author liu
  * @date 14:44 2019/8/27
- * @param
- * @return
  **/
 @Service
 public class CommentService {
@@ -58,6 +56,6 @@ public class CommentService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("list", commentVoList);
-        return ShopUtil.getJSONString(0, "success",data);
+        return ShopUtil.ok(data);
     }
 }
